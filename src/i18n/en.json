@@ -1,0 +1,63 @@
+{
+  "comNav": {
+    "inscribe": "Inscribe",
+    "wallet": "Wallet",
+    "DeployOrder": "Deploy Order",
+    "MintOrder": "Mint Order",
+    "Disconnect": "Disconnect",
+    "Connect": "Connect"
+  },
+  "pages": {
+    "pageInscribe": {
+      "Inscribe": "Inscribe",
+      "Mint": "Mint",
+      "Deploy": "Deploy",
+      "Max": "Max",
+      "Minted": "Minted",
+      "Limit": "Limit",
+      "RemainingMintTimes": "Remaining Mint Times",
+      "Query": "Query",
+      "MintBtn": "Mint",
+      "Max_Max_Limit_Repeat": "Max (Max = Limit * Repeat)",
+      "Repeat": "Repeat",
+      "DeployBtn": "Deploy"
+    },
+    "pageL2": {
+      "Search": "Search",
+      "All": "All",
+      "InProgress": "In-Progress",
+      "Completed": "Completed",
+      "Progress": "Progress",
+      "DeployTime": "Deploy Time",
+      "Holders": "Holders",
+      "Transactions": "Transactions",
+      "Action": "Action",
+      "Mint": "Mint"
+    },
+    "my": {
+      "pageMyWallet": {
+        "MyWallet": "My Wallet",
+        "HideEmptyAssets": "Hide Empty Assets",
+        "Symbol": "Symbol",
+        "Contract": "Contract",
+        "Balance": "Balance",
+        "Action": "Action",
+        "Send": "Send"
+      },
+      "pageMyDeployOrder": {
+        "DeployOrder": "Deploy Order",
+        "Total": "Total",
+        "Fee": "Fee",
+        "Time": "Time",
+        "Status": "Status"
+      },
+      "pageMyMintOrder": {
+        "MintOrder": "Mint Order",
+        "Total": "Total",
+        "Fee": "Fee",
+        "Time": "Time",
+        "Status": "Status"
+      }
+    }
+  }
+}

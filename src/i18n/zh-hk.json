@@ -1,0 +1,63 @@
+{
+  "comNav": {
+    "inscribe": "銘刻",
+    "wallet": "錢包",
+    "DeployOrder": "部署訂單",
+    "MintOrder": "銘刻訂單",
+    "Disconnect": "退出連接",
+    "Connect": "連接錢包"
+  },
+  "pages": {
+    "pageInscribe": {
+      "Inscribe": "銘刻",
+      "Mint": "鑄造",
+      "Deploy": "部署",
+      "Max": "最大數量",
+      "Minted": "已鑄造",
+      "Limit": "單次鑄造數量",
+      "RemainingMintTimes": "剩餘鑄造次數",
+      "Query": "查詢",
+      "MintBtn": "鑄造",
+      "Max_Max_Limit_Repeat": "最大數量(單次鑄造數量 * 重複次數)",
+      "Repeat": "重複次數",
+      "DeployBtn": "部署"
+    },
+    "pageL2": {
+      "Search": "搜索",
+      "All": "全部",
+      "InProgress": "进行中",
+      "Completed": "已完成",
+      "Progress": "进度",
+      "Holders": "持有者",
+      "Transactions": "交易",
+      "Action": "操作",
+      "Mint": "铸造",
+      "DeployTime": "部署时间"
+    },
+    "my": {
+      "pageMyWallet": {
+        "MyWallet": "我的钱包",
+        "HideEmptyAssets": "隐藏空资产",
+        "Contract": "合约",
+        "Balance": "余额",
+        "Action": "操作",
+        "Symbol": "代币",
+        "Send": "发送"
+      },
+      "pageMyDeployOrder": {
+        "DeployOrder": "部署订单",
+        "Total": "总量",
+        "Fee": "费用",
+        "Time": "时间",
+        "Status": "状态"
+      },
+      "pageMyMintOrder": {
+        "MintOrder": "铸造订单",
+        "Total": "总量",
+        "Fee": "费用",
+        "Time": "时间",
+        "Status": "状态"
+      }
+    }
+  }
+}

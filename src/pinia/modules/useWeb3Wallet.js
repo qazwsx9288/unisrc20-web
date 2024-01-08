@@ -1,0 +1,146 @@
+import { defineStore } from "pinia"
+import { reactive, ref, computed } from "vue"
+import { ethers } from "ethers"
+
+export const useWeb3Wallet = defineStore("web3Wallet", () => {
+  // config
+  const RPC_URL = import.meta.env.VITE_BASE_OKX_RPC
+  const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
+
+  // provider（无响应式）
+  let defaultProvider = null
+  // 获取provider
+  function getDefaultProvider() {
+    if (defaultProvider === null) {
+      defaultProvider = ethers.getDefaultProvider(RPC_URL)
+    }
+    return defaultProvider
+  }
+
+  // 受支持的walletList
+  const supportWalletList = reactive([
+    {
+      name: "MetaMask",
+      browserProvider: null,
+      // 检查对象名
+      _checkObject: "ethereum",
+    },
+    {
+      name: "OKX",
+      browserProvider: null,
+      _checkObject: "okxwallet",
+    },
+  ])
+  // 更新受支持的walletList
+  function updateSupportWalletList() {
+    supportWalletList.forEach((cur) => {
+      if (typeof window[cur._checkObject] !== "undefined") {
+        // 该钱包拓展可用
+        cur.browserProvider = window[cur._checkObject]
+      } else {
+        // 该钱包拓展不可用
+        cur.browserProvider = null
+      }
+    })
+
+    // console.log(supportWalletList)
+  }
+
+  // 已登入的用户的钱包地址
+  let userWallet = ref({
+    address: "",
+    addressFormat: computed(() => {
+      return (
+        userWallet.value.address.slice(0, 6) +
+        "..." +
+        userWallet.value.address.slice(-6)
+      )
+    }),
+  })
+
+  // const addressFormat = computed(() => {
+  //   return "xxxx" + userWallet.value.address + "xxxx"
+  // })
+
+  // 用于操作的signer（无响应式）
+  let signer = null
+  // (登入)获取signer
+  async function getSigner(walletName) {
+    if (signer !== null) {
+      return signer
+    }
+    // 更新当前受支持的钱包状态
+    updateSupportWalletList()
+
+    // 要登入的钱包对象
+    let wallet = null
+
+    if (walletName) {
+      // 有指定的钱包
+      for (let i = 0; i < supportWalletList.length; i++) {
+        if (supportWalletList[i].name === walletName) {
+          wallet = supportWalletList[i]
+          break
+        }
+      }
+    } else {
+      // 无指定钱包
+      for (let i = 0; i < supportWalletList.length; i++) {
+        if (supportWalletList[i].browserProvider !== null) {
+          wallet = supportWalletList[i]
+          break
+        }
+      }
+    }
+
+    // 校验钱包对象是否可用
+    if (wallet?.browserProvider !== null) {
+      // 连接钱包
+      const provider = new ethers.BrowserProvider(wallet.browserProvider)
+      try {
+        // 保存当前的signer
+        signer = await provider.getSigner()
+        userWallet.value.address = signer.address
+        // 登陆成功
+        localStorage.setItem("walletName", wallet.name)
+        return signer
+      } catch (error) {
+        console.log(error.reason)
+        return {
+          msg: error.reason,
+          error: true,
+          errorType: errorType.UNKNOWN,
+        }
+      }
+    } else {
+      // 钱包未安装
+      return {
+        msg: "Wallet Not Installed.",
+        error: true,
+        errorType: errorType.NO_WALLET,
+      }
+    }
+  }
+  // （登出）清除signer
+  function clearSigner() {
+    signer = null
+    userWallet.value.address = ""
+    localStorage.setItem("walletName", "")
+  }
+
+  // 错误表
+  const errorType = {
+    NO_WALLET: Symbol("NO_WALLET"),
+    UNKNOWN: Symbol("UNKNOWN"),
+  }
+
+  return {
+    supportWalletList,
+    updateSupportWalletList,
+    getSigner,
+    clearSigner,
+    getDefaultProvider,
+    userWallet,
+    errorType,
+  }
+})

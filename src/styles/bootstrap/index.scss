@@ -1,0 +1,40 @@
+// 【修改bootstrap主题颜色】 （要用确定的值，而不是变量，因为没被声明）
+// 【注意】必须全部声明，如果没有声明，则原有的类型也不会存在。
+$primary: #06b6d4;
+
+// $secondary: #909399;
+// $success: #67C23A;
+// $info: #9edae5;
+// $warning: #E6A23C;
+// $danger: #F56C6C;
+// $light: #f8f9fa;
+// $dark: #212529;
+
+// $theme-colors: (
+// 	"primary":    $primary,
+//   "secondary":  $secondary,
+//   "success":    $success,
+//   "info":       $info,
+//   "warning":    $warning,
+//   "danger":     $danger,
+//   "light":      $light,
+//   "dark":       $dark
+// );
+// // 【创建自定义的主题】
+// $custom-colors: (
+//   "custom-red": #900
+// );
+// // 颜色合并到bootstrap 即可使用
+// $theme-colors: map-merge($theme-colors, $custom-colors);
+
+
+// 引入bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+// 修改bootstrap
+.btn-primary{
+  color: #fff;
+}
+.btn.active, .btn:hover{
+  color: #fff;
+}
