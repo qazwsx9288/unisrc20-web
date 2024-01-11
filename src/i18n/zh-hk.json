@@ -20,7 +20,8 @@
       "MintBtn": "鑄造",
       "Max_Max_Limit_Repeat": "最大數量(單次鑄造數量 * 重複次數)",
       "Repeat": "重複次數",
-      "DeployBtn": "部署"
+      "DeployBtn": "部署",
+      "ProjectUrl": "项目地址"
     },
     "pageL2": {
       "Search": "搜索",

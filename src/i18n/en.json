@@ -20,7 +20,8 @@
       "MintBtn": "Mint",
       "Max_Max_Limit_Repeat": "Max (Max = Limit * Repeat)",
       "Repeat": "Repeat",
-      "DeployBtn": "Deploy"
+      "DeployBtn": "Deploy",
+      "ProjectUrl": "Project Url"
     },
     "pageL2": {
       "Search": "Search",

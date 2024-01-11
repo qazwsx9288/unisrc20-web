@@ -99,10 +99,15 @@
             status-icon
           >
             <el-form-item class="w-100" label="Tick" prop="tick">
-              <el-input
-                v-model="formDataDeploy.tick"
-                @input="handleMintTickInput"
-              />
+              <el-input v-model="formDataDeploy.tick" />
+            </el-form-item>
+
+            <el-form-item
+              class="w-100"
+              :label="$t('pages.pageInscribe.ProjectUrl')"
+              prop="projectUrl"
+            >
+              <el-input v-model="formDataDeploy.projectUrl" />
             </el-form-item>
 
             <el-form-item label="Max">
@@ -280,6 +285,7 @@ function handleGoMint() {
 const refFormDeploy = ref(null)
 const formDataDeploy = reactive({
   tick: "",
+  projectUrl: "",
   limit: null,
   repeat: null,
 })
