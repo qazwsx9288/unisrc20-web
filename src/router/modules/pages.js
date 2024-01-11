@@ -34,6 +34,11 @@ const route = {
       name: "mint-order",
       component: () => import("@/view/pages/my/page-my-mint-order.vue"),
     },
+    {
+      path: "/earn-points",
+      name: "earn-points",
+      component: () => import("@/view/pages/page-earn-points.vue"),
+    },
   ],
 }
 

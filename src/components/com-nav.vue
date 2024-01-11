@@ -189,6 +189,10 @@ const menuList = [
     label: i18n.t("comNav.inscribe"),
   },
   {
+    name: "earn-points",
+    label: "Earn Points",
+  },
+  {
     name: "my-wallet",
     label: i18n.t("comNav.wallet"),
   },
