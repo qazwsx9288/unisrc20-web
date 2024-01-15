@@ -21,13 +21,16 @@ onBeforeUnmount(() => {
 })
 
 onMounted(async () => {
-  // 初始默认dark
-  document.body.setAttribute("data-bs-theme", "dark")
-  document.getElementById("html").className = "dark"
+  // 加载主题
+  const theme = localStorage.getItem("unisrc20-theme") || "dark"
+  document.body.setAttribute("data-bs-theme", theme)
+  document.getElementById("html").className = theme
+
   // 网络切换钩子
   if (window.ethereum) {
     window.ethereum.on("chainChanged", handleNetworkChange)
   }
+
   // 检查登陆状态
   const walletName = localStorage.getItem("walletName")
   if (walletName) {

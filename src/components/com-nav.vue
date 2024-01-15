@@ -190,7 +190,7 @@ const menuList = [
   },
   {
     name: "earn-points",
-    label: "Earn Points",
+    label: i18n.t("comNav.EarnPoints"),
   },
   {
     name: "my-wallet",
@@ -219,16 +219,20 @@ function switchLang(val) {
   location.reload()
 }
 
-let colorMode = ref("dark")
+// 主题
+const colorMode = ref("")
+colorMode.value = localStorage.getItem("unisrc20-theme") || "dark"
 function colorModeToggle() {
   if (colorMode.value === "dark") {
     colorMode.value = "light"
     document.getElementById("html").className = "light"
     document.body.setAttribute("data-bs-theme", "light")
+    localStorage.setItem("unisrc20-theme", "light")
   } else if (colorMode.value === "light") {
     colorMode.value = "dark"
     document.body.setAttribute("data-bs-theme", "dark")
     document.getElementById("html").className = "dark"
+    localStorage.setItem("unisrc20-theme", "dark")
   }
   // 设置 bootstrap、element 暗黑模式
 }
