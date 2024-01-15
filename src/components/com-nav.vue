@@ -15,8 +15,8 @@
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarTogglerDemo01"
-          aria-controls="navbarTogglerDemo01"
+          data-bs-target="#navbarToggler"
+          aria-controls="navbarToggler"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
@@ -25,7 +25,7 @@
         <!-- 响应式 移动端的菜单toggle end -->
 
         <!-- 菜单列表 -->
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <div class="collapse navbar-collapse" id="navbarToggler">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li v-for="(item, index) in menuList" :key="index" class="nav-item">
               <button
