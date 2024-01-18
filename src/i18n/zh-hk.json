@@ -5,7 +5,8 @@
     "DeployOrder": "部署訂單",
     "MintOrder": "銘刻訂單",
     "Disconnect": "退出連接",
-    "Connect": "連接錢包"
+    "Connect": "連接錢包",
+    "EarnPoints": "赚取积分"
   },
   "pages": {
     "pageInscribe": {
@@ -59,6 +60,17 @@
         "Time": "时间",
         "Status": "状态"
       }
+    },
+    "pageEarnPoints": {
+      "EarnPoints": "赚取积分",
+      "COMPLETETASKSEARNPOINTS": "完成任务来赚取积分",
+      "MyTotalPoints": "我的总积分",
+      "Task": "任务",
+      "Points": "积分",
+      "Action": "操作",
+      "Getmorepointsbyinvitingyourfriends": "通过邀请朋友获得更多积分",
+      "Pointsbyinvited": "通过邀请获得的积分",
+      "CopythisURLtoyourfriends": "复制这个URL给你的朋友"
     }
   }
 }

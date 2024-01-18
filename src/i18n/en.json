@@ -5,7 +5,8 @@
     "DeployOrder": "Deploy Order",
     "MintOrder": "Mint Order",
     "Disconnect": "Disconnect",
-    "Connect": "Connect"
+    "Connect": "Connect",
+    "EarnPoints": "Earn Points"
   },
   "pages": {
     "pageInscribe": {
@@ -59,6 +60,17 @@
         "Time": "Time",
         "Status": "Status"
       }
+    },
+    "pageEarnPoints": {
+      "EarnPoints": "Earn Points",
+      "COMPLETETASKSEARNPOINTS": "COMPLETE TASKS EARN POINTS",
+      "MyTotalPoints": "My Total Points",
+      "Task": "Task",
+      "Points": "Points",
+      "Action": "Action",
+      "Getmorepointsbyinvitingyourfriends": "Get more points by inviting your friends",
+      "Pointsbyinvited": "Points by invited",
+      "CopythisURLtoyourfriends": "Copy this URL to your friends"
     }
   }
 }
