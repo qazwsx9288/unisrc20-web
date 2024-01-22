@@ -1,17 +1,20 @@
 import service from "@/utils/request.js"
+import { buildQueryParm } from "@/utils/helper.js"
 
 // ticker列表
 export const tickerList = (data) => {
+  const d = buildQueryParm(data)
   return service({
-    url: `/v1/tickerList?page=${data.page}&pageSize=${data.pageSize}&type=${data.type}`,
+    url: `/v1/tickerList?${d}`,
     method: "get",
   })
 }
 
 // 最新的铸造费用
 export const gasCountLatest = (data) => {
+  const d = buildQueryParm(data)
   return service({
-    url: `/gasCountLatest?addr=${data.addr}`,
+    url: `/gasCountLatest?${d}`,
     method: "get",
   })
 }
@@ -29,6 +32,24 @@ export const verifyToken = (data) => {
 export const createOrder = (data) => {
   return service({
     url: `/createOrder`,
+    method: "post",
+    data,
+  })
+}
+
+// 获取地址的所有订单
+export const getAllOrder = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getAllOrder?${d}`,
+    method: "get",
+  })
+}
+
+// 验证白名单
+export const verifyWritelist = (data) => {
+  return service({
+    url: `/v1/verifyWritelist`,
     method: "post",
     data,
   })
