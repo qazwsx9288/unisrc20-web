@@ -12,7 +12,6 @@ service.interceptors.request.use(
     //   "Content-Type": "application/json",
     //   ...config.headers,
     // }
-    console.log(config)
     return config
   },
   (error) => {
