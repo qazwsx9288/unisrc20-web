@@ -16,7 +16,7 @@
         <ul class="nav nav-pills">
           <li class="nav-item">
             <button
-              :class="{ active: filter === '1' }"
+              :class="{ active: curStatus === '1' }"
               class="nav-link"
               type="button"
               @click="handleFilterChange('1')"
@@ -26,7 +26,7 @@
           </li>
           <li class="nav-item">
             <button
-              :class="{ active: filter === '2' }"
+              :class="{ active: curStatus === '2' }"
               class="nav-link"
               type="button"
               @click="handleFilterChange('2')"
@@ -36,7 +36,7 @@
           </li>
           <li class="nav-item">
             <button
-              :class="{ active: filter === '3' }"
+              :class="{ active: curStatus === '3' }"
               class="nav-link"
               type="button"
               @click="handleFilterChange('3')"
@@ -48,7 +48,7 @@
       </div>
 
       <!-- 表格 -->
-      <div>
+      <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
           <el-table-column fixed prop="name" label="Ticker" width="110" />
           <el-table-column
@@ -87,25 +87,61 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :background="true"
+        layout="prev, pager, next, jumper"
+        :total="total"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted } from "vue"
+import { tickerList } from "@/api/server-api.js"
 
-// 表格数据
-const tableData = [
-  {
-    name: "Tom",
-  },
-]
+onMounted(() => {
+  init()
+})
+
+// init
+async function init() {
+  fetchList({})
+}
 
 // 1 all, 2 inprogress, 3 completed
-const filter = ref("1")
+const curStatus = ref("1")
 function handleFilterChange(s) {
-  filter.value = s
+  curStatus.value = s
 }
+// page
+const currentPage = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`)
+  fetchList({ page: val })
+}
+// 获取列表
+async function fetchList({ page = currentPage.value }) {
+  try {
+    const res = await tickerList({
+      page: page,
+      pageSize: pageSize.value,
+      type: curStatus.value,
+    })
+    tableData.value = res.data.list
+    total.value = res.data.total
+  } catch (error) {
+    console.log(error)
+  }
+}
+// 表格数据
+const tableData = ref([])
 </script>
 
 <style scoped></style>
