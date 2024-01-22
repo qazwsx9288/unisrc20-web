@@ -61,19 +61,41 @@
       <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
           <el-table-column fixed prop="ticker" label="Ticker" width="110" />
-          <el-table-column :label="$t('pages.pageL2.Progress')" width="180">
-            <template #default="scope"> {{ scope.row.rate }} % </template>
-          </el-table-column>
-          <el-table-column
-            prop="createdAtFormat"
-            :label="$t('pages.pageL2.DeployTime')"
-            width="auto"
-          />
+
           <el-table-column
             prop="holders"
             :label="$t('pages.pageL2.Holders')"
             width="180"
           />
+
+          <el-table-column
+            prop="createdAtFormat"
+            :label="$t('pages.pageL2.DeployTime')"
+            width="200"
+          />
+
+          <el-table-column :label="$t('pages.pageL2.Progress')" width="180">
+            <template #default="scope"> {{ scope.row.rate }} % </template>
+          </el-table-column>
+
+          <el-table-column
+            prop="max"
+            :label="$t('pages.pageL2.Max')"
+            width="auto"
+          />
+
+          <el-table-column :label="$t('pages.pageL2.ProjectUrl')" width="auto">
+            <template #default="scope">
+              <a
+                v-if="scope.row.projectUrl"
+                target="_blank"
+                :href="scope.row.projectUrl"
+              >
+                View
+              </a>
+            </template>
+          </el-table-column>
+
           <el-table-column
             fixed="right"
             :label="$t('pages.pageL2.Action')"

@@ -34,7 +34,9 @@
       "Transactions": "交易",
       "Action": "操作",
       "Mint": "鑄造",
-      "DeployTime": "部署時間"
+      "DeployTime": "部署時間",
+      "Max": "最大数量",
+      "ProjectUrl": "项目地址"
     },
     "my": {
       "pageMyWallet": {

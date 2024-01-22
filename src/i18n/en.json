@@ -34,7 +34,9 @@
       "Holders": "Holders",
       "Transactions": "Transactions",
       "Action": "Action",
-      "Mint": "Mint"
+      "Mint": "Mint",
+      "Max": "Max",
+      "ProjectUrl": "Project Url"
     },
     "my": {
       "pageMyWallet": {
