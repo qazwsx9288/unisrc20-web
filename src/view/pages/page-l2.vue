@@ -5,8 +5,18 @@
 
       <!-- 搜索 -->
       <div class="input-group pb-2 pb-lg-3">
-        <input type="text" class="form-control" placeholder="Sreach Tips" />
-        <button class="btn btn-outline-primary" type="button">
+        <input
+          v-model="searchContent"
+          type="text"
+          class="form-control"
+          placeholder="Sreach Tips"
+          @keypress.enter="handleSearch"
+        />
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          @click="handleSearch"
+        >
           {{ $t("pages.pageL2.Search") }}
         </button>
       </div>
@@ -113,6 +123,11 @@ async function init() {
   fetchList({})
 }
 
+// 搜索框内容
+const searchContent = ref("")
+async function handleSearch() {
+  init()
+}
 // 1 all, 2 inprogress, 3 completed
 const curStatus = ref("1")
 function handleFilterChange(s) {
@@ -133,6 +148,7 @@ async function fetchList({ page = currentPage.value }) {
       page: page,
       pageSize: pageSize.value,
       type: curStatus.value,
+      search: searchContent.value,
     })
     tableData.value = res.data.list
     total.value = res.data.total
