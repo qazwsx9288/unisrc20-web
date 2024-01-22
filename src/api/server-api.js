@@ -54,3 +54,21 @@ export const verifyWritelist = (data) => {
     data,
   })
 }
+
+// 获取签名的消息
+export const getSignatureMessage = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getSignatureMessage?${d}`,
+    method: "get",
+  })
+}
+
+// 验证签名
+export const verifySignature = (data) => {
+  return service({
+    url: `/v1/verifySignature`,
+    method: "post",
+    data,
+  })
+}
