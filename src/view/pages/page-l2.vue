@@ -60,25 +60,18 @@
       <!-- 表格 -->
       <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
-          <el-table-column fixed prop="name" label="Ticker" width="110" />
+          <el-table-column fixed prop="ticker" label="Ticker" width="110" />
+          <el-table-column :label="$t('pages.pageL2.Progress')" width="180">
+            <template #default="scope"> {{ scope.row.rate }} % </template>
+          </el-table-column>
           <el-table-column
-            prop="name"
-            :label="$t('pages.pageL2.Progress')"
-            width="180"
-          />
-          <el-table-column
-            prop="name"
+            prop="createdAtFormat"
             :label="$t('pages.pageL2.DeployTime')"
             width="auto"
           />
           <el-table-column
-            prop="name"
+            prop="holders"
             :label="$t('pages.pageL2.Holders')"
-            width="180"
-          />
-          <el-table-column
-            prop="name"
-            :label="$t('pages.pageL2.Transactions')"
             width="180"
           />
           <el-table-column
@@ -113,6 +106,7 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import { tickerList } from "@/api/server-api.js"
+import { listFormat } from "@/utils/list-format.js"
 
 onMounted(() => {
   init()
@@ -132,6 +126,7 @@ async function handleSearch() {
 const curStatus = ref("1")
 function handleFilterChange(s) {
   curStatus.value = s
+  init()
 }
 // page
 const currentPage = ref(1)
@@ -150,8 +145,10 @@ async function fetchList({ page = currentPage.value }) {
       type: curStatus.value,
       search: searchContent.value,
     })
-    tableData.value = res.data.list
+    console.log(res)
     total.value = res.data.total
+    tableData.value = res.data.list
+    listFormat(tableData.value)
   } catch (error) {
     console.log(error)
   }
