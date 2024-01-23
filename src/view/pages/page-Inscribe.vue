@@ -179,27 +179,53 @@
           </div>
           <!-- 弹窗body -->
           <div class="modal-body text-gray">
+            <div class="btn-group mb-3" role="group">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                :class="{ active: curDeployFee === 'slow' }"
+                @click="handleDeployFeeSwitch('slow')"
+              >
+                Slow
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                :class="{ active: curDeployFee === 'avg' }"
+                @click="handleDeployFeeSwitch('avg')"
+              >
+                Avg
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                :class="{ active: curDeployFee === 'fast' }"
+                @click="handleDeployFeeSwitch('fast')"
+              >
+                FAST
+              </button>
+            </div>
             <table class="table">
-              <tbody>
+              <tbody v-if="curDeployFeeObj">
                 <tr>
                   <td>Sats In Inscription</td>
-                  <td>≈1000 USDT</td>
+                  <td>≈{{ curDeployFeeObj.inscriptionPrice }} USDT</td>
                 </tr>
                 <tr>
                   <td>Commit Transaction Fee</td>
-                  <td>≈1000 USDT</td>
+                  <td>≈{{ curDeployFeeObj.CommitPrice }} USDT</td>
                 </tr>
                 <tr>
                   <td>Reveal Transaction Fee</td>
-                  <td>≈1000 USDT</td>
+                  <td>≈{{ curDeployFeeObj.revealPrice }} USDT</td>
                 </tr>
                 <tr>
                   <td>Service Fee</td>
-                  <td>1000 USDT</td>
+                  <td>{{ curDeployFeeObj.serviceCharge }} USDT</td>
                 </tr>
                 <tr>
                   <th>Total</th>
-                  <th>≈1000 USDT</th>
+                  <th>≈{{ curDeployFeeObj.totalPrice }} USDT</th>
                 </tr>
               </tbody>
             </table>
@@ -232,6 +258,11 @@
 import { reactive, ref, computed } from "vue"
 import comModalMint from "@/components/com-modal-mint.vue"
 import * as bootstrap from "bootstrap"
+import { createOrder, gasCountLatest } from "@/api/server-api.js"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+import { ElMessage } from "element-plus"
+
+const web3Wallet = useWeb3Wallet()
 
 // 模式 1mint 2deploy
 const inscribeMode = ref("1")
@@ -310,7 +341,21 @@ const submitFormDeploy = async () => {
   await refFormDeploy.value.validate(async (valid, fields) => {
     if (valid) {
       console.log("submit!")
-      handleGoDeploy()
+      // 登陆校验
+      if (!web3Wallet?.userWallet?.address) {
+        ElMessage({
+          type: "warning",
+          message: "Please connect first",
+        })
+        return
+      }
+
+      try {
+        await fetchDeployFee()
+        handleGoDeploy()
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       console.log("error submit!", fields)
     }
@@ -320,12 +365,33 @@ const resetFormDeploy = async () => {
   if (!refFormDeploy.value) return
   refFormDeploy.value.resetFields()
 }
+// deploy费用相关
+const deployFee = ref({})
+const curDeployFee = ref("avg")
+const curDeployFeeObj = computed(() => {
+  if (deployFee.value[curDeployFee.value]) {
+    return deployFee.value[curDeployFee.value]
+  } else {
+    return null
+  }
+})
+// 切换费用
+async function handleDeployFeeSwitch(t) {
+  curDeployFee.value = t
+  fetchDeployFee()
+}
+// 获取deploy费用
+async function fetchDeployFee() {
+  const res = await gasCountLatest({ addr: web3Wallet?.userWallet?.address })
+  deployFee.value = res.data.result.fee
+}
 // 打开deploy弹窗
 function handleGoDeploy() {
   const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
   myModal.show()
 }
 // deploy submit
+//TODO:下单
 async function submitFormDeployModal() {}
 // Deploy表单 end
 </script>

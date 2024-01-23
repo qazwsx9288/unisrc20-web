@@ -14,7 +14,7 @@ export const tickerList = (data) => {
 export const gasCountLatest = (data) => {
   const d = buildQueryParm(data)
   return service({
-    url: `/gasCountLatest?${d}`,
+    url: `/v1/gasCountLatest?${d}`,
     method: "get",
   })
 }
