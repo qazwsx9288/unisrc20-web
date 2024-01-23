@@ -1,4 +1,6 @@
 import axios from "axios" // 引入axios
+import { ElMessage } from "element-plus"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -8,10 +10,11 @@ const service = axios.create({
 // http request 拦截器
 service.interceptors.request.use(
   (config) => {
-    // config.headers = {
-    //   "Content-Type": "application/json",
-    //   ...config.headers,
-    // }
+    const web3Wallet = useWeb3Wallet()
+    config.headers = {
+      token: web3Wallet?.userWallet?.token,
+      ...config.headers,
+    }
     return config
   },
   (error) => {
@@ -23,11 +26,24 @@ service.interceptors.request.use(
 // http response 拦截器
 service.interceptors.response.use(
   (response) => {
+    const web3Wallet = useWeb3Wallet()
     // 请求有响应
     if (response.data.code === 0) {
       return response.data
+    } else if (response.data.code === 55) {
+      // token失效
+      web3Wallet.clearSigner()
+      ElMessage({
+        message: "Please connect again",
+        type: "error",
+      })
     } else {
       console.log("服务端返回错误：", response)
+      const msg = response?.data?.msg || "Server Error!"
+      ElMessage({
+        message: msg,
+        type: "error",
+      })
     }
   },
   (error) => {

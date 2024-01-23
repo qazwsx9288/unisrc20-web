@@ -75,10 +75,12 @@ async function signIn(walletName) {
   if (signer?.error) {
     if (signer?.errorType !== web3Wallet.errorType.NO_WALLET) {
       // 登入失败
-      ElMessage({
-        message: signer.msg,
-        type: "warning",
-      })
+      if (signer?.msg) {
+        ElMessage({
+          message: signer.msg,
+          type: "warning",
+        })
+      }
     } else {
       // 未安装钱包
       if (walletName === "MetaMask") {

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia"
 import { reactive, ref, computed } from "vue"
 import { ethers } from "ethers"
+import { getSignatureMessage, verifySignature } from "@/api/server-api.js"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -56,6 +57,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
         userWallet.value.address.slice(-6)
       )
     }),
+    token: "",
   })
 
   // const addressFormat = computed(() => {
@@ -98,13 +100,41 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       // 连接钱包
       const provider = new ethers.BrowserProvider(wallet.browserProvider)
       try {
-        // 保存当前的signer
         signer = await provider.getSigner()
-        userWallet.value.address = signer.address
+
+        let token = localStorage.getItem("token")
+        if (!token) {
+          // 获取签名消息
+          const resGetSign = await getSignatureMessage({
+            address: signer.address,
+          })
+          const signMsg = resGetSign.data.result
+          console.log(signMsg)
+
+          // 签名
+          const signedMsg = await signer.signMessage(signMsg)
+
+          // const addr = ethers.verifyMessage(signMsg, signedMsg)
+          // console.log("addr:", addr)
+
+          // 验证签名消息获取token
+          const resVerify = await verifySignature({
+            text: signMsg,
+            address: signer.address,
+            message: signedMsg,
+          })
+          // TODO:后端接口未通，待测
+          token = resVerify.data.result
+          localStorage.setItem("token", token)
+        }
         // 登陆成功
+        userWallet.value.address = signer.address
         localStorage.setItem("walletName", wallet.name)
+
         return signer
       } catch (error) {
+        clearSigner()
+
         console.log(error.reason)
         return {
           msg: error.reason,
@@ -125,7 +155,9 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   function clearSigner() {
     signer = null
     userWallet.value.address = ""
+    userWallet.value.token = ""
     localStorage.setItem("walletName", "")
+    localStorage.setItem("token", "")
   }
 
   // 错误表
