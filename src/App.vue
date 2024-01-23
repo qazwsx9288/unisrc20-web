@@ -41,8 +41,6 @@ onMounted(async () => {
 const handleNetworkChange = async (networkId) => {
   console.log(networkId)
 }
-
-onMounted(async () => {})
 </script>
 
 <style scoped></style>
