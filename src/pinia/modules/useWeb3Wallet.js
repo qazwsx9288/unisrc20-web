@@ -119,11 +119,9 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
           // 验证签名消息获取token
           const resVerify = await verifySignature({
-            text: signMsg,
             address: signer.address,
             message: signedMsg,
           })
-          // TODO:后端接口未通，待测
           token = resVerify.data.result
           localStorage.setItem("token", token)
         }
