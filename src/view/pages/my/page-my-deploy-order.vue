@@ -99,7 +99,10 @@ async function fetchList({ page = currentPage.value }) {
     tableData.value = res.data.list.map((cur) => {
       cur.ticker = cur.ticker.toUpperCase()
       if (cur.deploy) {
-        cur.deployHashUrl = `https://mempool.space/tx/${cur.deploy}`
+        cur.deployHashUrl = `${import.meta.env.VITE_BASE_BTC_SCAN_URL}/tx/${
+          cur.deploy
+        }`
+
         cur.deployHashFormat = `
         ${cur.deploy.slice(0, 3)}
         ...
