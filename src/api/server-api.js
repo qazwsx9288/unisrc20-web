@@ -19,7 +19,7 @@ export const gasCountLatest = (data) => {
   })
 }
 
-// 验证是否存在这个token
+// 验证(brc20)是否存在这个token
 export const verifyToken = (data) => {
   return service({
     url: `/verifyToken`,

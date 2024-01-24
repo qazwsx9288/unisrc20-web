@@ -258,7 +258,7 @@
 import { reactive, ref, computed } from "vue"
 import comModalMint from "@/components/com-modal-mint.vue"
 import * as bootstrap from "bootstrap"
-import { createOrder, gasCountLatest } from "@/api/server-api.js"
+import { createOrder, gasCountLatest, verifyToken } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 
@@ -346,6 +346,18 @@ const submitFormDeploy = async () => {
         ElMessage({
           type: "warning",
           message: "Please connect first",
+        })
+        return
+      }
+
+      // TOKEN已在BRC20
+      const resVerifyToken = await verifyToken({
+        ticker: formDataDeploy.tick,
+      })
+      if (!resVerifyToken.data.result) {
+        ElMessage({
+          type: "warning",
+          message: "Tick already exists",
         })
         return
       }
