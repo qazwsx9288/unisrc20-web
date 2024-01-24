@@ -72,3 +72,12 @@ export const verifySignature = (data) => {
     data,
   })
 }
+
+// 验证token和address
+export const verifyAddress = (data) => {
+  return service({
+    url: `/v1/verifyAddress`,
+    method: "post",
+    data,
+  })
+}

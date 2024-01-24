@@ -1,7 +1,11 @@
 import { defineStore } from "pinia"
 import { reactive, ref, computed } from "vue"
 import { ethers } from "ethers"
-import { getSignatureMessage, verifySignature } from "@/api/server-api.js"
+import {
+  getSignatureMessage,
+  verifySignature,
+  verifyAddress,
+} from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
@@ -109,10 +113,10 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
         // signer = await provider.getSigner()
         await provider.provider.request({ method: "eth_requestAccounts" })
         signer = provider.getSigner()
+        const signerAddress = await signer.getAddress()
 
         let token = localStorage.getItem("token")
         if (!token) {
-          const signerAddress = await signer.getAddress()
           // 获取签名消息
           const resGetSign = await getSignatureMessage({
             address: signerAddress,
@@ -133,6 +137,12 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
           })
           token = resVerify.data.result
           localStorage.setItem("token", token)
+        } else {
+          // 校验地址和token 不正确request会清理
+          await verifyAddress({
+            address: signerAddress,
+            token: token,
+          })
         }
 
         const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
