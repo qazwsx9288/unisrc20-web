@@ -237,13 +237,22 @@
               :disabled="deployModalLoading"
               @click="submitFormDeployModal"
             >
-              <div
-                v-if="deployModalLoading"
+              <!-- <div
+                
                 class="spinner-border text-light"
                 role="status"
               >
                 <span class="visually-hidden">Loading...</span>
+              </div> -->
+
+              <div v-if="deployModalLoading">
+                <span
+                  class="spinner-border spinner-border-sm text-light"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden" role="status">Loading...</span>
               </div>
+
               <span v-else>Submit</span>
             </button>
             <button
@@ -447,7 +456,7 @@ async function submitFormDeployModal() {
       curDeployFeeObj.value.totalDecimal
     )
 
-    if (tx.isError) {
+    if (tx.error) {
       ElMessage({
         type: "error",
         message: tx.msg,
