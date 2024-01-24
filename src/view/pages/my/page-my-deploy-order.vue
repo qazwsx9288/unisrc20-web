@@ -9,6 +9,7 @@
       <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
           <el-table-column prop="ticker" label="Ticker" width="80" />
+
           <el-table-column label="Hash" width="120">
             <template #default="scope">
               <a :href="scope.row.deployHashUrl" target="_blank">{{
