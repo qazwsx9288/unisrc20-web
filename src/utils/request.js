@@ -12,8 +12,8 @@ service.interceptors.request.use(
   (config) => {
     const web3Wallet = useWeb3Wallet()
     config.headers = {
-      token: web3Wallet?.userWallet?.token,
       ...config.headers,
+      token: web3Wallet?.userWallet?.token,
     }
     return config
   },

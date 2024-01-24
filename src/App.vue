@@ -8,7 +8,6 @@
 import { onMounted, onBeforeUnmount } from "vue"
 
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
-import { contractConfig } from "@/contract/contract.js"
 import { ethers } from "ethers"
 
 const web3Wallet = useWeb3Wallet()

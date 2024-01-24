@@ -22,7 +22,7 @@ export const gasCountLatest = (data) => {
 // 验证(brc20)是否存在这个token
 export const verifyToken = (data) => {
   return service({
-    url: `/verifyToken`,
+    url: `/v1/verifyToken`,
     method: "post",
     data,
   })
@@ -31,7 +31,7 @@ export const verifyToken = (data) => {
 // 创建一个订单
 export const createOrder = (data) => {
   return service({
-    url: `/createOrder`,
+    url: `/v1/createOrder`,
     method: "post",
     data,
   })

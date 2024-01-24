@@ -234,9 +234,17 @@
             <button
               type="button"
               class="btn btn-primary"
+              :disabled="deployModalLoading"
               @click="submitFormDeployModal"
             >
-              Submit
+              <div
+                v-if="deployModalLoading"
+                class="spinner-border text-light"
+                role="status"
+              >
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span v-else>Submit</span>
             </button>
             <button
               type="button"
@@ -351,14 +359,19 @@ const submitFormDeploy = async () => {
       }
 
       // TOKEN已在BRC20
-      const resVerifyToken = await verifyToken({
-        ticker: formDataDeploy.tick,
-      })
-      if (!resVerifyToken.data.result) {
-        ElMessage({
-          type: "warning",
-          message: "Tick already exists",
+      try {
+        const resVerifyToken = await verifyToken({
+          ticker: formDataDeploy.tick,
         })
+        if (resVerifyToken?.data.code === 0 && !resVerifyToken?.data?.result) {
+          ElMessage({
+            type: "warning",
+            message: "Tick already exists",
+          })
+          return
+        }
+      } catch (error) {
+        console.log(error)
         return
       }
 
@@ -394,7 +407,7 @@ async function handleDeployFeeSwitch(t) {
 }
 // 获取deploy费用
 async function fetchDeployFee() {
-  const res = await gasCountLatest({ addr: web3Wallet?.userWallet?.address })
+  const res = await gasCountLatest()
   deployFee.value = res.data.result.fee
 }
 // 打开deploy弹窗
@@ -404,7 +417,58 @@ function handleGoDeploy() {
 }
 // deploy submit
 //TODO:下单
-async function submitFormDeployModal() {}
+const deployModalLoading = ref(false)
+async function submitFormDeployModal() {
+  deployModalLoading.value = true
+  try {
+    const res = await createOrder({
+      ticker: formDataDeploy.tick,
+      mode: curDeployFee.value,
+      projectUrl: formDataDeploy.projectUrl,
+      limit: String(formDataDeploy.limit),
+      repeat: String(formDataDeploy.repeat),
+    })
+
+    console.log(res)
+
+    if (res.code !== 0) {
+      ElMessage({
+        type: "error",
+        message: res.msg,
+      })
+      return
+    }
+
+    const contractAddress = res.data.order.contractAddress
+    const receiveAccount = res.data.order.receiveAccount
+    const tx = await web3Wallet.payUSDT(
+      contractAddress,
+      receiveAccount,
+      curDeployFeeObj.value.totalDecimal
+    )
+
+    if (tx.isError) {
+      ElMessage({
+        type: "error",
+        message: tx.msg,
+      })
+      return
+    }
+
+    await tx.wait()
+    ElMessage({
+      type: "success",
+      message: "Operation successful!",
+    })
+
+    const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
+    myModal.hide()
+  } catch (error) {
+    console.log(error)
+  } finally {
+    deployModalLoading.value = false
+  }
+}
 // Deploy表单 end
 </script>
 

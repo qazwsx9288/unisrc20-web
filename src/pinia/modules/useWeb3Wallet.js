@@ -2,6 +2,7 @@ import { defineStore } from "pinia"
 import { reactive, ref, computed } from "vue"
 import { ethers } from "ethers"
 import { getSignatureMessage, verifySignature } from "@/api/server-api.js"
+import { contractConfig } from "@/contract/contract.js"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -51,11 +52,15 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   let userWallet = ref({
     address: "",
     addressFormat: computed(() => {
-      return (
-        userWallet.value.address.slice(0, 6) +
-        "..." +
-        userWallet.value.address.slice(-6)
-      )
+      if (userWallet.value.address) {
+        return (
+          userWallet.value.address.slice(0, 6) +
+          "..." +
+          userWallet.value.address.slice(-6)
+        )
+      } else {
+        return ""
+      }
     }),
     token: "",
   })
@@ -98,15 +103,19 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     // 校验钱包对象是否可用
     if (wallet?.browserProvider !== null) {
       // 连接钱包
-      const provider = new ethers.BrowserProvider(wallet.browserProvider)
+      // const provider = new ethers.BrowserProvider(wallet.browserProvider)
+      const provider = new ethers.providers.Web3Provider(wallet.browserProvider)
       try {
-        signer = await provider.getSigner()
+        // signer = await provider.getSigner()
+        await provider.provider.request({ method: "eth_requestAccounts" })
+        signer = provider.getSigner()
 
         let token = localStorage.getItem("token")
         if (!token) {
+          const signerAddress = await signer.getAddress()
           // 获取签名消息
           const resGetSign = await getSignatureMessage({
-            address: signer.address,
+            address: signerAddress,
           })
           const signMsg = resGetSign.data.result
           console.log(signMsg)
@@ -119,14 +128,21 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
           // 验证签名消息获取token
           const resVerify = await verifySignature({
-            address: signer.address,
+            address: signerAddress,
             message: signedMsg,
           })
           token = resVerify.data.result
           localStorage.setItem("token", token)
         }
+
+        const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
+        await signer.provider.send("wallet_switchEthereumChain", [
+          { chainId: CHAIN_ID },
+        ])
+
         // 登陆成功
-        userWallet.value.address = signer.address
+        userWallet.value.address = await signer.getAddress()
+        userWallet.value.token = token
         localStorage.setItem("walletName", wallet.name)
 
         return signer
@@ -158,10 +174,33 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     localStorage.setItem("token", "")
   }
 
+  // 支付
+  async function payUSDT(contractAddress, receiveAccount, amount) {
+    const contractUSDT = new ethers.Contract(
+      contractAddress,
+      contractConfig.abi.USDT,
+      signer
+    )
+
+    const signerAddress = await signer.getAddress()
+    const balance = await contractUSDT.balanceOf(signerAddress)
+
+    if (balance.lt(amount)) {
+      return {
+        error: true,
+        msg: "Insufficient token balance.",
+        errorType: errorType.INSUFFICIENT_BALANCE,
+      }
+    }
+
+    return contractUSDT.transfer(receiveAccount, amount)
+  }
+
   // 错误表
   const errorType = {
     NO_WALLET: Symbol("NO_WALLET"),
     UNKNOWN: Symbol("UNKNOWN"),
+    INSUFFICIENT_BALANCE: Symbol("INSUFFICIENT_BALANCE"),
   }
 
   return {
@@ -170,6 +209,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     getSigner,
     clearSigner,
     getDefaultProvider,
+    payUSDT,
     userWallet,
     errorType,
   }
