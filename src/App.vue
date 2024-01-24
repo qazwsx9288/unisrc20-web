@@ -16,6 +16,7 @@ onBeforeUnmount(() => {
   // 在组件销毁前移除监听器，以防止内存泄漏
   if (window.ethereum && window.ethereum.removeListener) {
     window.ethereum.removeListener("chainChanged", handleNetworkChange)
+    window.ethereum.removeListener("accountsChanged", handleAccountChange)
   }
 })
 
@@ -30,12 +31,22 @@ onMounted(async () => {
     window.ethereum.on("chainChanged", handleNetworkChange)
   }
 
+  // 钱包切换钩子
+  if (window.ethereum) {
+    window.ethereum.on("accountsChanged", handleAccountChange)
+  }
+
   // 检查登陆状态
   const walletName = localStorage.getItem("walletName")
   if (walletName) {
     web3Wallet.getSigner(walletName)
   }
 })
+
+//
+const handleAccountChange = async () => {
+  web3Wallet.clearSigner()
+}
 
 const handleNetworkChange = async (networkId) => {
   console.log(networkId)
