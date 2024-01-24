@@ -10,10 +10,10 @@ const service = axios.create({
 // http request 拦截器
 service.interceptors.request.use(
   (config) => {
-    const web3Wallet = useWeb3Wallet()
+    const token = localStorage.getItem("token")
     config.headers = {
       ...config.headers,
-      token: web3Wallet?.userWallet?.token,
+      token: token,
     }
     return config
   },
