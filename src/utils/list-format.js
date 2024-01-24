@@ -29,11 +29,19 @@ export function listFormat(list) {
     const key = hasKeyDicList[i].key
     // 格式化字段
     const keyFormat = key + "Format"
-    // 格式化elment的type字段
+    // 格式化element的type字段
     const keyFormatElType = key + "FormatElType"
     for (let n = 0; n < list.length; n++) {
       formatTable.forEach((cur) => {
-        if (cur.value === list[n][key]) {
+        // 匹配对象有可能是数组 有可能是 number
+        let dicKeyArr = []
+        if (Array.isArray(cur.value)) {
+          dicKeyArr = cur.value
+        } else {
+          dicKeyArr.push(cur.value)
+        }
+
+        if (dicKeyArr.includes(list[n][key])) {
           list[n][keyFormat] = cur.text
           // 如果有elType 则处理
           if (cur.elType) {
