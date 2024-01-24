@@ -79,6 +79,7 @@
             </el-form-item>
             <el-form-item class="w-100">
               <button
+                v-if="queryMintData.max"
                 class="w-100 btn btn-primary"
                 data-bs-toggle="modal"
                 data-bs-target="#mintModal"
@@ -275,7 +276,12 @@
 import { reactive, ref, computed } from "vue"
 import comModalMint from "@/components/com-modal-mint.vue"
 import * as bootstrap from "bootstrap"
-import { createOrder, gasCountLatest, verifyToken } from "@/api/server-api.js"
+import {
+  createOrder,
+  gasCountLatest,
+  verifyToken,
+  orderMsg,
+} from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 
@@ -302,7 +308,22 @@ const submitFormMint = async () => {
   if (!refFormMint.value) return
   await refFormMint.value.validate(async (valid, fields) => {
     if (valid) {
-      console.log("submit!")
+      const res = await orderMsg({
+        ticker: formDataMint.tick,
+      })
+      if (res.data?.result?.ticker) {
+        queryMintData.value.max = res.data.result.max
+        queryMintData.value.minted = res.data.result.totalSupply
+        queryMintData.value.limit = res.data.result.limit
+        queryMintData.value.remaining = res.data.result.remaining
+      } else {
+        clearQueryMintData()
+        resetFormMint()
+        ElMessage({
+          type: "warning",
+          message: "Tick does not exist",
+        })
+      }
     } else {
       console.log("error submit!", fields)
     }

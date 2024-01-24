@@ -28,6 +28,15 @@ export const verifyToken = (data) => {
   })
 }
 
+// 获取l2 ticker详情
+export const orderMsg = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/orderMsg?${d}`,
+    method: "get",
+  })
+}
+
 // 创建一个订单
 export const createOrder = (data) => {
   return service({
