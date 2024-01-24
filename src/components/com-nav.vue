@@ -134,17 +134,20 @@
                     {{ i18n.t("comNav.DeployOrder") }}
                   </button>
                 </li>
-                <li>
+                <!-- <li>
                   <button
                     class="btn dropdown-item"
                     @click="navTo('mint-order')"
                   >
                     {{ $t("comNav.MintOrder") }}
                   </button>
-                </li>
+                </li> -->
                 <li><hr class="dropdown-divider" /></li>
                 <li>
-                  <button class="btn dropdown-item" @click="handleDisconnect">
+                  <button
+                    class="btn text-danger dropdown-item"
+                    @click="handleDisconnect"
+                  >
                     {{ $t("comNav.Disconnect") }}
                   </button>
                 </li>

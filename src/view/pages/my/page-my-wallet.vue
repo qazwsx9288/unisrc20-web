@@ -31,7 +31,7 @@
             :label="$t('pages.my.pageMyWallet.Balance')"
             width="auto"
           />
-          <el-table-column
+          <!-- <el-table-column
             fixed="right"
             :label="$t('pages.my.pageMyWallet.Action')"
             width="130"
@@ -41,7 +41,7 @@
                 {{ $t("pages.my.pageMyWallet.Send") }}
               </button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </div>
     </div>
