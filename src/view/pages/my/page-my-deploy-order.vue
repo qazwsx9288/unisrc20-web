@@ -79,17 +79,6 @@ async function init() {
   fetchList({})
 }
 
-// 搜索框内容
-const searchContent = ref("")
-async function handleSearch() {
-  init()
-}
-// 1 all, 2 inprogress, 3 completed
-const curStatus = ref("1")
-function handleFilterChange(s) {
-  curStatus.value = s
-  init()
-}
 // page
 const currentPage = ref(1)
 const pageSize = ref(10)
@@ -104,8 +93,6 @@ async function fetchList({ page = currentPage.value }) {
     const res = await getAllOrder({
       page: page,
       pageSize: pageSize.value,
-      type: curStatus.value,
-      search: searchContent.value,
     })
     console.log(res)
     total.value = res.data.total
