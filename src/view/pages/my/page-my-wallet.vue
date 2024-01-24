@@ -11,23 +11,36 @@
           <div class="me-1">
             {{ $t("pages.my.pageMyWallet.HideEmptyAssets") }}
           </div>
-          <el-switch v-model="isHideZero" />
+          <el-switch
+            v-model="isHideZero"
+            @change="handleIsHideZeroChange"
+            active-value="1"
+            inactive-value="0"
+          />
         </div>
       </div>
+
       <div>
-        <el-table class="rounded" :data="tableData" style="width: 100%">
+        <el-table class="rounded" :data="tableDataView" style="width: 100%">
           <el-table-column
-            prop="name"
+            prop="ticker"
             :label="$t('pages.my.pageMyWallet.Symbol')"
-            width="auto"
+            width="80"
           />
+
           <el-table-column
-            prop="name"
             :label="$t('pages.my.pageMyWallet.Contract')"
-            width="auto"
-          />
+            width="120"
+          >
+            <template #default="scope">
+              <a :href="scope?.row?.contractUrl" target="_blank">{{
+                scope?.row?.contractFormat
+              }}</a>
+            </template>
+          </el-table-column>
+
           <el-table-column
-            prop="name"
+            prop="balance"
             :label="$t('pages.my.pageMyWallet.Balance')"
             width="auto"
           />
@@ -44,20 +57,121 @@
           </el-table-column> -->
         </el-table>
       </div>
+
+      <!-- <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :background="true"
+        layout="prev, pager, next, jumper"
+        :total="total"
+        @current-change="handleCurrentChange"
+      /> -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, computed } from "vue"
+import { tickerList } from "@/api/server-api.js"
+import { listFormat } from "@/utils/list-format.js"
+import { contractConfig } from "@/contract/contract.js"
+import { ethers } from "ethers"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 
-const isHideZero = ref(true)
+const web3Wallet = useWeb3Wallet()
 
-const tableData = [
-  {
-    name: "Tom",
-  },
-]
+onMounted(() => {
+  isHideZero.value = localStorage.getItem("isHideZero") || "1"
+  init()
+})
+
+// init
+async function init() {
+  fetchList({})
+}
+
+// 空资产
+const isHideZero = ref("1")
+function handleIsHideZeroChange(val) {
+  localStorage.setItem("isHideZero", val)
+}
+
+// page
+const currentPage = ref(1)
+const pageSize = ref(99999)
+const total = ref(0)
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`)
+  fetchList({ page: val })
+}
+// 获取列表
+async function fetchList({ page = currentPage.value }) {
+  try {
+    const res = await tickerList({
+      page: page,
+      pageSize: pageSize.value,
+      type: "1",
+    })
+    console.log(res)
+    total.value = res.data.total
+
+    tableData.value = res.data.list.map((cur) => {
+      cur.ticker = cur.ticker.toUpperCase()
+      if (cur.contract) {
+        cur.contractUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${
+          cur.contract
+        }`
+
+        cur.contractFormat = `
+        ${cur.contract.slice(0, 3)}
+        ...
+        ${cur.contract.slice(-4, cur.contract.length)}
+        `
+      } else {
+        cur.contractUrl = ""
+        cur.contractFormat = ""
+      }
+
+      cur.balance = "0"
+      return cur
+    })
+
+    // 获取余额
+    const signer = await web3Wallet.getSigner()
+    tableData.value.forEach(async (cur) => {
+      const contractUSDT = new ethers.Contract(
+        cur.contract,
+        contractConfig.abi.L2TOKEN,
+        signer
+      )
+
+      const balance = await contractUSDT.balanceOf(
+        web3Wallet.userWallet.address
+      )
+      const decimals = await contractUSDT.decimals()
+      const formattedBalance = ethers.utils.formatUnits(balance, decimals)
+      cur.balance = parseFloat(formattedBalance).toFixed(4)
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+// 表格数据
+const tableData = ref([])
+// 表格展示数据
+const tableDataView = computed(() => {
+  if (isHideZero.value === "1") {
+    return tableData.value.filter((cur) => {
+      if (cur.balance == "0") {
+        return false
+      } else {
+        return true
+      }
+    })
+  } else {
+    return tableData.value
+  }
+})
 </script>
 
 <style scoped></style>
