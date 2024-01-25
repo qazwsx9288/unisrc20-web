@@ -162,7 +162,7 @@ const tableData = ref([])
 const tableDataView = computed(() => {
   if (isHideZero.value === "1") {
     return tableData.value.filter((cur) => {
-      if (cur.balance == "0") {
+      if (["0", "0.0000"].includes(cur.balance)) {
         return false
       } else {
         return true
