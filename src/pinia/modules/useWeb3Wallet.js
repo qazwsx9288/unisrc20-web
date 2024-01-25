@@ -186,6 +186,9 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     userWallet.value.token = ""
     localStorage.setItem("walletName", "")
     localStorage.setItem("token", "")
+
+    // 登出事件
+    bus.emit("onClearSigner", {})
   }
 
   // 支付

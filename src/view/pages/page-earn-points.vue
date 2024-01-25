@@ -15,7 +15,8 @@
             {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
           </div>
           <span class="bg-primary text-light p-2 rounded">
-            {{ $t("pages.pageEarnPoints.MyTotalPoints") }}: 0
+            {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
+            {{ dataInfo.taskScore }}
           </span>
         </div>
 
@@ -81,13 +82,14 @@
           </el-table>
         </div>
 
-        <div class="pb-3">
+        <div v-if="web3Wallet.userWallet.token" class="pb-3">
           <div class="fs-4 pb-3">
             {{ $t("pages.pageEarnPoints.Getmorepointsbyinvitingyourfriends") }}
           </div>
           <div class="pb-3">
             <span class="bg-primary text-light p-2 rounded">
-              {{ $t("pages.pageEarnPoints.Pointsbyinvited") }}: 0
+              {{ $t("pages.pageEarnPoints.Pointsbyinvited") }}:
+              {{ dataInfo.inviteScore }}
             </span>
           </div>
 
@@ -97,8 +99,14 @@
               Points per invited)
             </div>
             <div class="text-break">
-              <span>https://app.unisrc20.com/code=abasbdawdoajsdkl</span>
-              <button class="btn btn-primary btn-sm ms-2" type="button">
+              <span>{{
+                `https://app.unisrc20.com/inviteAddress=${dataInfo.address}`
+              }}</span>
+              <button
+                class="btn btn-primary btn-sm ms-2"
+                type="button"
+                @click="handleCopyInviteUrl"
+              >
                 Copy
               </button>
             </div>
@@ -113,12 +121,18 @@
 import { ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { getTaskList } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+import { copyToClipboard } from "@/utils/helper.js"
 import bus from "vue3-eventbus"
+import { ElMessage } from "element-plus"
 
 const web3Wallet = useWeb3Wallet()
 
 onMounted(() => {
   bus.on("onGetSigner", () => {
+    init()
+  })
+
+  bus.on("onClearSigner", () => {
     init()
   })
 
@@ -139,6 +153,23 @@ async function fetchInfo() {
 const tableData = computed(() => {
   return dataInfo.value?.task || []
 })
+
+function handleCopyInviteUrl() {
+  try {
+    copyToClipboard(
+      `https://app.unisrc20.com/inviteAddress=${dataInfo.value.address}`
+    )
+    ElMessage({
+      type: "success",
+      message: "Success",
+    })
+  } catch (error) {
+    ElMessage({
+      type: "warning",
+      message: "Please manually copy",
+    })
+  }
+}
 
 // const tableData = [
 //   {
