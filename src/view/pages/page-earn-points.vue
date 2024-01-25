@@ -32,13 +32,13 @@
               width="auto"
             >
               <template #default="scope">
-                {{ scope.row.taskText }}
+                {{ scope.row.taskName }}
               </template>
             </el-table-column>
 
             <el-table-column
               fixed
-              prop="points"
+              prop="point"
               :label="$t('pages.pageEarnPoints.Points')"
               width="100"
             />
@@ -50,15 +50,31 @@
             >
               <template #default="scope">
                 <a
-                  v-if="scope.row.taskLink"
+                  v-if="
+                    scope.row.done === 0 &&
+                    web3Wallet.userWallet.token &&
+                    scope.row.id !== 6
+                  "
                   type="button"
-                  :href="scope.row.taskLink"
+                  :href="scope.row.url"
                   target="_blank"
                   class="btn btn-sm btn-primary me-2"
                 >
                   To do it
                 </a>
-                <span v-if="!scope.row.taskLink">Comming Soon</span>
+
+                <el-tag
+                  v-if="scope.row.done === 1 && web3Wallet.userWallet.token"
+                  type="success"
+                >
+                  Done
+                </el-tag>
+
+                <span v-if="!web3Wallet.userWallet.token && scope.row.id !== 6">
+                  Connect First
+                </span>
+
+                <span v-if="scope.row.id === 6">Comming Soon</span>
                 <!-- <span>Completed</span> -->
               </template>
             </el-table-column>
@@ -94,44 +110,71 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onBeforeUnmount, computed } from "vue"
+import { getTaskList } from "@/api/server-api.js"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+import bus from "vue3-eventbus"
 
-// 表格数据
-const tableData = [
-  {
-    taskText:
-      "Follow @unisrc20 on Twitter and report your wallet address to @unisrc20.",
-    points: "10",
-    taskLink: "https://twitter.com/unisrc20",
-  },
-  {
-    taskText:
-      "Join @unisrc20 on Discord and report your wallet address to @unisrc20.",
-    points: "10",
-    taskLink: "https://t.co/eVNMU1QQ0I",
-  },
-  {
-    taskText:
-      "Join @unisrc20 on Telegram and report your wallet address to @unisrc20.",
-    points: "10",
-    taskLink: "https://t.me/unisrc20",
-  },
-  {
-    taskText: "Deploy a BRC20 token in Unisrc20.",
-    points: "50",
-    taskLink: "/#/inscribe",
-  },
-  {
-    taskText: "Mint a BRC20 token in Unisrc20.",
-    points: "50",
-    taskLink: "/#/inscribe",
-  },
-  {
-    taskText: "Buy a BRC20 token in Unisrc20.",
-    points: "50",
-    taskLink: "",
-  },
-]
+const web3Wallet = useWeb3Wallet()
+
+onMounted(() => {
+  bus.on("onGetSigner", () => {
+    init()
+  })
+
+  init()
+})
+
+// init
+async function init() {
+  fetchInfo()
+}
+
+const dataInfo = ref({})
+async function fetchInfo() {
+  const res = await getTaskList()
+  dataInfo.value = res.data.result
+}
+
+const tableData = computed(() => {
+  return dataInfo.value?.task || []
+})
+
+// const tableData = [
+//   {
+//     taskText:
+//       "Follow @unisrc20 on Twitter and report your wallet address to @unisrc20.",
+//     points: "10",
+//     taskLink: "https://twitter.com/unisrc20",
+//   },
+//   {
+//     taskText:
+//       "Join @unisrc20 on Discord and report your wallet address to @unisrc20.",
+//     points: "10",
+//     taskLink: "https://t.co/eVNMU1QQ0I",
+//   },
+//   {
+//     taskText:
+//       "Join @unisrc20 on Telegram and report your wallet address to @unisrc20.",
+//     points: "10",
+//     taskLink: "https://t.me/unisrc20",
+//   },
+//   {
+//     taskText: "Deploy a BRC20 token in Unisrc20.",
+//     points: "50",
+//     taskLink: "/#/inscribe",
+//   },
+//   {
+//     taskText: "Mint a BRC20 token in Unisrc20.",
+//     points: "50",
+//     taskLink: "/#/inscribe",
+//   },
+//   {
+//     taskText: "Buy a BRC20 token in Unisrc20.",
+//     points: "50",
+//     taskLink: "",
+//   },
+// ]
 </script>
 
 <style lang="scss" scoped></style>

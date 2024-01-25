@@ -7,6 +7,7 @@ import {
   verifyAddress,
 } from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
+import bus from "vue3-eventbus"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -154,6 +155,9 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
         userWallet.value.address = await signer.getAddress()
         userWallet.value.token = token
         localStorage.setItem("walletName", wallet.name)
+
+        // 登陆事件
+        bus.emit("onGetSigner", {})
 
         return signer
       } catch (error) {

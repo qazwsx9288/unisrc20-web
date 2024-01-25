@@ -4,6 +4,7 @@ import router from "@/router/index.js"
 import { store } from "@/pinia"
 import { createI18n } from "vue-i18n"
 import messages from "./i18n/index.js"
+import eventBus from "vue3-eventbus"
 
 const i18n = createI18n({
   legacy: false,
@@ -25,4 +26,10 @@ import "./styles/style.scss"
 
 const app = createApp(App)
 app.config.productionTip = false
-app.use(router).use(store).use(ElementPlus).use(i18n).mount("#app")
+app
+  .use(router)
+  .use(store)
+  .use(ElementPlus)
+  .use(eventBus)
+  .use(i18n)
+  .mount("#app")
