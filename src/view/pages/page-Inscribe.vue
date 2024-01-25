@@ -388,12 +388,15 @@ const submitFormDeploy = async () => {
         return
       }
 
-      // TOKEN已在BRC20
+      // Tick已在BRC20
       try {
         const resVerifyToken = await verifyToken({
           ticker: formDataDeploy.tick,
         })
-        if (resVerifyToken?.data.code === 0 && !resVerifyToken?.data?.result) {
+        if (
+          resVerifyToken?.code === 0 &&
+          resVerifyToken?.data?.result === false
+        ) {
           ElMessage({
             type: "warning",
             message: "Tick already exists",
