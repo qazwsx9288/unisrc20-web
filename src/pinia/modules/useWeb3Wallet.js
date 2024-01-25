@@ -8,6 +8,7 @@ import {
 } from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
+import { getQueryString } from "@/utils/helper.js"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -118,9 +119,12 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
         let token = localStorage.getItem("token")
         if (!token) {
+          const qr = getQueryString()
+
           // 获取签名消息
           const resGetSign = await getSignatureMessage({
             address: signerAddress,
+            inviteAddress: qr?.inviteAddress || "",
           })
           const signMsg = resGetSign.data.result
           console.log(signMsg)

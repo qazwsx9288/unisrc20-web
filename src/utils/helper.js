@@ -43,3 +43,41 @@ export function copyToClipboard(text) {
     }
   }
 }
+
+// 获取当前页的queryString
+export function getQueryString() {
+  // 创建一个空对象来保存查询参数
+  let queryParams = {}
+
+  // 获取当前URL的查询字符串部分，去除'?'
+  let queryString = window.location.search.substring(1)
+
+  // 检查查询字符串是否为空
+  if (queryString) {
+    // 将查询字符串分解为单独的参数
+    let params = queryString.split("&")
+
+    // 遍历参数
+    for (let param of params) {
+      // 将每个参数分解为键和值
+      let pair = param.split("=")
+
+      // 解码键和值，并将它们添加到queryParams对象
+      let key = decodeURIComponent(pair[0])
+      let value = pair.length > 1 ? decodeURIComponent(pair[1]) : null
+
+      // 如果键已经存在，则创建数组来支持多个值
+      if (queryParams[key]) {
+        if (!Array.isArray(queryParams[key])) {
+          queryParams[key] = [queryParams[key]]
+        }
+        queryParams[key].push(value)
+      } else {
+        queryParams[key] = value
+      }
+    }
+  }
+
+  // 返回包含所有查询参数的对象
+  return queryParams
+}

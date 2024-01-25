@@ -100,7 +100,7 @@
             </div>
             <div class="text-break">
               <span>{{
-                `https://app.unisrc20.com/inviteAddress=${dataInfo.address}`
+                `https://app.unisrc20.com/?inviteAddress=${dataInfo.address}`
               }}</span>
               <button
                 class="btn btn-primary btn-sm ms-2"
@@ -157,7 +157,7 @@ const tableData = computed(() => {
 function handleCopyInviteUrl() {
   try {
     copyToClipboard(
-      `https://app.unisrc20.com/inviteAddress=${dataInfo.value.address}`
+      `https://app.unisrc20.com/?inviteAddress=${dataInfo.value.address}`
     )
     ElMessage({
       type: "success",
