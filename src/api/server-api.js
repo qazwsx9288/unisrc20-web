@@ -90,3 +90,21 @@ export const verifyAddress = (data) => {
     data,
   })
 }
+
+// 获取任务列表
+export const getTaskList = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getTaskList?${d}`,
+    method: "get",
+  })
+}
+
+// 完成任务
+export const completeTask = (data) => {
+  return service({
+    url: `/v1/completeTask`,
+    method: "post",
+    data,
+  })
+}
