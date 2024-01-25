@@ -55,7 +55,7 @@
                 class="small-item"
                 :label="$t('pages.pageInscribe.Minted')"
               >
-                <el-input disabled v-model="queryMintData.minted" />
+                <el-input disabled v-model="queryMintData.totalSupply" />
               </el-form-item>
             </div>
             <div class="d-lg-flex w-100 justify-content-between">
@@ -73,7 +73,7 @@
               </el-form-item>
             </div>
             <el-form-item class="w-100">
-              <button class="w-100 btn btn-primary" @click="submitFormMint">
+              <button class="w-100 btn btn-primary" @click="submitMintQuery">
                 {{ $t("pages.pageInscribe.Query") }}
               </button>
             </el-form-item>
@@ -81,8 +81,7 @@
               <button
                 v-if="queryMintData.max"
                 class="w-100 btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#mintModal"
+                @click="submitMint()"
               >
                 {{ $t("pages.pageInscribe.MintBtn") }}
               </button>
@@ -160,10 +159,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Modal mint -->
-    <comModalMint />
-    <!-- Modal mint end -->
 
     <!-- Modal depoly -->
     <div
@@ -274,7 +269,6 @@
 
 <script setup>
 import { reactive, ref, computed } from "vue"
-import comModalMint from "@/components/com-modal-mint.vue"
 import * as bootstrap from "bootstrap"
 import {
   createOrder,
@@ -284,6 +278,8 @@ import {
 } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
+import { ethers } from "ethers"
+import { contractConfig } from "@/contract/contract.js"
 
 const web3Wallet = useWeb3Wallet()
 
@@ -304,7 +300,7 @@ const rulesMint = reactive({
     { min: 4, max: 4, message: "Tick's length must be 4", trigger: "blur" },
   ],
 })
-const submitFormMint = async () => {
+const submitMintQuery = async () => {
   if (!refFormMint.value) return
   await refFormMint.value.validate(async (valid, fields) => {
     if (valid) {
@@ -312,10 +308,7 @@ const submitFormMint = async () => {
         ticker: formDataMint.tick,
       })
       if (res.data?.result?.ticker) {
-        queryMintData.value.max = res.data.result.max
-        queryMintData.value.minted = res.data.result.totalSupply
-        queryMintData.value.limit = res.data.result.limit
-        queryMintData.value.remaining = res.data.result.remaining
+        queryMintData.value = res.data.result
       } else {
         clearQueryMintData()
         resetFormMint()
@@ -336,18 +329,50 @@ const resetFormMint = async () => {
 // Query查询的数据
 const queryMintData = ref({})
 function clearQueryMintData() {
-  queryMintData.value = {
-    max: "",
-    minted: "",
-    limit: "",
-    remaining: "",
-  }
+  queryMintData.value = {}
 }
 function handleMintTickInput() {
   clearQueryMintData()
 }
-function handleGoMint() {
-  // TODO:打开Mint弹窗
+// MINT
+async function submitMint() {
+  if (!web3Wallet.userWallet.token) {
+    ElMessage({
+      type: "warning",
+      message: "Please connect first",
+    })
+    return
+  }
+
+  if (queryMintData.value.max === queryMintData.value.totalSupply) {
+    ElMessage({
+      type: "warning",
+      message: "The remaining times is zero",
+    })
+    return
+  }
+
+  const signer = await web3Wallet.getSigner()
+
+  const contractL2 = new ethers.Contract(
+    queryMintData.value.contract,
+    contractConfig.abi.USDT,
+    signer
+  )
+
+  // TODO: 用户拒绝，交易失败
+  // TODO: white List
+  try {
+    const resTx = await contractL2.mint()
+    await resTx.wait()
+
+    ElMessage({
+      type: "success",
+      message: "Operation successful",
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 // Deploy表单
@@ -446,7 +471,6 @@ function handleGoDeploy() {
   myModal.show()
 }
 // deploy submit
-//TODO:下单
 const deployModalLoading = ref(false)
 async function submitFormDeployModal() {
   deployModalLoading.value = true
