@@ -56,9 +56,9 @@ export const getAllOrder = (data) => {
 }
 
 // 验证白名单
-export const verifyWritelist = (data) => {
+export const verifyWhitelist = (data) => {
   return service({
-    url: `/v1/verifyWritelist`,
+    url: `/v1/verifyWhitelist`,
     method: "post",
     data,
   })

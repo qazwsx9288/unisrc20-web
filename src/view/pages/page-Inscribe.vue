@@ -336,14 +336,6 @@ function handleMintTickInput() {
 }
 // MINT
 async function submitMint() {
-  if (!web3Wallet.userWallet.token) {
-    ElMessage({
-      type: "warning",
-      message: "Please connect first",
-    })
-    return
-  }
-
   if (queryMintData.value.max === queryMintData.value.totalSupply) {
     ElMessage({
       type: "warning",
@@ -352,27 +344,10 @@ async function submitMint() {
     return
   }
 
-  const signer = await web3Wallet.getSigner()
-
-  const contractL2 = new ethers.Contract(
+  await web3Wallet.mintL2(
     queryMintData.value.contract,
-    contractConfig.abi.USDT,
-    signer
+    queryMintData.value.ticker
   )
-
-  // TODO: 用户拒绝，交易失败
-  // TODO: white List
-  try {
-    const resTx = await contractL2.mint()
-    await resTx.wait()
-
-    ElMessage({
-      type: "success",
-      message: "Operation successful",
-    })
-  } catch (error) {
-    console.log(error)
-  }
 }
 
 // Deploy表单

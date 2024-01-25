@@ -5,10 +5,12 @@ import {
   getSignatureMessage,
   verifySignature,
   verifyAddress,
+  verifyWhitelist,
 } from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
 import { getQueryString } from "@/utils/helper.js"
+import { ElMessage } from "element-plus"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -217,6 +219,62 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     return contractUSDT.transfer(receiveAccount, amount)
   }
 
+  // mint
+  async function mintL2(contract, ticker) {
+    if (!userWallet.value.token) {
+      ElMessage({
+        type: "warning",
+        message: "Please connect first",
+      })
+      return
+    }
+
+    // white List
+    const resVerifyWhitelist = await verifyWhitelist({ ticker })
+    if (resVerifyWhitelist?.data?.result === false) {
+      ElMessage({
+        type: "error",
+        message: "You are not in whitelist",
+      })
+      return
+    }
+
+    const signer = await getSigner()
+
+    const contractL2 = new ethers.Contract(
+      contract,
+      contractConfig.abi.L2TOKEN,
+      signer
+    )
+
+    // 用户拒绝，交易失败
+    try {
+      const resTx = await contractL2.mint()
+      await resTx.wait()
+
+      ElMessage({
+        type: "success",
+        message: "Operation successful",
+      })
+    } catch (error) {
+      console.log(error)
+
+      let msg = ""
+      if (error.message.includes("user rejected transaction")) {
+        msg = "User rejected transaction!"
+      } else if (error.message.includes("this token is not mintable")) {
+        msg = "This token is not mintable"
+      } else {
+        msg = "Mint failed"
+      }
+
+      ElMessage({
+        type: "error",
+        message: msg,
+      })
+    }
+  }
+
   // 错误表
   const errorType = {
     NO_WALLET: Symbol("NO_WALLET"),
@@ -231,6 +289,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     clearSigner,
     getDefaultProvider,
     payUSDT,
+    mintL2,
     userWallet,
     errorType,
   }

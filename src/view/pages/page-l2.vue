@@ -65,14 +65,16 @@
           <el-table-column
             prop="holders"
             :label="$t('pages.pageL2.Holders')"
-            width="180"
+            width="160"
           />
 
-          <el-table-column
-            prop="createdAtFormat"
-            :label="$t('pages.pageL2.DeployTime')"
-            width="200"
-          />
+          <el-table-column label="Hash" width="120">
+            <template #default="scope">
+              <a :href="scope.row.contractHashUrl" target="_blank">
+                {{ scope.row.contractHashFormat }}
+              </a>
+            </template>
+          </el-table-column>
 
           <el-table-column :label="$t('pages.pageL2.Progress')" width="180">
             <template #default="scope"> {{ scope.row.rate }} % </template>
@@ -101,8 +103,13 @@
             :label="$t('pages.pageL2.Action')"
             width="130"
           >
-            <template #default="">
-              <button type="button" class="btn btn-sm btn-primary me-2">
+            <template #default="scope">
+              <button
+                :disabled="scope.row.rate >= 100"
+                type="button"
+                class="btn btn-sm btn-primary me-2"
+                @click="handleMint(scope.row)"
+              >
                 {{ $t("pages.pageL2.Mint") }}
               </button>
               <!-- <button type="button" class="btn btn-sm btn-secondary">
@@ -129,6 +136,9 @@
 import { ref, onMounted } from "vue"
 import { tickerList } from "@/api/server-api.js"
 import { listFormat } from "@/utils/list-format.js"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+
+const web3Wallet = useWeb3Wallet()
 
 onMounted(() => {
   init()
@@ -169,7 +179,26 @@ async function fetchList({ page = currentPage.value }) {
     })
     console.log(res)
     total.value = res.data.total
-    tableData.value = res.data.list
+    tableData.value = res.data.list.map((cur) => {
+      cur.ticker = cur.ticker.toUpperCase()
+      if (cur.contract) {
+        cur.contractHashUrl = `${
+          import.meta.env.VITE_BASE_OKTC_SCAN_URL
+        }/address/${cur.contract}`
+
+        cur.contractHashFormat = `
+        ${cur.contract.slice(0, 3)}
+        ...
+        ${cur.contract.slice(-4, cur.contract.length)}
+        `
+        cur.deployStatus = cur.status
+      } else {
+        cur.contractHashUrl = ""
+        cur.contractHashFormat = ""
+      }
+      return cur
+    })
+
     listFormat(tableData.value)
   } catch (error) {
     console.log(error)
@@ -177,6 +206,11 @@ async function fetchList({ page = currentPage.value }) {
 }
 // 表格数据
 const tableData = ref([])
+
+// mint
+async function handleMint(item) {
+  await web3Wallet.mintL2(item.contract, item.ticker)
+}
 </script>
 
 <style scoped></style>
