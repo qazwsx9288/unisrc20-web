@@ -99,6 +99,9 @@ async function fetchList({ page = currentPage.value }) {
     total.value = res.data.total
     tableData.value = res.data.list.map((cur) => {
       cur.ticker = cur.ticker.toUpperCase()
+
+      cur.deployStatus = cur.status
+
       if (cur.deploy) {
         cur.deployHashUrl = `${import.meta.env.VITE_BASE_BTC_SCAN_URL}/tx/${
           cur.deploy
@@ -109,7 +112,6 @@ async function fetchList({ page = currentPage.value }) {
         ...
         ${cur.deploy.slice(-4, cur.deploy.length)}
         `
-        cur.deployStatus = cur.status
       } else {
         cur.deployHashUrl = ""
         cur.deployHashFormat = ""
