@@ -16,6 +16,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
   const RPC_URL = import.meta.env.VITE_BASE_OKX_RPC
   const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
+  const CHAIN_NAME = import.meta.env.VITE_BASE_CHAIN_Name
 
   // provider（无响应式）
   let defaultProvider = null
@@ -113,6 +114,22 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       // 连接钱包
       // const provider = new ethers.BrowserProvider(wallet.browserProvider)
       const provider = new ethers.providers.Web3Provider(wallet.browserProvider)
+
+      // 添加OKTC链
+      const nativeCurrency = {
+        name: CHAIN_NAME,
+        symbol: "OKT",
+        decimals: 18,
+      }
+      await provider.send("wallet_addEthereumChain", [
+        {
+          chainId: CHAIN_ID, // Chain ID of the custom network
+          chainName: "OKExChain Testnet", // Name of the custom network
+          nativeCurrency: nativeCurrency,
+          rpcUrls: [RPC_URL], // RPC URL of your custom network
+        },
+      ])
+
       try {
         // signer = await provider.getSigner()
         await provider.provider.request({ method: "eth_requestAccounts" })
@@ -152,7 +169,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
           })
         }
 
-        const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
+        // 连接钱包
         await signer.provider.send("wallet_switchEthereumChain", [
           { chainId: CHAIN_ID },
         ])
