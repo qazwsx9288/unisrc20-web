@@ -6,6 +6,7 @@ import { createI18n } from "vue-i18n"
 import messages from "./i18n/index.js"
 import eventBus from "vue3-eventbus"
 
+// TODO：翻译校对
 const i18n = createI18n({
   legacy: false,
   locale: localStorage.getItem("language") || "en",
