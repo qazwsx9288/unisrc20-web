@@ -335,6 +335,7 @@ function handleMintTickInput() {
   clearQueryMintData()
 }
 // MINT
+// TODO:完成任务
 async function submitMint() {
   if (queryMintData.value.max === queryMintData.value.totalSupply) {
     ElMessage({
