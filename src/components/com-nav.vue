@@ -185,7 +185,7 @@ const currentRoute = useCurrentRoute()
 const menuList = [
   {
     name: "l2",
-    label: "Brc20 L2",
+    label: "Brc20(L2)",
   },
   {
     name: "inscribe",
