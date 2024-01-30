@@ -167,7 +167,7 @@
         <div class="col-md-4 col-6">
           <div class="p-3 border rounded">
             <div class="text-secondary">Progress</div>
-            <div>
+            <div style="height: 24px">
               <el-progress :percentage="tickerInfo.rate" />
             </div>
           </div>
