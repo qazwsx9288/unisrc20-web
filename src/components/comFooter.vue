@@ -85,20 +85,66 @@
         </div>
       </div>
       <!-- SOURCE end -->
+      <!-- Add Token To Wallet -->
+      <div class="pe-0 pe-lg-3 pb-3 pb-lg-5 pb-lg-0">
+        <h3 class="text-secondary text-center text-lg-start">Add Token</h3>
+        <div class="row">
+          <div class="col-12">
+            <div class="cursor-pointer" @click="handleAddToken('USDT')">
+              <img
+                class="me-1"
+                style="width: 25px; height: 25px"
+                src="@/assets/img/icon-usdt.png"
+              />
+              <span>USDT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Add Token To Wallet end -->
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router"
+import { contractConfig } from "@/contract/contract.js"
+import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+import { ElMessage } from "element-plus"
 
 const router = useRouter()
+const web3Wallet = useWeb3Wallet()
 
 // 导航
 function navTo(name) {
   router.push({
     name,
   })
+}
+
+// 添加代币
+async function handleAddToken(symbol) {
+  const env = process.env.NODE_ENV
+  let contract
+  if (env === "development") {
+    contract = contractConfig.contract["oktc-test-usdt"]
+  } else {
+    contract = contractConfig.contract["oktc-usdt"]
+  }
+
+  try {
+    await web3Wallet.addTokenToWallet(
+      contract.contract,
+      contract.symbol,
+      contract.decimals
+    )
+  } catch (error) {
+    ElMessage({
+      type: "warning",
+      message: error.message || "Error",
+    })
+    console.log(error)
+  }
 }
 </script>
 
