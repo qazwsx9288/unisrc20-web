@@ -10,6 +10,17 @@
         <el-table class="rounded" :data="tableData" style="width: 100%">
           <el-table-column prop="ticker" label="Ticker" width="80" />
 
+          <el-table-column label="Icon" width="120">
+            <template #default="scope">
+              <img
+                v-if="scope.row.logoBase64"
+                style="width: 30px; height: 30px"
+                :src="scope.row.logoBase64"
+                alt=""
+              />
+            </template>
+          </el-table-column>
+
           <el-table-column label="Hash" width="120">
             <template #default="scope">
               <a :href="scope.row.deployHashUrl" target="_blank">{{
