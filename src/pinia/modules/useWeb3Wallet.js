@@ -222,18 +222,27 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       signer
     )
 
-    const signerAddress = await signer.getAddress()
-    const balance = await contractUSDT.balanceOf(signerAddress)
+    try {
+      const signerAddress = await signer.getAddress()
+      const balance = await contractUSDT.balanceOf(signerAddress)
 
-    if (balance.lt(amount)) {
+      if (balance.lt(amount)) {
+        return {
+          error: true,
+          msg: "Insufficient token balance.",
+          errorType: errorType.INSUFFICIENT_BALANCE,
+        }
+      }
+
+      return contractUSDT.transfer(receiveAccount, amount)
+    } catch (error) {
+      console.log(error)
       return {
         error: true,
-        msg: "Insufficient token balance.",
-        errorType: errorType.INSUFFICIENT_BALANCE,
+        msg: "Network Error, retry.",
+        errorType: errorType.UNKNOWN,
       }
     }
-
-    return contractUSDT.transfer(receiveAccount, amount)
   }
 
   // mint
