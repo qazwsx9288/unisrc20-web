@@ -48,6 +48,10 @@ service.interceptors.response.use(
   },
   (error) => {
     console.log("response请求错误：", error)
+    ElMessage({
+      message: "Network error, server not responding.",
+      type: "error",
+    })
     return error
   }
 )
