@@ -75,6 +75,19 @@
       "Pointsbyinvited": "通過邀請獲得的積分",
       "CopythisURLtoyourfriends": "複製這個URL給你的朋友"
     },
-    "pageL2Info": {}
+    "pageL2Info": {
+      "InscriptionInfo": "铭文信息",
+      "AddTokentoWallet": "添加代币到钱包",
+      "Supply": "已铸造",
+      "LimitPerMint": "单次铸造",
+      "Holders": "持有者",
+      "Transactions": "交易",
+      "Decimals": "小数位",
+      "DeployTime": "部署时间",
+      "Progress": "进度",
+      "Percent": "占比",
+      "Address": "地址",
+      "Total": "总数"
+    }
   }
 }

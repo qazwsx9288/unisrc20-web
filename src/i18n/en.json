@@ -80,7 +80,16 @@
     "pageL2Info": {
       "Holders": "Holders",
       "Transactions": "Transactions",
-      "Total": "Total"
+      "Total": "Total",
+      "Percent": "Percent",
+      "Address": "Address",
+      "InscriptionInfo": "Inscription Info",
+      "AddTokentoWallet": "Add Token To Wallet",
+      "Supply": "Supply",
+      "LimitPerMint": "Limit Per Mint",
+      "Decimals": "Decimals",
+      "DeployTime": "Deploy Time",
+      "Progress": "Progress"
     }
   }
 }

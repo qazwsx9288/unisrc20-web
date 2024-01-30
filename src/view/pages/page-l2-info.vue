@@ -1,7 +1,9 @@
 <template>
   <div class="page-min-h">
     <div class="container">
-      <h2 class="m-0 py-3 py-lg-5 text-primary-emphasis">Inscription Info</h2>
+      <h2 class="m-0 py-3 py-lg-5 text-primary-emphasis">
+        {{ $t("pages.pageL2Info.InscriptionInfo") }}
+      </h2>
 
       <!-- top -->
       <div class="row">
@@ -111,9 +113,9 @@
           </div>
 
           <div>
-            <el-link @click="handleAddTokenToWallet" type="primary"
-              >Add Token to Wallet</el-link
-            >
+            <el-link @click="handleAddTokenToWallet" type="primary">
+              {{ $t("pages.pageL2Info.AddTokentoWallet") }}
+            </el-link>
           </div>
         </div>
 
@@ -132,6 +134,7 @@
               {{ tickerInfo.deployHashFormat }}
             </a>
           </div>
+
           <div>
             <img
               style="width: 1rem; height: 1rem"
@@ -166,7 +169,9 @@
         <!-- progress -->
         <div class="col-md-4 col-6">
           <div class="p-3 border rounded">
-            <div class="text-secondary">Progress</div>
+            <div class="text-secondary">
+              {{ $t("pages.pageL2Info.Progress") }}
+            </div>
             <div style="height: 24px">
               <el-progress :percentage="tickerInfo.rate" />
             </div>
@@ -207,7 +212,11 @@
             :data="holderList"
             style="width: 100%"
           >
-            <el-table-column fixed label="Address" width="auto">
+            <el-table-column
+              fixed
+              :label="$t('pages.pageL2Info.Address')"
+              width="auto"
+            >
               <template #default="scope">
                 <a :href="scope.row.holderAddressUrl" target="_blank">
                   {{ scope.row.holderAddress }}
@@ -215,7 +224,11 @@
               </template>
             </el-table-column>
 
-            <el-table-column fixed label="Percent" width="180">
+            <el-table-column
+              fixed
+              :label="$t('pages.pageL2Info.Percent')"
+              width="180"
+            >
               <template #default="scope">
                 <el-progress :percentage="scope.row.rate" />
               </template>
@@ -255,6 +268,9 @@ import { orderMsg, getHolders } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
+import { useI18n } from "vue-i18n"
+
+const i18n = useI18n()
 
 const route = useRoute()
 const web3Wallet = useWeb3Wallet()
@@ -268,8 +284,8 @@ onMounted(() => {
 })
 
 async function init() {
-  await fetchInfo()
-  await fetchHolderList()
+  fetchInfo()
+  fetchHolderList()
 }
 
 // ticker信息
@@ -334,23 +350,23 @@ const overviewList = computed(() => {
   const info = tickerInfo.value
   return [
     {
-      label: "Supply",
+      label: i18n.t("pages.pageL2Info.Supply"),
       value: info.totalSupply || "0",
     },
     {
-      label: "Limit Per Mint",
+      label: i18n.t("pages.pageL2Info.LimitPerMint"),
       value: info.limit || "0",
     },
     {
-      label: "Holders",
+      label: i18n.t("pages.pageL2Info.Holders"),
       value: info.holders || "0",
     },
     {
-      label: "Decimals",
+      label: i18n.t("pages.pageL2Info.Decimals"),
       value: info.dec || "0",
     },
     {
-      label: "Deploy Time",
+      label: i18n.t("pages.pageL2Info.DeployTime"),
       value: info.createdAtFormat || "0",
     },
   ]
@@ -368,7 +384,7 @@ async function fetchHolderList() {
   const res = await getHolders({
     pageSize: pageSizeHolder.value,
     page: currentPageHolder.value,
-    ticker: tickerInfo.value.ticker,
+    ticker: queryParam.value.ticker,
   })
 
   totalHolder.value = res.data.result.total
