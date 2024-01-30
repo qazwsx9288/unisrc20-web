@@ -119,9 +119,26 @@
               src="@/assets/img/icon-btc.png"
             />
             <span>L1 Address: </span>
-            <a :href="tickerInfo.deployHashUrl" target="_blank">
-              {{ tickerInfo.deploy }}
+
+            <a class="me-2" :href="tickerInfo.deployHashUrl" target="_blank">
+              {{ tickerInfo.deployHashFormat }}
             </a>
+
+            <span class="cursor-pointer" @click="handleCopy(tickerInfo.deploy)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-copy"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                />
+              </svg>
+            </span>
           </div>
 
           <div>
@@ -131,9 +148,29 @@
               src="@/assets/img/icon-okx.png"
             />
             <span>L2 Address: </span>
-            <a :href="tickerInfo.contractHashUrl" target="_blank">
-              {{ tickerInfo.contract }}
+
+            <a class="me-2" :href="tickerInfo.contractHashUrl" target="_blank">
+              {{ tickerInfo.contractHashFormat }}
             </a>
+
+            <span
+              class="cursor-pointer"
+              @click="handleCopy(tickerInfo.contract)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-copy"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                />
+              </svg>
+            </span>
           </div>
         </div>
         <!-- address end -->
@@ -258,6 +295,7 @@ import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
 import { useI18n } from "vue-i18n"
+import { copyToClipboard } from "@/utils/helper.js"
 
 const i18n = useI18n()
 
@@ -301,9 +339,12 @@ async function fetchInfo() {
       }/address/${tickerInfo.value.contract}`
 
       tickerInfo.value.contractHashFormat = `
-        ${tickerInfo.value.contract.slice(0, 3)}
+        ${tickerInfo.value.contract.slice(0, 12)}
         ...
-        ${tickerInfo.value.contract.slice(-4, tickerInfo.value.contract.length)}
+        ${tickerInfo.value.contract.slice(
+          -12,
+          tickerInfo.value.contract.length
+        )}
         `
       tickerInfo.value.deployStatus = tickerInfo.value.status
     } else {
@@ -318,9 +359,9 @@ async function fetchInfo() {
       }/tx/${tickerInfo.value.deploy}`
 
       tickerInfo.value.deployHashFormat = `
-        ${tickerInfo.value.deploy.slice(0, 3)}
+        ${tickerInfo.value.deploy.slice(0, 12)}
         ...
-        ${tickerInfo.value.deploy.slice(-4, tickerInfo.value.deploy.length)}
+        ${tickerInfo.value.deploy.slice(-12, tickerInfo.value.deploy.length)}
         `
     } else {
       tickerInfo.value.deployHashUrl = ""
@@ -423,6 +464,21 @@ async function handleAddTokenToWallet() {
       message: error.message || "Error",
     })
     console.log(error)
+  }
+}
+
+function handleCopy(text) {
+  try {
+    copyToClipboard(text)
+    ElMessage({
+      type: "success",
+      message: "Success",
+    })
+  } catch (error) {
+    ElMessage({
+      type: "warning",
+      message: "Your browser is blocking copying",
+    })
   }
 }
 </script>
