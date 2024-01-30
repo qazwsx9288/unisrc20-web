@@ -81,3 +81,25 @@ export function getQueryString() {
   // 返回包含所有查询参数的对象
   return queryParams
 }
+
+// return promise(file)
+export function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    var reader = new FileReader()
+
+    // 读取文件完成时触发的回调函数
+    reader.onload = function (event) {
+      // 将文件内容转换为Base64字符串
+      var base64String = event.target.result
+      resolve(base64String)
+    }
+
+    // 读取文件出错时触发的回调函数
+    reader.onerror = function (error) {
+      reject(error)
+    }
+
+    // 读取文件内容，并以DataURL的形式返回
+    reader.readAsDataURL(file)
+  })
+}

@@ -102,20 +102,13 @@
               <el-input v-model="formDataDeploy.tick" />
             </el-form-item>
 
-            <el-form-item
-              class="w-100"
-              :label="$t('pages.pageInscribe.ProjectUrl')"
-              prop="projectUrl"
-            >
-              <el-input v-model="formDataDeploy.projectUrl" />
-            </el-form-item>
-
             <el-form-item label="Max">
               <template #label>
                 {{ $t("pages.pageInscribe.Max_Max_Limit_Repeat") }}
               </template>
               <el-input disabled v-model="deployMax" />
             </el-form-item>
+
             <div class="d-lg-flex w-100 justify-content-between">
               <el-form-item
                 class="small-item"
@@ -147,9 +140,61 @@
               </el-form-item>
             </div>
 
+            <div class="mb-3 fw-bolder">Optional</div>
+
+            <el-form-item label="" prop="files">
+              <el-upload
+                ref="refUpload"
+                v-model:file-list="formDataDeploy.files"
+                :auto-upload="false"
+                drag
+                :limit="1"
+                accept=".jpg, .jpeg, .png,"
+                :on-exceed="handleExceed"
+              >
+                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+                <div class="el-upload__text">
+                  Drop file here or <em>click to upload</em>
+                </div>
+                <template #tip>
+                  <div class="el-upload__tip">
+                    jpg/png files with a size less than 300kb
+                  </div>
+                </template>
+              </el-upload>
+            </el-form-item>
+
+            <el-form-item
+              class="w-100"
+              :label="$t('pages.pageInscribe.ProjectUrl')"
+              prop="projectUrl"
+            >
+              <el-input v-model="formDataDeploy.projectUrl" />
+            </el-form-item>
+
+            <el-form-item class="w-100" label="Twitter" prop="twitter">
+              <el-input v-model="formDataDeploy.twitter" />
+            </el-form-item>
+
+            <el-form-item class="w-100" label="Github" prop="github">
+              <el-input v-model="formDataDeploy.github" />
+            </el-form-item>
+
+            <el-form-item class="w-100" label="Telegram" prop="telegram">
+              <el-input v-model="formDataDeploy.telegram" />
+            </el-form-item>
+
+            <el-form-item class="w-100" label="Medium" prop="medium">
+              <el-input v-model="formDataDeploy.medium" />
+            </el-form-item>
+
             <el-form-item class="w-100">
               <el-form-item class="w-100">
-                <button class="w-100 btn btn-primary" @click="submitFormDeploy">
+                <button
+                  type="button"
+                  class="w-100 btn btn-primary"
+                  @click="submitFormDeploy"
+                >
                   {{ $t("pages.pageInscribe.DeployBtn") }}
                 </button>
               </el-form-item>
@@ -277,9 +322,11 @@ import {
   orderMsg,
 } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
-import { ElMessage } from "element-plus"
+import { ElMessage, genFileId } from "element-plus"
 import { ethers } from "ethers"
 import { contractConfig } from "@/contract/contract.js"
+import { UploadFilled } from "@element-plus/icons-vue"
+import { fileToBase64 } from "@/utils/helper.js"
 
 const web3Wallet = useWeb3Wallet()
 
@@ -355,9 +402,14 @@ async function submitMint() {
 const refFormDeploy = ref(null)
 const formDataDeploy = reactive({
   tick: "",
-  projectUrl: "",
   limit: null,
   repeat: null,
+  projectUrl: "",
+  twitter: "",
+  github: "",
+  telegram: "",
+  medium: "",
+  files: [],
 })
 const deployMax = computed(() => {
   if (formDataDeploy.limit && formDataDeploy.repeat) {
@@ -366,7 +418,42 @@ const deployMax = computed(() => {
     return ""
   }
 })
+const checkUrl = (rule, value, callback) => {
+  if (value === undefined || value === null || value === "") {
+    callback()
+    return
+  }
 
+  // 校验value是否是http链接
+  const urlPattern =
+    /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/
+  if (urlPattern.test(value)) {
+    callback()
+  } else {
+    callback(new Error("Error URL"))
+  }
+}
+const checkFileSize = (rule, value, callback) => {
+  if (value === undefined || value === null || value === "") {
+    callback()
+    return
+  }
+
+  if (value?.lengt == 0) {
+    callback()
+    return
+  }
+
+  // 获取文件大小，以KB为单位
+  const file = value[0]
+  var fileSizeKB = file.size / 1024
+  // 检查文件大小是否小于 300KB
+  if (fileSizeKB < 300) {
+    callback() // 文件大小小于 300KB
+  } else {
+    callback(new Error("File size must < 300kb")) // 文件大小大于等于 300KB
+  }
+}
 const rulesDeploy = reactive({
   tick: [
     { required: true, message: "Please input", trigger: "blur" },
@@ -374,21 +461,36 @@ const rulesDeploy = reactive({
   ],
   repeat: [{ required: true, message: "Please input", trigger: "blur" }],
   limit: [{ required: true, message: "Please input", trigger: "blur" }],
+  projectUrl: [{ validator: checkUrl, trigger: "blur" }],
+  twitter: [{ validator: checkUrl, trigger: "blur" }],
+  github: [{ validator: checkUrl, trigger: "blur" }],
+  telegram: [{ validator: checkUrl, trigger: "blur" }],
+  medium: [{ validator: checkUrl, trigger: "blur" }],
+  files: [{ validator: checkFileSize, trigger: "blur" }],
 })
+// 上传组件文件超出限制的钩子 用于覆盖文件
+const refUpload = ref(null)
+function handleExceed(files) {
+  refUpload.value.clearFiles()
+  const file = files[0]
+  file.uid = genFileId()
+  refUpload.value.handleStart(file)
+  // 手动上传
+}
 const submitFormDeploy = async () => {
+  // 登陆校验
+  if (!web3Wallet?.userWallet?.address) {
+    ElMessage({
+      type: "warning",
+      message: "Please connect first",
+    })
+    return
+  }
+
   if (!refFormDeploy.value) return
   await refFormDeploy.value.validate(async (valid, fields) => {
     if (valid) {
       console.log("submit!")
-      // 登陆校验
-      if (!web3Wallet?.userWallet?.address) {
-        ElMessage({
-          type: "warning",
-          message: "Please connect first",
-        })
-        return
-      }
-
       // Tick已在BRC20
       try {
         const resVerifyToken = await verifyToken({
@@ -453,6 +555,18 @@ function handleGoDeploy() {
 const deployModalLoading = ref(false)
 async function submitFormDeployModal() {
   deployModalLoading.value = true
+
+  // logo转base64处理
+  let logoBase64 = ""
+  if (formDataDeploy.files?.length > 0) {
+    const logoFile = formDataDeploy.files[0].raw
+    try {
+      logoBase64 = await fileToBase64(logoFile)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   try {
     const res = await createOrder({
       ticker: formDataDeploy.tick,
@@ -460,6 +574,11 @@ async function submitFormDeployModal() {
       projectUrl: formDataDeploy.projectUrl,
       limit: String(formDataDeploy.limit),
       repeat: String(formDataDeploy.repeat),
+      twitter: formDataDeploy.twitter,
+      github: formDataDeploy.github,
+      telegram: formDataDeploy.telegram,
+      medium: formDataDeploy.medium,
+      logoBase64: logoBase64,
     })
 
     console.log(res)

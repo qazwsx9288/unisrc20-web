@@ -22,7 +22,9 @@
       "Max_Max_Limit_Repeat": "Max (Max = Limit * Repeat)",
       "Repeat": "Repeat",
       "DeployBtn": "Deploy",
-      "ProjectUrl": "Project Url"
+      "ProjectUrl": "Website",
+      "twitter": "Twitter",
+      "github": "Github"
     },
     "pageL2": {
       "Search": "Search",
@@ -36,7 +38,7 @@
       "Action": "Action",
       "Mint": "Mint",
       "Max": "Max",
-      "ProjectUrl": "Project Url"
+      "ProjectUrl": "Website"
     },
     "my": {
       "pageMyWallet": {
