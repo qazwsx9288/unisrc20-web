@@ -60,22 +60,19 @@
       <!-- 表格 -->
       <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
-          <el-table-column fixed label="Ticker" width="110">
+          <el-table-column fixed label="Ticker" width="130">
             <template #default="scope">
-              <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">{{
-                scope.row.ticker
-              }}</el-link>
-            </template>
-          </el-table-column>
+              <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">
+                <img
+                  v-if="scope.row.logoBase64"
+                  class="me-2 rounded-circle"
+                  style="width: 25px; height: 25px"
+                  :src="scope.row.logoBase64"
+                  alt=""
+                />
 
-          <el-table-column label="Icon" width="60">
-            <template #default="scope">
-              <img
-                v-if="scope.row.logoBase64"
-                style="width: 30px; height: 30px"
-                :src="scope.row.logoBase64"
-                alt=""
-              />
+                <span>{{ scope.row.ticker }}</span>
+              </el-link>
             </template>
           </el-table-column>
 
@@ -84,22 +81,6 @@
             :label="$t('pages.pageL2.Holders')"
             width="120"
           />
-
-          <el-table-column label="L1 Addresss" width="120">
-            <template #default="scope">
-              <a :href="scope.row.deployHashUrl" target="_blank">
-                {{ scope.row.deployHashFormat }}
-              </a>
-            </template>
-          </el-table-column>
-
-          <el-table-column label="L2 Addresss" width="120">
-            <template #default="scope">
-              <a :href="scope.row.contractHashUrl" target="_blank">
-                {{ scope.row.contractHashFormat }}
-              </a>
-            </template>
-          </el-table-column>
 
           <el-table-column :label="$t('pages.pageL2.Progress')" width="180">
             <template #default="scope">
@@ -185,26 +166,6 @@
                 >
                   <path
                     d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"
-                  />
-                </svg>
-              </a>
-
-              <a
-                v-if="scope.row.medium"
-                class="me-1"
-                target="_blank"
-                :href="scope.row.medium"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-medium"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M9.025 8c0 2.485-2.02 4.5-4.513 4.5A4.506 4.506 0 0 1 0 8c0-2.486 2.02-4.5 4.512-4.5A4.506 4.506 0 0 1 9.025 8m4.95 0c0 2.34-1.01 4.236-2.256 4.236S9.463 10.339 9.463 8c0-2.34 1.01-4.236 2.256-4.236S13.975 5.661 13.975 8M16 8c0 2.096-.355 3.795-.794 3.795-.438 0-.793-1.7-.793-3.795 0-2.096.355-3.795.794-3.795.438 0 .793 1.699.793 3.795"
                   />
                 </svg>
               </a>
