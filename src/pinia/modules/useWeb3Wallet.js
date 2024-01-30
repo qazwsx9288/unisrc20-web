@@ -11,6 +11,7 @@ import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
 import { getQueryString } from "@/utils/helper.js"
 import { ElMessage } from "element-plus"
+import { compileScript } from "vue/compiler-sfc"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
@@ -301,6 +302,23 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     }
   }
 
+  // 添加代币到钱包
+  async function addTokenToWallet(contractAddress, symbol, decimals) {
+    const signer = await getSigner()
+    console.log(contractAddress, symbol, decimals)
+    // 添加OKTC链
+    const params = {
+      type: "ERC20",
+      options: {
+        address: contractAddress,
+        symbol: symbol, // 代币符号
+        decimals: decimals, // 代币小数位数
+        image: "",
+      },
+    }
+    await signer.provider.send("wallet_watchAsset", params)
+  }
+
   // 错误表
   const errorType = {
     NO_WALLET: Symbol("NO_WALLET"),
@@ -316,6 +334,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     getDefaultProvider,
     payUSDT,
     mintL2,
+    addTokenToWallet,
     userWallet,
     errorType,
   }
