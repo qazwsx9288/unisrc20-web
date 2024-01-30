@@ -316,7 +316,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
         image: "",
       },
     }
-    await signer.provider.send("wallet_watchAsset", params)
+    return await signer.provider.send("wallet_watchAsset", params)
   }
 
   // 错误表
