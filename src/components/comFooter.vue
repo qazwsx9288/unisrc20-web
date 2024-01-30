@@ -50,7 +50,7 @@
           <a
             class="link-a text-decoration-none text-secondary"
             target="_blank"
-            href="https://t.co/eVNMU1QQ0I"
+            href="https://discord.com/invite/MqGCVEZExc"
           >
             <i class="iconfont icon-facebook3 footer-content-text-fs"></i>
             <span class="footer-content-text-fs">Discord</span>
