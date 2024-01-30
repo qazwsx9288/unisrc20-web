@@ -232,7 +232,7 @@
                 {{ $t("pages.pageL2.Mint") }}
               </button>
               <button type="button" disabled class="btn btn-sm btn-secondary">
-                Buy
+                {{ $t("pages.pageL2.Buy") }}
               </button>
             </template>
           </el-table-column>

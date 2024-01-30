@@ -37,7 +37,8 @@
       "Mint": "鑄造",
       "DeployTime": "部署時間",
       "Max": "最大数量",
-      "ProjectUrl": "网站"
+      "ProjectUrl": "网站",
+      "Buy": "购买"
     },
     "my": {
       "pageMyWallet": {
@@ -47,7 +48,10 @@
         "Balance": "餘額",
         "Action": "操作",
         "Symbol": "代幣",
-        "Send": "發送"
+        "Send": "發送",
+        "Check My Deploy Orders": "查看我的部署订单",
+        "Add": "添加",
+        "Buy": "购买"
       },
       "pageMyDeployOrder": {
         "DeployOrder": "部署訂單",

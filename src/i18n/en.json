@@ -39,7 +39,8 @@
       "Mint": "Mint",
       "Max": "Max",
       "ProjectUrl": "Website",
-      "Socials": "Socials"
+      "Socials": "Socials",
+      "Buy": "Buy"
     },
     "my": {
       "pageMyWallet": {
@@ -49,7 +50,10 @@
         "Contract": "Contract",
         "Balance": "Balance",
         "Action": "Action",
-        "Send": "Send"
+        "Send": "Send",
+        "Check My Deploy Orders": "Check My Deploy Orders",
+        "Add": "Add",
+        "Buy": "Buy"
       },
       "pageMyDeployOrder": {
         "DeployOrder": "Deploy Order",
