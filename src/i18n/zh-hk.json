@@ -3,10 +3,10 @@
     "inscribe": "銘刻",
     "wallet": "錢包",
     "DeployOrder": "部署訂單",
-    "MintOrder": "銘刻訂單",
+    "MintOrder": "鑄造訂單",
     "Disconnect": "退出連接",
     "Connect": "連接錢包",
-    "EarnPoints": "赚取積分"
+    "EarnPoints": "賺取積分"
   },
   "pages": {
     "pageInscribe": {
@@ -22,10 +22,10 @@
       "Max_Max_Limit_Repeat": "最大數量(單次鑄造數量 * 重複次數)",
       "Repeat": "重複次數",
       "DeployBtn": "部署",
-      "ProjectUrl": "网站",
+      "ProjectUrl": "網站",
       "twitter": "",
-      "Optional": "可选项",
-      "Required": "必填项"
+      "Optional": "可選項",
+      "Required": "必填項"
     },
     "pageL2": {
       "Search": "搜索",
@@ -38,9 +38,9 @@
       "Action": "操作",
       "Mint": "鑄造",
       "DeployTime": "部署時間",
-      "Max": "最大数量",
-      "ProjectUrl": "网站",
-      "Buy": "购买"
+      "Max": "最大數量",
+      "ProjectUrl": "網站",
+      "Buy": "購買"
     },
     "my": {
       "pageMyWallet": {
@@ -51,9 +51,9 @@
         "Action": "操作",
         "Symbol": "代幣",
         "Send": "發送",
-        "Check My Deploy Orders": "查看我的部署订单",
+        "Check My Deploy Orders": "查看我的部署訂單",
         "Add": "添加",
-        "Buy": "购买"
+        "Buy": "購買"
       },
       "pageMyDeployOrder": {
         "DeployOrder": "部署訂單",
@@ -82,18 +82,18 @@
       "CopythisURLtoyourfriends": "複製這個URL給你的朋友"
     },
     "pageL2Info": {
-      "InscriptionInfo": "铭文信息",
-      "AddTokentoWallet": "添加代币到钱包",
-      "Supply": "已铸造",
-      "LimitPerMint": "单次铸造",
+      "InscriptionInfo": "銘文信息",
+      "AddTokentoWallet": "添加代幣到錢包",
+      "Supply": "已鑄造",
+      "LimitPerMint": "單次鑄造",
       "Holders": "持有者",
       "Transactions": "交易",
-      "Decimals": "小数位",
-      "DeployTime": "部署时间",
-      "Progress": "进度",
-      "Percent": "占比",
+      "Decimals": "小數位",
+      "DeployTime": "部署時間",
+      "Progress": "進度",
+      "Percent": "佔比",
       "Address": "地址",
-      "Total": "总数"
+      "Total": "總數"
     }
   }
 }
