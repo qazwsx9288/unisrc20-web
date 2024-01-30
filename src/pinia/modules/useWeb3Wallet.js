@@ -304,8 +304,22 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
   // 添加代币到钱包
   async function addTokenToWallet(contractAddress, symbol, decimals) {
-    const signer = await getSigner()
-    console.log(contractAddress, symbol, decimals)
+    let signer = null
+    try {
+      signer = await getSigner()
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (signer === null) {
+      ElMessage({
+        type: "warning",
+        message: "Please connect first",
+      })
+
+      return
+    }
+
     // 添加OKTC链
     const params = {
       type: "ERC20",

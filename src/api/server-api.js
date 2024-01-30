@@ -108,3 +108,12 @@ export const completeTask = (data) => {
     data,
   })
 }
+
+// ticker的holders列表
+export const getHolders = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getHolders?${d}`,
+    method: "get",
+  })
+}

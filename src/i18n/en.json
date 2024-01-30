@@ -76,6 +76,11 @@
       "Getmorepointsbyinvitingyourfriends": "Get more points by inviting your friends",
       "Pointsbyinvited": "Points by invited",
       "CopythisURLtoyourfriends": "Copy this URL to your friends"
+    },
+    "pageL2Info": {
+      "Holders": "Holders",
+      "Transactions": "Transactions",
+      "Total": "Total"
     }
   }
 }
