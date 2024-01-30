@@ -10,7 +10,7 @@
         <el-table class="rounded" :data="tableData" style="width: 100%">
           <el-table-column prop="ticker" label="Ticker" width="80" />
 
-          <el-table-column label="Icon" width="120">
+          <el-table-column label="Icon" width="60">
             <template #default="scope">
               <img
                 v-if="scope.row.logoBase64"
