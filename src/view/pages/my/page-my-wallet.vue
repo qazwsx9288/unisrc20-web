@@ -5,6 +5,12 @@
         {{ $t("pages.my.pageMyWallet.MyWallet") }}
       </h2>
 
+      <div class="mb-3">
+        <el-link type="primary" @click="handleGoDeployOrder">
+          {{ $t("pages.my.pageMyWallet.Check My Deploy Orders") }}
+        </el-link>
+      </div>
+
       <!-- 表格 -->
       <div class="pb-3">
         <div class="d-flex align-items-center">
@@ -44,17 +50,31 @@
             :label="$t('pages.my.pageMyWallet.Balance')"
             width="auto"
           />
-          <!-- <el-table-column
+          <el-table-column
             fixed="right"
             :label="$t('pages.my.pageMyWallet.Action')"
-            width="130"
+            width="160"
           >
             <template #default="scope">
-              <button type="button" class="btn btn-sm btn-primary me-2">
+              <!-- <button type="button" class="btn btn-sm btn-primary me-2">
                 {{ $t("pages.my.pageMyWallet.Send") }}
+              </button> -->
+              <button
+                type="button"
+                class="btn btn-sm btn-primary me-2"
+                @click="handleAddTokenToWallet(scope.row)"
+              >
+                {{ $t("pages.my.pageMyWallet.Add") }}
+              </button>
+              <button
+                type="button"
+                disabled
+                class="btn btn-sm btn-secondary me-2"
+              >
+                {{ $t("pages.my.pageMyWallet.Buy") }}
               </button>
             </template>
-          </el-table-column> -->
+          </el-table-column>
         </el-table>
       </div>
 
@@ -72,13 +92,16 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue"
+import { useRouter } from "vue-router"
 import { tickerList } from "@/api/server-api.js"
 import { listFormat } from "@/utils/list-format.js"
 import { contractConfig } from "@/contract/contract.js"
 import { ethers } from "ethers"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+import { ElMessage } from "element-plus"
 
 const web3Wallet = useWeb3Wallet()
+const router = useRouter()
 
 onMounted(() => {
   isHideZero.value = localStorage.getItem("isHideZero") || "1"
@@ -178,6 +201,24 @@ const tableDataView = computed(() => {
     return tableData.value
   }
 })
+
+// 转到部署订单
+function handleGoDeployOrder() {
+  router.push({ name: "deploy-order" })
+}
+
+// 添加代币
+async function handleAddTokenToWallet(item) {
+  try {
+    await web3Wallet.addTokenToWallet(item.contract, item.ticker, item.dec)
+  } catch (error) {
+    ElMessage({
+      type: "warning",
+      message: error.message || "Error",
+    })
+    console.log(error)
+  }
+}
 </script>
 
 <style scoped></style>
