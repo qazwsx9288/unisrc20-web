@@ -131,7 +131,6 @@
                       :min="1"
                       :step="1"
                       :precision="0"
-                      placeholder="1000"
                     />
                   </el-form-item>
 
@@ -145,7 +144,6 @@
                       :min="1"
                       :step="1"
                       :precision="0"
-                      placeholder="1000"
                     />
                   </el-form-item>
 
