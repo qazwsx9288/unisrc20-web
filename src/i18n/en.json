@@ -25,7 +25,8 @@
       "ProjectUrl": "Website",
       "twitter": "Twitter",
       "github": "Github",
-      "Optional": "Optional"
+      "Optional": "Optional",
+      "Required": "Required"
     },
     "pageL2": {
       "Search": "Search",

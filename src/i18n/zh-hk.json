@@ -24,7 +24,8 @@
       "DeployBtn": "部署",
       "ProjectUrl": "网站",
       "twitter": "",
-      "Optional": "可选项"
+      "Optional": "可选项",
+      "Required": "必填项"
     },
     "pageL2": {
       "Search": "搜索",

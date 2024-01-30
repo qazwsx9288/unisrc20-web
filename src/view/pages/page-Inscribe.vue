@@ -5,32 +5,34 @@
         {{ $t("pages.pageInscribe.Inscribe") }}
       </h2>
 
+      <!-- 筛选 -->
+      <div class="d-flex justify-content-center py-3">
+        <div class="btn-group" role="group">
+          <button
+            type="button"
+            :class="{ active: inscribeMode === '2' }"
+            class="btn btn-lg btn-outline-primary"
+            @click="handleInscribeModeChange('2')"
+          >
+            {{ $t("pages.pageInscribe.Deploy") }}
+          </button>
+
+          <button
+            type="button"
+            :class="{ active: inscribeMode === '1' }"
+            class="btn btn-lg btn-outline-primary"
+            @click="handleInscribeModeChange('1')"
+          >
+            {{ $t("pages.pageInscribe.Mint") }}
+          </button>
+        </div>
+      </div>
+      <!-- 筛选 end -->
+
       <div class="inscribe-form">
-        <div class="form-panel bg-light-subtle">
-          <!-- 筛选 -->
-          <div class="py-3">
-            <div class="btn-group" role="group">
-              <button
-                type="button"
-                :class="{ active: inscribeMode === '1' }"
-                class="btn btn-outline-primary"
-                @click="handleInscribeModeChange('1')"
-              >
-                {{ $t("pages.pageInscribe.Mint") }}
-              </button>
-              <button
-                type="button"
-                :class="{ active: inscribeMode === '2' }"
-                class="btn btn-outline-primary"
-                @click="handleInscribeModeChange('2')"
-              >
-                {{ $t("pages.pageInscribe.Deploy") }}
-              </button>
-            </div>
-          </div>
-          <!-- Mint表单 -->
+        <!-- Mint表单 -->
+        <div v-if="inscribeMode === '1'" class="form-panel bg-light-subtle">
           <el-form
-            v-if="inscribeMode === '1'"
             ref="refFormMint"
             :model="formDataMint"
             :rules="rulesMint"
@@ -87,10 +89,12 @@
               </button>
             </el-form-item>
           </el-form>
-          <!-- Mint表单 end -->
-          <!-- Deploy表单 -->
+        </div>
+        <!-- Mint表单 end -->
+
+        <!-- Deploy表单 -->
+        <div v-if="inscribeMode === '2'" class="form-panel-deploy">
           <el-form
-            v-if="inscribeMode === '2'"
             ref="refFormDeploy"
             :model="formDataDeploy"
             :rules="rulesDeploy"
@@ -98,122 +102,132 @@
             label-width="auto"
             status-icon
           >
-            <el-form-item class="w-100" label="Tick" prop="tick">
-              <el-input v-model="formDataDeploy.tick" />
-            </el-form-item>
-
-            <el-form-item label="Max">
-              <template #label>
-                {{ $t("pages.pageInscribe.Max_Max_Limit_Repeat") }}
-              </template>
-              <el-input disabled v-model="deployMax" />
-            </el-form-item>
-
-            <div class="d-lg-flex w-100 justify-content-between">
-              <el-form-item
-                class="small-item"
-                :label="$t('pages.pageInscribe.Limit')"
-                prop="limit"
-              >
-                <el-input-number
-                  class="w-100"
-                  v-model="formDataDeploy.limit"
-                  :min="1"
-                  :step="1"
-                  :precision="0"
-                  placeholder="1000"
-                />
-              </el-form-item>
-              <el-form-item
-                class="small-item"
-                :label="$t('pages.pageInscribe.Repeat')"
-                prop="repeat"
-              >
-                <el-input-number
-                  class="w-100"
-                  v-model="formDataDeploy.repeat"
-                  :min="1"
-                  :step="1"
-                  :precision="0"
-                  placeholder="1000"
-                />
-              </el-form-item>
-            </div>
-
-            <div class="mb-3 p-3 border rounded">
-              {{
-                `{"p":"brc-20","op":"deploy","tick":${
-                  formDataDeploy.tick || ""
-                },"max":${deployMax || "0"},"lim":${
-                  formDataDeploy.limit || "0"
-                } }`
-              }}
-            </div>
-
-            <div class="mb-3 fw-bolder">
-              {{ $t("pages.pageInscribe.Optional") }}
-            </div>
-
-            <el-form-item label="" prop="files">
-              <el-upload
-                ref="refUpload"
-                v-model:file-list="formDataDeploy.files"
-                :auto-upload="false"
-                drag
-                :limit="1"
-                accept=".jpg, .jpeg, .png,"
-                :on-exceed="handleExceed"
-              >
-                <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-                <div class="el-upload__text">
-                  Drop file here or <em>click to upload</em>
-                </div>
-                <template #tip>
-                  <div class="el-upload__tip">
-                    jpg/png files with a size less than 300kb
+            <div class="row gx-5">
+              <!-- left -->
+              <div class="col-12 col-md-6">
+                <div class="p-3 h-100 bg-light-subtle rounded">
+                  <div class="mb-3 fw-bolder">
+                    {{ $t("pages.pageInscribe.Required") }}
                   </div>
-                </template>
-              </el-upload>
-            </el-form-item>
 
-            <el-form-item
-              class="w-100"
-              :label="$t('pages.pageInscribe.ProjectUrl')"
-              prop="projectUrl"
-            >
-              <el-input v-model="formDataDeploy.projectUrl" />
-            </el-form-item>
+                  <el-form-item class="w-100" label="Tick" prop="tick">
+                    <el-input v-model="formDataDeploy.tick" />
+                  </el-form-item>
 
-            <el-form-item class="w-100" label="Twitter" prop="twitter">
-              <el-input v-model="formDataDeploy.twitter" />
-            </el-form-item>
+                  <el-form-item label="Max">
+                    <template #label>
+                      {{ $t("pages.pageInscribe.Max_Max_Limit_Repeat") }}
+                    </template>
+                    <el-input disabled v-model="deployMax" />
+                  </el-form-item>
 
-            <el-form-item class="w-100" label="Github" prop="github">
-              <el-input v-model="formDataDeploy.github" />
-            </el-form-item>
+                  <el-form-item
+                    :label="$t('pages.pageInscribe.Limit')"
+                    prop="limit"
+                  >
+                    <el-input-number
+                      class="w-100"
+                      v-model="formDataDeploy.limit"
+                      :min="1"
+                      :step="1"
+                      :precision="0"
+                      placeholder="1000"
+                    />
+                  </el-form-item>
 
-            <el-form-item class="w-100" label="Telegram" prop="telegram">
-              <el-input v-model="formDataDeploy.telegram" />
-            </el-form-item>
+                  <el-form-item
+                    :label="$t('pages.pageInscribe.Repeat')"
+                    prop="repeat"
+                  >
+                    <el-input-number
+                      class="w-100"
+                      v-model="formDataDeploy.repeat"
+                      :min="1"
+                      :step="1"
+                      :precision="0"
+                      placeholder="1000"
+                    />
+                  </el-form-item>
 
-            <el-form-item class="w-100" label="Medium" prop="medium">
-              <el-input v-model="formDataDeploy.medium" />
-            </el-form-item>
+                  <div class="mb-3 p-3 border rounded">
+                    {{
+                      `{"p":"brc-20","op":"deploy","tick":${
+                        formDataDeploy.tick || ""
+                      },"max":${deployMax || "0"},"lim":${
+                        formDataDeploy.limit || "0"
+                      } }`
+                    }}
+                  </div>
 
-            <el-form-item class="w-100">
-              <el-form-item class="w-100">
-                <button
-                  type="button"
-                  class="w-100 btn btn-primary"
-                  @click="submitFormDeploy"
-                >
-                  {{ $t("pages.pageInscribe.DeployBtn") }}
-                </button>
-              </el-form-item>
-            </el-form-item>
+                  <div class="mt-3">
+                    <button
+                      type="button"
+                      class="w-100 btn btn-primary"
+                      @click="submitFormDeploy"
+                    >
+                      {{ $t("pages.pageInscribe.DeployBtn") }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- left end -->
+
+              <!-- right optional -->
+              <div class="col-12 col-md-6">
+                <div class="p-3 h-100 bg-light-subtle rounded">
+                  <div class="mb-3 fw-bolder">
+                    {{ $t("pages.pageInscribe.Optional") }}
+                  </div>
+
+                  <el-form-item label="" prop="files">
+                    <el-upload
+                      ref="refUpload"
+                      v-model:file-list="formDataDeploy.files"
+                      :auto-upload="false"
+                      drag
+                      :limit="1"
+                      accept=".jpg, .jpeg, .png,"
+                      :on-exceed="handleExceed"
+                    >
+                      <el-icon class="el-icon--upload"
+                        ><upload-filled
+                      /></el-icon>
+                      <div class="el-upload__text">
+                        Drop file here or <em>click to upload</em>
+                      </div>
+                      <template #tip>
+                        <div class="el-upload__tip">
+                          LOGO: jpg/png files with a size less than 300kb
+                        </div>
+                      </template>
+                    </el-upload>
+                  </el-form-item>
+
+                  <el-form-item
+                    :label="$t('pages.pageInscribe.ProjectUrl')"
+                    prop="projectUrl"
+                  >
+                    <el-input v-model="formDataDeploy.projectUrl" />
+                  </el-form-item>
+
+                  <el-form-item label="Twitter" prop="twitter">
+                    <el-input v-model="formDataDeploy.twitter" />
+                  </el-form-item>
+
+                  <el-form-item label="Github" prop="github">
+                    <el-input v-model="formDataDeploy.github" />
+                  </el-form-item>
+
+                  <el-form-item label="Telegram" prop="telegram">
+                    <el-input v-model="formDataDeploy.telegram" />
+                  </el-form-item>
+                </div>
+                <!-- right optional end -->
+              </div>
+            </div>
           </el-form>
-          <!-- Deploy表单 end -->
         </div>
+        <!-- Deploy表单 end -->
       </div>
     </div>
 
@@ -343,7 +357,7 @@ import { fileToBase64 } from "@/utils/helper.js"
 const web3Wallet = useWeb3Wallet()
 
 // 模式 1mint 2deploy
-const inscribeMode = ref("1")
+const inscribeMode = ref("2")
 function handleInscribeModeChange(val) {
   inscribeMode.value = val
 }
@@ -645,6 +659,14 @@ async function submitFormDeployModal() {
     width: 100%;
     padding: 1rem;
     max-width: 700px;
+
+    border-radius: 0.375rem;
+  }
+
+  .form-panel-deploy {
+    width: 100%;
+    padding: 1rem;
+    max-width: 1000px;
 
     border-radius: 0.375rem;
   }
