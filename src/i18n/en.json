@@ -24,7 +24,8 @@
       "DeployBtn": "Deploy",
       "ProjectUrl": "Website",
       "twitter": "Twitter",
-      "github": "Github"
+      "github": "Github",
+      "Optional": "Optional"
     },
     "pageL2": {
       "Search": "Search",

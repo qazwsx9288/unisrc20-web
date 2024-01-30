@@ -150,7 +150,9 @@
               }}
             </div>
 
-            <div class="mb-3 fw-bolder">Optional</div>
+            <div class="mb-3 fw-bolder">
+              {{ $t("pages.pageInscribe.Optional") }}
+            </div>
 
             <el-form-item label="" prop="files">
               <el-upload
