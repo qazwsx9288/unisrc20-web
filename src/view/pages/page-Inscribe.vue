@@ -102,7 +102,7 @@
             label-width="auto"
             status-icon
           >
-            <div class="row gx-5">
+            <div class="row gx-3">
               <!-- left -->
               <div class="col-12 col-md-6">
                 <div class="p-3 h-100 bg-light-subtle rounded">
