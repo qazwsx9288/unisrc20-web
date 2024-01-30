@@ -140,6 +140,16 @@
               </el-form-item>
             </div>
 
+            <div class="mb-3 p-3 border rounded">
+              {{
+                `{"p":"brc-20","op":"deploy","tick":${
+                  formDataDeploy.tick || ""
+                },"max":${deployMax || "0"},"lim":${
+                  formDataDeploy.limit || "0"
+                } }`
+              }}
+            </div>
+
             <div class="mb-3 fw-bolder">Optional</div>
 
             <el-form-item label="" prop="files">
