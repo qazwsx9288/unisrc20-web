@@ -38,7 +38,8 @@
       "Action": "Action",
       "Mint": "Mint",
       "Max": "Max",
-      "ProjectUrl": "Website"
+      "ProjectUrl": "Website",
+      "Socials": "Socials"
     },
     "my": {
       "pageMyWallet": {
