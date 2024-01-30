@@ -149,7 +149,7 @@
                     />
                   </el-form-item>
 
-                  <div class="mb-3 p-3 border rounded">
+                  <div class="mb-3 p-3 border rounded text-break">
                     {{
                       `{"p":"brc-20","op":"deploy","tick":${
                         formDataDeploy.tick || ""
