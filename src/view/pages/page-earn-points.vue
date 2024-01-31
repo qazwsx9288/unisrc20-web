@@ -1,19 +1,19 @@
 <template>
   <div class="page-min-h">
     <div class="container">
-      <h2 class="m-0 py-3 py-lg-5 text-primary-emphasis">
-        {{ $t("pages.pageEarnPoints.EarnPoints") }}
-      </h2>
-
       <div>
-        <div class="pb-3">
-          <img class="w-100" src="@/assets/img/earn-points-1.svg" alt="" />
+        <div class="py-5 gx-5 row">
+          <img
+            class="col-12 col-md-6"
+            src="@/assets/img/earn-points-1.svg"
+            alt=""
+          />
+          <div class="col-12 col-md-6 banner-title-font">
+            {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
+          </div>
         </div>
 
         <div class="pb-3">
-          <div class="fs-4 pb-3">
-            {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
-          </div>
           <span class="bg-primary text-light p-2 rounded">
             {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
             {{ dataInfo.taskScore }}
@@ -118,6 +118,7 @@
 </template>
 
 <script setup>
+// TODO：任务分3个模块，添加排名页
 import { ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { getTaskList } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
@@ -209,4 +210,8 @@ function handleCopyInviteUrl() {
 // ]
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.banner-title-font {
+  font-size: 3rem;
+}
+</style>
