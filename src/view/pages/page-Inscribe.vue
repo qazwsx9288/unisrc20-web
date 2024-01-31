@@ -463,7 +463,7 @@ const checkFileSize = (rule, value, callback) => {
     return
   }
 
-  if (value?.lengt == 0) {
+  if (value?.length == 0) {
     callback()
     return
   }
