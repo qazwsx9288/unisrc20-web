@@ -105,6 +105,12 @@
       "Block": "Block",
       "From": "From",
       "To": "To"
+    },
+    "pageEarnPointsRank": {
+      "Rank": "Rank",
+      "Points": "Points",
+      "Address": "Address",
+      "Invited": "Invited"
     }
   }
 }

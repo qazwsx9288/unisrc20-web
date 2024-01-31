@@ -40,6 +40,11 @@ const route = {
       component: () => import("@/view/pages/page-earn-points.vue"),
     },
     {
+      path: "/earn-points-rank",
+      name: "earn-points-rank",
+      component: () => import("@/view/pages/page-earn-points-rank.vue"),
+    },
+    {
       path: "/l2-info",
       name: "l2-info",
       component: () => import("@/view/pages/page-l2-info.vue"),

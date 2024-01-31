@@ -99,6 +99,10 @@
       "Value": "數量",
       "Time": "時間",
       "Block": "區塊"
+    },
+    "pageEarnPointsRank": {
+      "Rank": "排名",
+      "Points": "積分"
     }
   }
 }
