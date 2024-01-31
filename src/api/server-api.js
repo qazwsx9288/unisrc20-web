@@ -117,3 +117,12 @@ export const getHolders = (data) => {
     method: "get",
   })
 }
+
+// ticker的transactions列表
+export const getContractTransactions = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getContractTransactions?${d}`,
+    method: "get",
+  })
+}

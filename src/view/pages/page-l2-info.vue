@@ -231,13 +231,8 @@
         </div>
 
         <!-- holderList -->
-        <div>
-          <el-table
-            v-if="tableMode === '1'"
-            class="rounded"
-            :data="holderList"
-            style="width: 100%"
-          >
+        <div v-if="tableMode === '1'">
+          <el-table class="rounded" :data="holderList" style="width: 100%">
             <el-table-column
               fixed
               :label="$t('pages.pageL2Info.Address')"
@@ -280,6 +275,70 @@
         <!-- holderList end -->
 
         <!-- transactionList -->
+        <div v-if="tableMode === '2'">
+          <el-table class="rounded" :data="transactionList" style="width: 100%">
+            <el-table-column
+              fixed
+              :label="$t('pages.pageL2Info.Hash')"
+              width="220"
+            >
+              <template #default="scope">
+                <a :href="scope.row.txhashUrl" target="_blank">
+                  {{ scope.row.txhashFormat }}
+                </a>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="blockHeight"
+              :label="$t('pages.pageL2Info.Block')"
+              width="120"
+            />
+
+            <el-table-column
+              fixed
+              :label="$t('pages.pageL2Info.Time')"
+              width="180"
+            >
+              <template #default="scope">
+                {{ scope.row.createdAtFormat }}
+              </template>
+            </el-table-column>
+
+            <el-table-column :label="$t('pages.pageL2Info.From')" width="220">
+              <template #default="scope">
+                <a :href="scope.row.fromUrl" target="_blank">
+                  {{ scope.row.fromFormat }}
+                </a>
+              </template>
+            </el-table-column>
+
+            <el-table-column :label="$t('pages.pageL2Info.To')" width="220">
+              <template #default="scope">
+                <a :href="scope.row.toUrl" target="_blank">
+                  {{ scope.row.toFormat }}
+                </a>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="value"
+              :label="$t('pages.pageL2Info.Value')"
+              :fixed="'right'"
+              width="auto"
+            />
+          </el-table>
+
+          <el-pagination
+            class="mt-3"
+            v-model:current-page="currentPageTransaction"
+            v-model:page-size="pageSizeTransaction"
+            :background="true"
+            layout="prev, pager, next, jumper"
+            :total="totalTransaction"
+            @current-change="handleCurrentPageTransactionChange"
+          />
+        </div>
         <!-- transactionList end -->
       </div>
       <!-- table end -->
@@ -290,12 +349,17 @@
 <script setup>
 import { ref, onMounted, computed } from "vue"
 import { useRoute } from "vue-router"
-import { orderMsg, getHolders } from "@/api/server-api.js"
+import {
+  orderMsg,
+  getHolders,
+  getContractTransactions,
+} from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
 import { useI18n } from "vue-i18n"
 import { copyToClipboard } from "@/utils/helper.js"
+import { listFormat } from "@/utils/list-format.js"
 
 const i18n = useI18n()
 
@@ -312,7 +376,13 @@ onMounted(() => {
 
 async function init() {
   fetchInfo()
-  fetchHolderList()
+  if (tableMode.value === "1") {
+    currentPageHolder.value = 1
+    fetchHolderList()
+  } else {
+    pageSizeTransaction.value = 1
+    fetchTransactionList()
+  }
 }
 
 // ticker信息
@@ -406,6 +476,7 @@ const overviewList = computed(() => {
 const tableMode = ref("1")
 function handletableModeChange(val) {
   tableMode.value = val
+  init()
 }
 
 // holders
@@ -420,21 +491,15 @@ async function fetchHolderList() {
   totalHolder.value = res.data.result.total
   holderList.value = res.data.result.list.map((cur) => {
     // 地址格式化
-    if (cur.holderAddress) {
-      cur.holderAddressUrl = `${
-        import.meta.env.VITE_BASE_OKTC_SCAN_URL
-      }/address/${cur.holderAddress}`
+    cur.holderAddressUrl = `${
+      import.meta.env.VITE_BASE_OKTC_SCAN_URL
+    }/address/${cur.holderAddress}`
 
-      cur.holderAddressFormat = `
+    cur.holderAddressFormat = `
         ${cur.holderAddress.slice(0, 3)}
         ...
         ${cur.holderAddress.slice(-4, cur.holderAddress.length)}
         `
-      cur.deployStatus = cur.status
-    } else {
-      cur.holderAddressUrl = ""
-      cur.holderAddressFormat = ""
-    }
 
     return cur
   })
@@ -449,6 +514,58 @@ const handleCurrentPageHolderChange = (val) => {
 }
 
 // transactions
+const transactionList = ref([])
+async function fetchTransactionList() {
+  const res = await getContractTransactions({
+    pageSize: pageSizeTransaction.value,
+    page: currentPageTransaction.value,
+    ticker: queryParam.value.ticker,
+  })
+
+  totalTransaction.value = res.data.result.total
+  transactionList.value = res.data.result.list.map((cur) => {
+    // 地址格式化
+    cur.txhashUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/tx/${
+      cur.txhash
+    }`
+    cur.txhashFormat = `
+        ${cur.txhash.slice(0, 8)}
+        ...
+        ${cur.txhash.slice(-8, cur.txhash.length)}
+        `
+
+    cur.fromUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${
+      cur.from
+    }`
+    cur.fromFormat = `
+        ${cur.from.slice(0, 8)}
+        ...
+        ${cur.from.slice(-8, cur.from.length)}
+        `
+
+    cur.toUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${cur.to}`
+    cur.toFormat = `
+        ${cur.to.slice(0, 8)}
+        ...
+        ${cur.to.slice(-8, cur.txhash.length)}
+        `
+
+    // 赋值一个时间，让listFormat自动格式化
+    cur.createdAt = cur.blockTime
+
+    return cur
+  })
+
+  listFormat(transactionList.value)
+}
+
+const currentPageTransaction = ref(1)
+const pageSizeTransaction = ref(20)
+const totalTransaction = ref(0)
+const handleCurrentPageTransactionChange = (val) => {
+  console.log(`current page: ${val}`)
+  fetchTransactionList({ page: val })
+}
 
 // 添加代币
 async function handleAddTokenToWallet() {

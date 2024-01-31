@@ -95,7 +95,13 @@
       "LimitPerMint": "Limit Per Mint",
       "Decimals": "Decimals",
       "DeployTime": "Deploy Time",
-      "Progress": "Progress"
+      "Progress": "Progress",
+      "Hash": "Hash",
+      "Value": "Value",
+      "Time": "Time",
+      "Block": "Block",
+      "From": "From",
+      "To": "To"
     }
   }
 }

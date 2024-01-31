@@ -93,7 +93,10 @@
       "Progress": "進度",
       "Percent": "佔比",
       "Address": "地址",
-      "Total": "總數"
+      "Total": "總數",
+      "Value": "數量",
+      "Time": "時間",
+      "Block": "區塊"
     }
   }
 }
