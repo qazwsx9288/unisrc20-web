@@ -6,6 +6,7 @@ import {
   verifySignature,
   verifyAddress,
   verifyWhitelist,
+  completeTask,
 } from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
@@ -275,7 +276,14 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     // 用户拒绝，交易失败
     try {
       const resTx = await contractL2.mint()
+      // 等待交易
       await resTx.wait()
+
+      // 完成任务
+      completeTask({
+        // 完成mint任务
+        id: 5,
+      })
 
       ElMessage({
         type: "success",

@@ -344,6 +344,7 @@ import {
   gasCountLatest,
   verifyToken,
   orderMsg,
+  completeTask,
 } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage, genFileId } from "element-plus"
@@ -406,7 +407,6 @@ function handleMintTickInput() {
   clearQueryMintData()
 }
 // MINT
-// TODO:完成任务
 async function submitMint() {
   if (queryMintData.value.max === queryMintData.value.totalSupply) {
     ElMessage({
