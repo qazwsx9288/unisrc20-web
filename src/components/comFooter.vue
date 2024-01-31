@@ -126,6 +126,7 @@ function navTo(name) {
 async function handleAddToken(symbol) {
   const env = process.env.NODE_ENV
   let contract
+  // TODO:改变合约
   if (env === "development") {
     contract = contractConfig.contract["oktc-test-usdt"]
   } else {

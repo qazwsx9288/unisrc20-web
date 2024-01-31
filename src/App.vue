@@ -50,6 +50,14 @@ const handleAccountChange = async () => {
 
 const handleNetworkChange = async (networkId) => {
   console.log(networkId)
+  // https://github.com/ethers-io/ethers.js/issues/866
+  // 使用Web3Provider创建provider时，需要添加any参数
+  // const provider = new ethers.providers.Web3Provider(
+  //   wallet.browserProvider,
+  //   "any"
+  // )
+  // 否则网络切换务必刷新页面 否则signer的操作要报错
+  // window.location.reload()
 }
 </script>
 

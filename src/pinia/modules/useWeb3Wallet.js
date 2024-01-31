@@ -19,16 +19,6 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
   const CHAIN_NAME = import.meta.env.VITE_BASE_CHAIN_Name
 
-  // provider（无响应式）
-  let defaultProvider = null
-  // 获取provider
-  function getDefaultProvider() {
-    if (defaultProvider === null) {
-      defaultProvider = ethers.getDefaultProvider(RPC_URL)
-    }
-    return defaultProvider
-  }
-
   // 受支持的walletList
   const supportWalletList = reactive([
     {
@@ -75,10 +65,6 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     token: "",
   })
 
-  // const addressFormat = computed(() => {
-  //   return "xxxx" + userWallet.value.address + "xxxx"
-  // })
-
   // 用于操作的signer（无响应式）
   let signer = null
   // (登入)获取signer
@@ -112,25 +98,16 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
     // 校验钱包对象是否可用
     if (wallet?.browserProvider !== null) {
-      // 连接钱包
+      // 获取provider
       // const provider = new ethers.BrowserProvider(wallet.browserProvider)
-      const provider = new ethers.providers.Web3Provider(wallet.browserProvider)
+      const provider = new ethers.providers.Web3Provider(
+        wallet.browserProvider,
+        // https://github.com/ethers-io/ethers.js/issues/866
+        // 允许网络更改
+        "any"
+      )
 
-      // 添加OKTC链
-      const nativeCurrency = {
-        name: CHAIN_NAME,
-        symbol: "OKT",
-        decimals: 18,
-      }
-      await provider.send("wallet_addEthereumChain", [
-        {
-          chainId: CHAIN_ID, // Chain ID of the custom network
-          chainName: "OKExChain Testnet", // Name of the custom network
-          nativeCurrency: nativeCurrency,
-          rpcUrls: [RPC_URL], // RPC URL of your custom network
-        },
-      ])
-
+      // 连接钱包
       try {
         // signer = await provider.getSigner()
         await provider.provider.request({ method: "eth_requestAccounts" })
@@ -170,13 +147,25 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
           })
         }
 
-        // 连接钱包
-        await signer.provider.send("wallet_switchEthereumChain", [
-          { chainId: CHAIN_ID },
-        ])
+        try {
+          // 添加OKTC链
+          await addNetwork(signer)
+
+          // 切换OKTC链
+          await signer.provider.send("wallet_switchEthereumChain", [
+            { chainId: CHAIN_ID },
+          ])
+        } catch (error) {
+          ElMessage({
+            type: "warning",
+            message: error.message,
+          })
+
+          return
+        }
 
         // 登陆成功
-        userWallet.value.address = await signer.getAddress()
+        userWallet.value.address = signerAddress
         userWallet.value.token = token
         localStorage.setItem("walletName", wallet.name)
 
@@ -217,14 +206,23 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
   // 支付
   async function payUSDT(contractAddress, receiveAccount, amount) {
+    try {
+      await checkAndSwitchChainId()
+    } catch (error) {
+      console.log(error)
+      return
+    }
+
+    const _signer = await getSigner()
+
     const contractUSDT = new ethers.Contract(
       contractAddress,
       contractConfig.abi.USDT,
-      signer
+      _signer
     )
 
     try {
-      const signerAddress = await signer.getAddress()
+      const signerAddress = await _signer.getAddress()
       const balance = await contractUSDT.balanceOf(signerAddress)
 
       if (balance.lt(amount)) {
@@ -266,12 +264,12 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       return
     }
 
-    const signer = await getSigner()
+    const _signer = await getSigner()
 
     const contractL2 = new ethers.Contract(
       contract,
       contractConfig.abi.L2TOKEN,
-      signer
+      _signer
     )
 
     // 用户拒绝，交易失败
@@ -304,14 +302,14 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
   // 添加代币到钱包
   async function addTokenToWallet(contractAddress, symbol, decimals) {
-    let signer = null
+    let _signer = null
     try {
-      signer = await getSigner()
+      _signer = await getSigner()
     } catch (error) {
       console.log(error)
     }
 
-    if (signer === null) {
+    if (_signer === null) {
       ElMessage({
         type: "warning",
         message: "Please connect first",
@@ -320,7 +318,6 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       return
     }
 
-    // 添加OKTC链
     const params = {
       type: "ERC20",
       options: {
@@ -331,6 +328,55 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       },
     }
     return await signer.provider.send("wallet_watchAsset", params)
+  }
+
+  // 添加OK链
+  async function addNetwork(signer) {
+    let _provider = signer.provider
+
+    // 添加OKTC链
+    const nativeCurrency = {
+      name: "OKT",
+      symbol: "OKT",
+      decimals: 18,
+    }
+    await _provider.send("wallet_addEthereumChain", [
+      {
+        chainId: CHAIN_ID, // Chain ID of the custom network
+        chainName: CHAIN_NAME, // Name of the custom network
+        nativeCurrency: nativeCurrency,
+        rpcUrls: [RPC_URL], // RPC URL of your custom network
+      },
+    ])
+  }
+
+  // 校验当前链id并切换
+  async function checkAndSwitchChainId() {
+    // 已连接才校验 否则不校验
+    if (userWallet.value.address) {
+      const _signer = await getSigner()
+      const curChainId = await _signer.getChainId()
+
+      if (curChainId !== CHAIN_ID) {
+        // 当前链id不匹配，尝试切换
+
+        await addNetwork(_signer)
+
+        try {
+          return await _signer.provider.send("wallet_switchEthereumChain", [
+            { chainId: CHAIN_ID },
+          ])
+        } catch (error) {
+          ElMessage({
+            type: "warning",
+            message: error.message,
+          })
+          console.error("网络切换失败:", error)
+        }
+      } else {
+        console.log("ChainId correct")
+      }
+    }
   }
 
   // 错误表
@@ -345,10 +391,10 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     updateSupportWalletList,
     getSigner,
     clearSigner,
-    getDefaultProvider,
     payUSDT,
     mintL2,
     addTokenToWallet,
+    checkAndSwitchChainId,
     userWallet,
     errorType,
   }

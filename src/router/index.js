@@ -20,21 +20,7 @@ router.afterEach(async (to) => {
 
   // 校验当前链id是否正确
   const web3Wallet = useWeb3Wallet()
-  if (web3Wallet.userWallet.address) {
-    const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
-    const signer = await web3Wallet.getSigner()
-    const curChainId = await signer.provider.send("eth_chainId", [])
-    if (curChainId !== CHAIN_ID) {
-      // 当前链id不匹配，尝试切换
-      try {
-        await signer.provider.send("wallet_switchEthereumChain", [
-          { chainId: CHAIN_ID },
-        ])
-      } catch (error) {
-        console.error("网络切换失败:", error)
-      }
-    }
-  }
+  await web3Wallet.checkAndSwitchChainId()
 })
 
 export default router
