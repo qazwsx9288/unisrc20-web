@@ -42,7 +42,9 @@
       "Max": "Max",
       "ProjectUrl": "Website",
       "Socials": "Socials",
-      "Buy": "Buy"
+      "Buy": "Buy",
+      "Information": "Information",
+      "Market Cap($)": "Market Cap($)"
     },
     "my": {
       "pageMyWallet": {

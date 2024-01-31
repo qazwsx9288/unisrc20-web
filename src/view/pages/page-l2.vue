@@ -88,7 +88,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column :label="$t('pages.pageL2.Socials')" width="160">
+          <el-table-column :label="$t('pages.pageL2.Information')" width="160">
             <template #default="scope">
               <a
                 v-if="scope.row.projectUrl"
@@ -170,6 +170,13 @@
                 </svg>
               </a>
             </template>
+          </el-table-column>
+
+          <el-table-column
+            :label="$t('pages.pageL2.Market Cap($)')"
+            width="180"
+          >
+            <template #default="scope"> - </template>
           </el-table-column>
 
           <el-table-column
