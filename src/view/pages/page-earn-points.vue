@@ -8,23 +8,100 @@
             src="@/assets/img/earn-points-1.svg"
             alt=""
           />
-          <div class="col-12 col-md-6 banner-title-font">
-            {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
+          <div class="col-12 col-md-6">
+            <div class="banner-title-font">
+              {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
+            </div>
+
+            <div class="py-3">
+              <span class="bg-primary fs-4 text-light p-2 me-3 rounded">
+                {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
+                {{ dataInfo.taskScore }}
+              </span>
+
+              <!-- TODO:接入API -->
+              <span class="bg-primary fs-4 text-light p-2 rounded">
+                {{ $t("pages.pageEarnPoints.MyRank") }}: 0
+              </span>
+            </div>
           </div>
         </div>
 
-        <div class="pb-3">
-          <span class="bg-primary text-light p-2 rounded">
-            {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
-            {{ dataInfo.taskScore }}
-          </span>
+        <div class="fs-4 fw-bold pb-3 text-primary">
+          Know UniSRC20 (Get 30 Points)
         </div>
 
         <div class="pb-3">
           <el-table
             class="rounded"
             size="large"
-            :data="tableData"
+            :data="knowTaskList"
+            style="width: 100%"
+          >
+            <el-table-column
+              fixed
+              :label="$t('pages.pageEarnPoints.Task')"
+              width="auto"
+            >
+              <template #default="scope">
+                {{ scope.row.taskName }}
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              fixed
+              prop="point"
+              :label="$t('pages.pageEarnPoints.Points')"
+              width="100"
+            />
+
+            <el-table-column
+              fixed="right"
+              :label="$t('pages.pageEarnPoints.Action')"
+              width="150"
+            >
+              <template #default="scope">
+                <a
+                  v-if="
+                    scope.row.done === 0 &&
+                    web3Wallet.userWallet.token &&
+                    scope.row.id !== 6
+                  "
+                  type="button"
+                  :href="scope.row.url"
+                  target="_blank"
+                  class="btn btn-sm btn-primary me-2"
+                >
+                  To do it
+                </a>
+
+                <el-tag
+                  v-if="scope.row.done === 1 && web3Wallet.userWallet.token"
+                  type="success"
+                >
+                  Done
+                </el-tag>
+
+                <span v-if="!web3Wallet.userWallet.token && scope.row.id !== 6">
+                  Connect First
+                </span>
+
+                <span v-if="scope.row.id === 6">Comming Soon</span>
+                <!-- <span>Completed</span> -->
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <div class="fs-4 fw-bold pb-3 text-primary">
+          Try L2 UniSRC20 (Get 150 Points)
+        </div>
+
+        <div class="pb-3">
+          <el-table
+            class="rounded"
+            size="large"
+            :data="tryTaskList"
             style="width: 100%"
           >
             <el-table-column
@@ -83,15 +160,15 @@
         </div>
 
         <div v-if="web3Wallet.userWallet.token" class="pb-3">
-          <div class="fs-4 pb-3">
+          <div class="fs-4 fw-bold pb-3 text-primary">
             {{ $t("pages.pageEarnPoints.Getmorepointsbyinvitingyourfriends") }}
           </div>
-          <div class="pb-3">
-            <span class="bg-primary text-light p-2 rounded">
+          <!-- <div class="pb-3">
+            <span class="bg-primary fs-4 text-light p-2 rounded">
               {{ $t("pages.pageEarnPoints.Pointsbyinvited") }}:
               {{ dataInfo.inviteScore }}
             </span>
-          </div>
+          </div> -->
 
           <div class="border p-3 rounded">
             <div class="fs-5 pb-3">
@@ -143,17 +220,38 @@ onMounted(() => {
 // init
 async function init() {
   fetchInfo()
+  fetchKnowTaskList()
+  fetchTryTaskList()
 }
 
+// know列表
+const knowTaskList = ref([])
+async function fetchKnowTaskList() {
+  const res = await getTaskList({
+    taskType: "1",
+  })
+  // 获取信息
+  knowTaskList.value = res.data.result.task
+}
+
+// try列表
+const tryTaskList = ref([])
+async function fetchTryTaskList() {
+  const res = await getTaskList({
+    taskType: "2",
+  })
+  // 获取信息
+  tryTaskList.value = res.data.result.task
+}
+
+// 信息
 const dataInfo = ref({})
+// 获取信息
 async function fetchInfo() {
   const res = await getTaskList()
+  // 获取信息
   dataInfo.value = res.data.result
 }
-
-const tableData = computed(() => {
-  return dataInfo.value?.task || []
-})
 
 function handleCopyInviteUrl() {
   try {

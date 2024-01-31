@@ -74,13 +74,14 @@
     "pageEarnPoints": {
       "EarnPoints": "賺取積分",
       "COMPLETETASKSEARNPOINTS": "完成任務來賺取積分",
-      "MyTotalPoints": "我的總積分",
+      "MyTotalPoints": "我的積分",
       "Task": "任務",
       "Points": "積分",
       "Action": "操作",
       "Getmorepointsbyinvitingyourfriends": "通過邀請朋友獲得更多積分",
       "Pointsbyinvited": "通過邀請獲得的積分",
-      "CopythisURLtoyourfriends": "複製這個URL給你的朋友"
+      "CopythisURLtoyourfriends": "複製這個URL給你的朋友",
+      "MyRank": "我的排名"
     },
     "pageL2Info": {
       "InscriptionInfo": "銘文信息",

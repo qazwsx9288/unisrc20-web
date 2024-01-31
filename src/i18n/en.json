@@ -77,13 +77,14 @@
     "pageEarnPoints": {
       "EarnPoints": "Earn Points",
       "COMPLETETASKSEARNPOINTS": "COMPLETE TASKS EARN POINTS",
-      "MyTotalPoints": "My Total Points",
+      "MyTotalPoints": "MY POINTS",
       "Task": "Task",
       "Points": "Points",
       "Action": "Action",
       "Getmorepointsbyinvitingyourfriends": "Get more points by inviting your friends",
       "Pointsbyinvited": "Points by invited",
-      "CopythisURLtoyourfriends": "Copy this URL to your friends"
+      "CopythisURLtoyourfriends": "Copy this URL to your friends",
+      "MyRank": "MY RANK"
     },
     "pageL2Info": {
       "Holders": "Holders",
