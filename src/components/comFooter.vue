@@ -134,7 +134,6 @@
 </template>
 
 <script setup>
-// TODO: 页脚同步官网风格
 import { useRouter } from "vue-router"
 import { contractConfig } from "@/contract/contract.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
