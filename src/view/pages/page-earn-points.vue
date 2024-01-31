@@ -195,7 +195,6 @@
 </template>
 
 <script setup>
-// TODO：任务分3个模块，添加排名页
 import { ref, onMounted, onBeforeUnmount, computed } from "vue"
 import { getTaskList } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
