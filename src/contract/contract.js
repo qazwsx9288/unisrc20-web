@@ -531,13 +531,13 @@ export const contractConfig = {
       },
     ],
   },
-  contract: {
-    "oktc-test-usdt": {
+  usdtContractInfo: {
+    "0x41": {
       contract: "0xAd6E9020c1600A4d74aC7845450Ac27328401C87",
       decimals: "18",
       symbol: "test",
     },
-    "oktc-usdt": {
+    "0x42": {
       contract: "0x382bB369d343125BfB2117af9c149795C6C65C50",
       decimals: "18",
       symbol: "USDT",

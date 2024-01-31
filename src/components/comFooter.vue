@@ -123,21 +123,21 @@ function navTo(name) {
 }
 
 // 添加代币
-async function handleAddToken(symbol) {
-  const env = process.env.NODE_ENV
-  let contract
-  // TODO:改变合约
-  if (env === "development") {
-    contract = contractConfig.contract["oktc-test-usdt"]
+async function handleAddToken(tokenType) {
+  const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
+
+  let contractInfo
+  if (tokenType === "USDT") {
+    contractInfo = contractConfig.usdtContractInfo[CHAIN_ID]
   } else {
-    contract = contractConfig.contract["oktc-usdt"]
+    // 其他代币
   }
 
   try {
     await web3Wallet.addTokenToWallet(
-      contract.contract,
-      contract.symbol,
-      contract.decimals
+      contractInfo.contract,
+      contractInfo.symbol,
+      contractInfo.decimals
     )
   } catch (error) {
     ElMessage({
