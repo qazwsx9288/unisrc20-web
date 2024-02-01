@@ -32,13 +32,15 @@
       </div>
       <!-- banner end -->
 
+      <!-- table LeaderBoard -->
       <div class="fs-1 fw-bold pb-3 text-primary">LeaderBoard</div>
 
-      <div>
+      <div class="pb-5">
         <el-table
-          class="rounded"
+          class="pb-3 rounded"
           size="large"
           :data="tableData"
+          @sort-change="handleSortChange"
           style="width: 100%"
         >
           <el-table-column
@@ -58,18 +60,48 @@
           />
 
           <el-table-column
-            prop="invite"
+            :sort-orders="['descending', 'null']"
+            sortable="custom"
+            prop="inviteScore"
             :label="$t('pages.pageEarnPointsRank.Invited')"
-            width="180"
+            width="220"
           />
 
           <el-table-column
+            :sort-orders="['descending', 'null']"
+            sortable="custom"
             fixed="right"
-            prop="point"
+            prop="totalScore"
             :label="$t('pages.pageEarnPointsRank.Points')"
             width="auto"
           />
         </el-table>
+
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :background="true"
+          layout="prev, pager, next, jumper"
+          :total="total"
+          @current-change="handleCurrentChange"
+        />
+      </div>
+      <!-- table LeaderBoard end -->
+
+      <div>
+        <div class="fs-4 fw-bold pb-3 text-primary">
+          Recently Joined UniSRC20
+        </div>
+
+        <div class="row gy-3">
+          <div v-for="(item, index) in joinList" :key="index" class="col-12">
+            <div class="p-3 border rounded row">
+              <div class="col-7">{{ item.invite }}</div>
+              <div class="col-2">Joined</div>
+              <div class="col-2">{{ item.timeFormat }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -83,6 +115,11 @@ import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { copyToClipboard } from "@/utils/helper.js"
 import bus from "vue3-eventbus"
 import { ElMessage } from "element-plus"
+import { getInviteOrder, getInviteLatest } from "@/api/server-api.js"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
+dayjs.extend(relativeTime)
 
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()
@@ -100,16 +137,69 @@ onMounted(() => {
 })
 
 // init
-async function init() {}
+async function init() {
+  currentPage.value = 1
+  fetchList()
+  fetchJoinList()
+}
 
-const tableData = ref([
-  {
-    rank: 1,
-    address: "asdasdasdasdasdasdasdasdasdasdasasdasdasd",
-    invite: 20,
-    point: 100,
-  },
-])
+const tableData = ref([])
+// 排序钩子
+function handleSortChange(val) {
+  const orderDic = {
+    descending: "desc",
+    ascending: "asc",
+  }
+
+  const propDic = {
+    inviteScore: "invite_score",
+    totalScore: "total_score",
+  }
+
+  const param = {
+    prop: propDic[val.prop],
+    order: orderDic[val.order],
+  }
+  fetchList(param)
+}
+// page
+const currentPage = ref(1)
+const pageSize = ref(10)
+const total = ref(0)
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`)
+  currentPage.value = val
+  fetchList()
+}
+// 获取列表
+async function fetchList(param) {
+  let reqData = {
+    page: param?.page || currentPage.value,
+    pageSize: param?.pageSize || pageSize.value,
+  }
+
+  if (param?.order) {
+    reqData = {
+      ...reqData,
+      ...param,
+    }
+  }
+  const res = await getInviteOrder(reqData)
+  // 获取信息
+  total.value = res.data.total
+  tableData.value = res.data.list
+}
+
+// 近期加入
+const joinList = ref([])
+// 获取近期加入列表
+async function fetchJoinList() {
+  const res = await getInviteLatest({ limit: 3 })
+  joinList.value = res.data.result.map((cur) => {
+    cur.timeFormat = dayjs(cur.createdAt).fromNow()
+    return cur
+  })
+}
 
 // 导航
 function handleGoEarnPoints() {

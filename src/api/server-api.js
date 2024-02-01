@@ -126,3 +126,21 @@ export const getContractTransactions = (data) => {
     method: "get",
   })
 }
+
+// 获取邀请排序
+export const getInviteOrder = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getInviteOrder?${d}`,
+    method: "get",
+  })
+}
+
+// 获得最近的邀请
+export const getInviteLatest = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getInviteLatest?${d}`,
+    method: "get",
+  })
+}

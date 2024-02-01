@@ -110,9 +110,9 @@
     },
     "pageEarnPointsRank": {
       "Rank": "Rank",
-      "Points": "Points",
+      "Points": "Total Points",
       "Address": "Address",
-      "Invited": "Invited",
+      "Invited": "Invited Points",
       "EARN POINTS": "EARN POINTS",
       "GAIN REWARDS": "GAIN REWARDS"
     }
