@@ -13,8 +13,12 @@
         <div class="col-12 col-md-2"></div>
 
         <div class="col-12 col-md-6">
-          <div class="banner-title-font">EARN POINTS</div>
-          <div class="banner-title-font">GAIN REWARDS</div>
+          <div class="banner-title-font">
+            {{ $t("pages.pageEarnPointsRank.EARN POINTS") }}
+          </div>
+          <div class="banner-title-font">
+            {{ $t("pages.pageEarnPointsRank.GAIN REWARDS") }}
+          </div>
           <div class="pt-5">
             <button
               type="button"

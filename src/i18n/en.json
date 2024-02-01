@@ -112,7 +112,9 @@
       "Rank": "Rank",
       "Points": "Points",
       "Address": "Address",
-      "Invited": "Invited"
+      "Invited": "Invited",
+      "EARN POINTS": "EARN POINTS",
+      "GAIN REWARDS": "GAIN REWARDS"
     }
   }
 }

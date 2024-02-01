@@ -81,7 +81,9 @@
       "Getmorepointsbyinvitingyourfriends": "通過邀請朋友獲得更多積分",
       "Pointsbyinvited": "通過邀請獲得的積分",
       "CopythisURLtoyourfriends": "複製這個URL給你的朋友",
-      "MyRank": "我的排名"
+      "MyRank": "我的排名",
+      "COMPLETETASKS": "完成任務",
+      "EARNPOINTS": "賺取積分"
     },
     "pageL2Info": {
       "InscriptionInfo": "銘文信息",
@@ -102,7 +104,9 @@
     },
     "pageEarnPointsRank": {
       "Rank": "排名",
-      "Points": "積分"
+      "Points": "積分",
+      "EARN POINTS": "賺取積分",
+      "GAIN REWARDS": "獲得獎勵"
     }
   }
 }
