@@ -63,7 +63,7 @@
 
           <!-- TODO:接入API -->
           <span class="bg-primary fs-4 text-light p-2 rounded">
-            {{ $t("pages.pageEarnPoints.MyRank") }}: 0
+            {{ $t("pages.pageEarnPoints.MyRank") }}: {{ dataInfo?.rank || 0 }}
           </span>
         </div>
         <!-- points -->
