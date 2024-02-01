@@ -28,6 +28,22 @@ export default defineConfig({
       include: ["src/**/*.js", "src/**/*.vue", "src/*.js", "src/*.vue"],
     }),
   ],
+  build: {
+    // sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return id
+              .toString()
+              .split("node_modules/")[1]
+              .split("/")[0]
+              .toString()
+          }
+        },
+      },
+    },
+  },
   server: {
     // 如果使用docker-compose开发模式，设置为false
     open: true,
