@@ -12,7 +12,7 @@
         <!-- 占位 -->
         <div class="col-12 col-md-2"></div>
 
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6 text-center text-md-start">
           <div class="banner-title-font">
             {{ $t("pages.pageEarnPointsRank.EARN POINTS") }}
           </div>
@@ -60,7 +60,7 @@
           />
 
           <el-table-column
-            :sort-orders="['descending', 'null']"
+            :sort-orders="['descending', null]"
             sortable="custom"
             prop="inviteScore"
             :label="$t('pages.pageEarnPointsRank.Invited')"
@@ -68,7 +68,7 @@
           />
 
           <el-table-column
-            :sort-orders="['descending', 'null']"
+            :sort-orders="['descending', null]"
             sortable="custom"
             fixed="right"
             prop="totalScore"
@@ -88,7 +88,8 @@
       </div>
       <!-- table LeaderBoard end -->
 
-      <div>
+      <!-- Recently Joined -->
+      <div v-if="joinList?.length > 0">
         <div class="fs-4 fw-bold pb-3 text-primary">
           Recently Joined UniSRC20
         </div>
@@ -96,13 +97,14 @@
         <div class="row gy-3">
           <div v-for="(item, index) in joinList" :key="index" class="col-12">
             <div class="p-3 border rounded row">
-              <div class="col-7">{{ item.invite }}</div>
-              <div class="col-2">Joined</div>
-              <div class="col-2">{{ item.timeFormat }}</div>
+              <div class="col-12 col-md-7">{{ item.invite }}</div>
+              <div class="col-3 col-md-2">Joined</div>
+              <div class="col-9 col-md-2">{{ item.timeFormat }}</div>
             </div>
           </div>
         </div>
       </div>
+      <!-- Recently Joined end -->
     </div>
   </div>
 </template>

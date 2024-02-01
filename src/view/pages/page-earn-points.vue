@@ -13,7 +13,7 @@
           <!-- 占位 -->
           <div class="col-12 col-md-1"></div>
 
-          <div class="col-12 col-md-5">
+          <div class="col-12 col-md-5 pt-5 pt-md-0 text-center text-md-start">
             <div class="banner-title-font">
               {{ $t("pages.pageEarnPoints.COMPLETETASKS") }}
             </div>
