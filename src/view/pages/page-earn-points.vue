@@ -70,7 +70,7 @@
 
         <!-- know -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          Know UniSRC20 (Get 30 Points)
+          {{ $t("pages.pageEarnPoints.Know UniSRC20") }} (Get 30 Points)
         </div>
 
         <div class="pb-3">
@@ -138,7 +138,7 @@
 
         <!-- Try -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          Try L2 UniSRC20 (Get 150 Points)
+          {{ $t("pages.pageEarnPoints.Try L2 UniSRC20") }} (Get 150 Points)
         </div>
 
         <div class="pb-3">
