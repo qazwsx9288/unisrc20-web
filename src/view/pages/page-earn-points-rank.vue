@@ -2,16 +2,20 @@
   <div class="page-min-h">
     <div class="container">
       <!-- banner -->
-      <div class="py-3 gx-5 row">
+      <div class="py-5 gx-5 row">
         <img
-          class="col-12 col-md-5"
+          class="col-12 col-md-4"
           src="@/assets/img/earn-points-rank-1.svg"
           alt=""
         />
-        <div class="col-12 col-md-7">
-          <div class="banner-title-font">EARN POINTS GAIN REWARDS</div>
 
-          <div class="py-3">
+        <!-- 占位 -->
+        <div class="col-12 col-md-2"></div>
+
+        <div class="col-12 col-md-6">
+          <div class="banner-title-font">EARN POINTS</div>
+          <div class="banner-title-font">GAIN REWARDS</div>
+          <div class="pt-5">
             <button
               type="button"
               class="btn btn-lg btn-primary"
@@ -24,7 +28,7 @@
       </div>
       <!-- banner end -->
 
-      <div class="fs-3 fw-bold pb-3 text-primary">LeaderBoard</div>
+      <div class="fs-1 fw-bold pb-3 text-primary">LeaderBoard</div>
 
       <div>
         <el-table

@@ -3,19 +3,26 @@
     <div class="container">
       <div>
         <!-- banner -->
-        <div class="py-3 gx-5 row">
+        <div class="py-5 gx-5 row">
           <img
             class="col-12 col-md-6"
             src="@/assets/img/earn-points-1.svg"
             alt=""
           />
-          <div class="col-12 col-md-6">
+
+          <!-- 占位 -->
+          <div class="col-12 col-md-1"></div>
+
+          <div class="col-12 col-md-5">
             <div class="banner-title-font">
-              {{ $t("pages.pageEarnPoints.COMPLETETASKSEARNPOINTS") }}
+              {{ $t("pages.pageEarnPoints.COMPLETETASKS") }}
+            </div>
+            <div class="banner-title-font">
+              {{ $t("pages.pageEarnPoints.EARNPOINTS") }}
             </div>
 
             <!-- LeaderBoard -->
-            <div class="py-3">
+            <div class="pt-5">
               <button
                 type="button"
                 class="btn btn-lg btn-primary"
@@ -48,7 +55,7 @@
         <!-- banner end -->
 
         <!-- points -->
-        <div class="py-4">
+        <div class="pt-5 pb-4">
           <span class="bg-primary fs-4 text-light p-2 me-3 rounded">
             {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
             {{ dataInfo.taskScore }}
