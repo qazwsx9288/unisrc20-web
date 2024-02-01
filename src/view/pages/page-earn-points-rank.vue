@@ -110,7 +110,6 @@
 </template>
 
 <script setup>
-// TODO：添加排名页
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
