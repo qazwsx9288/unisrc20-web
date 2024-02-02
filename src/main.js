@@ -29,6 +29,7 @@ import "./styles/style.scss"
 
 const app = createApp(App)
 
+// TODO:上线
 // 错误处理
 // const isProd = process.env.NODE_ENV === "production"
 // if (isProd) {
