@@ -145,7 +145,7 @@
             <img
               style="width: 1rem; height: 1rem"
               class="me-2"
-              src="@/assets/img/icon-okx.png"
+              src="@/assets/img/icon-l2-info.png"
             />
             <span>L2 Address: </span>
 

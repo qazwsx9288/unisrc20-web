@@ -532,13 +532,27 @@ export const contractConfig = {
     ],
   },
   usdtContractInfo: {
+    // OKTC TESTNET
     "0x41": {
       contract: "0xAd6E9020c1600A4d74aC7845450Ac27328401C87",
       decimals: "18",
       symbol: "test",
     },
+    // OKTC MAINNET
     "0x42": {
       contract: "0x382bB369d343125BfB2117af9c149795C6C65C50",
+      decimals: "18",
+      symbol: "USDT",
+    },
+    // BSC TESTNET
+    "0x61": {
+      contract: "0x9c6208c910630eD7de2b97a3aE460DAF02Fc21fb",
+      decimals: "18",
+      symbol: "test",
+    },
+    // BSC MAINNET
+    "0x38": {
+      contract: "0x55d398326f99059ff775485246999027b3197955",
       decimals: "18",
       symbol: "USDT",
     },

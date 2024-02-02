@@ -18,6 +18,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   const RPC_URL = import.meta.env.VITE_BASE_OKX_RPC
   const CHAIN_ID = import.meta.env.VITE_BASE_CHAIN_ID
   const CHAIN_NAME = import.meta.env.VITE_BASE_CHAIN_Name
+  const CURRENCY_SYMBOL = import.meta.env.VITE_BASE_CURRENCY_SYMBOL
 
   // 受支持的walletList
   const supportWalletList = reactive([
@@ -272,6 +273,29 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       _signer
     )
 
+    // 检查合约是否可mint
+    let mintable
+    try {
+      mintable = await contractL2.mintable()
+    } catch (error) {
+      console.log(error)
+      ElMessage({
+        type: "error",
+        message: "Call contract failed, try again later.",
+      })
+      // 合约错误
+      return
+    }
+
+    if (mintable === false) {
+      // 合约已无法mint
+      ElMessage({
+        type: "warning",
+        message: "This token is no longer mintable, please try another token.",
+      })
+      return
+    }
+
     // 用户拒绝，交易失败
     try {
       const resTx = await contractL2.mint()
@@ -343,8 +367,8 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
 
     // 添加OKTC链
     const nativeCurrency = {
-      name: "OKT",
-      symbol: "OKT",
+      name: CURRENCY_SYMBOL,
+      symbol: CURRENCY_SYMBOL,
       decimals: 18,
     }
     await _provider.send("wallet_addEthereumChain", [
