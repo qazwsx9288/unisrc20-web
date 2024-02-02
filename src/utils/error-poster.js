@@ -27,25 +27,6 @@ const ua = (function () {
   return window.navigator.userAgent
 })()
 
-// 生成错误的哈希值
-function _generateErrorHash(errorInfo) {
-  return CryptoJS.SHA256(errorInfo).toString(CryptoJS.enc.Hex)
-}
-
-// 检查错误是否可以提交
-function _canSubmitError(errorHash) {
-  const errorLog = JSON.parse(localStorage.getItem("errorLog") || "{}")
-  const currentTime = Date.now()
-  if (errorLog[errorHash] && currentTime - errorLog[errorHash] < 30000) {
-    // 如果同一错误在30秒内已提交，返回false
-    return false
-  }
-  // 更新错误记录 key=hash value=currentTime
-  errorLog[errorHash] = currentTime
-  localStorage.setItem("errorLog", JSON.stringify(errorLog))
-  return true
-}
-
 // 提交错误
 export function postErrorLogs(params) {
   /**
@@ -113,5 +94,42 @@ export function postErrorLogs(params) {
       time: time,
       encryptString,
     },
+  })
+}
+
+/**
+ * 内部方法
+ */
+
+// 生成错误的哈希值
+function _generateErrorHash(errorInfo) {
+  return CryptoJS.SHA256(errorInfo).toString(CryptoJS.enc.Hex)
+}
+
+// 检查错误是否可以提交
+function _canSubmitError(errorHash) {
+  let errorLog = JSON.parse(localStorage.getItem("errorLog") || "{}")
+  // 清除过期的错误日志
+  _cleanExpiredErrorLogs(errorLog)
+
+  const currentTime = Date.now()
+  if (errorLog[errorHash] && currentTime - errorLog[errorHash] < 30000) {
+    // 如果同一错误在30秒内已提交，返回false
+    return false
+  }
+  // 更新错误记录 key=hash value=currentTime
+  errorLog[errorHash] = currentTime
+  localStorage.setItem("errorLog", JSON.stringify(errorLog))
+  return true
+}
+
+// 清除过期的错误日志
+function _cleanExpiredErrorLogs(errorLog) {
+  const currentTime = Date.now()
+  Object.keys(errorLog).forEach((key) => {
+    // 假设错误日志的有效期限定为30秒
+    if (currentTime - errorLog[key] > 30000) {
+      delete errorLog[key]
+    }
   })
 }
