@@ -5,6 +5,8 @@ import { store } from "@/pinia"
 import { createI18n } from "vue-i18n"
 import messages from "./i18n/index.js"
 import eventBus from "vue3-eventbus"
+// 用于错误处理
+import { errorHandler, onerror } from "@/utils/error-handler.js"
 
 // TODO：翻译校对
 const i18n = createI18n({
@@ -26,6 +28,14 @@ import "bootstrap"
 import "./styles/style.scss"
 
 const app = createApp(App)
+
+// 错误处理
+// const isProd = process.env.NODE_ENV === "production"
+// if (isProd) {
+app.config.errorHandler = errorHandler
+window.onerror = onerror
+// }
+
 app.config.productionTip = false
 app
   .use(router)

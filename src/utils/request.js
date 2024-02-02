@@ -1,6 +1,8 @@
 import axios from "axios" // 引入axios
 import { ElMessage } from "element-plus"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
+// 错误报告
+import { postErrorLogs } from "@/utils/error-poster.js"
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -44,6 +46,11 @@ service.interceptors.response.use(
         message: msg,
         type: "error",
       })
+      postErrorLogs({
+        errorType: 1, // 错误类型: 1接口报错 2代码报错
+        errorInfo: JSON.stringify(response),
+        note: "服务端返回错误",
+      })
     }
   },
   (error) => {
@@ -51,6 +58,11 @@ service.interceptors.response.use(
     ElMessage({
       message: "Network error, server not responding.",
       type: "error",
+    })
+    postErrorLogs({
+      errorType: 1, // 错误类型: 1接口报错 2代码报错
+      errorInfo: JSON.stringify(error),
+      note: "response请求错误",
     })
     return error
   }
