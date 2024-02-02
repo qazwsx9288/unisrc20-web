@@ -27,16 +27,45 @@ const ua = (function () {
   return window.navigator.userAgent
 })()
 
-// const isProd = process.env.NODE_ENV === "production"
+// 生成错误的哈希值
+function _generateErrorHash(errorInfo) {
+  return CryptoJS.SHA256(errorInfo).toString(CryptoJS.enc.Hex)
+}
 
+// 检查错误是否可以提交
+function _canSubmitError(errorHash) {
+  const errorLog = JSON.parse(localStorage.getItem("errorLog") || "{}")
+  const currentTime = Date.now()
+  if (errorLog[errorHash] && currentTime - errorLog[errorHash] < 30000) {
+    // 如果同一错误在30秒内已提交，返回false
+    return false
+  }
+  // 更新错误记录 key=hash value=currentTime
+  errorLog[errorHash] = currentTime
+  localStorage.setItem("errorLog", JSON.stringify(errorLog))
+  return true
+}
+
+// 提交错误
 export function postErrorLogs(params) {
   /**
    * @description params可携带参数
    * @param errorType Number 错误类型: 1接口报错 2代码报错
-   * @param errorInfo String 错误信息
+   * @param errorInfo String （必填）错误信息
    * @param errorComponent String 错误组件
    * */
-  // if (!isProd) return
+
+  if (!params.errorInfo) {
+    return Promise.resolve()
+  }
+
+  // 检查重复提交
+  const errorHash = _generateErrorHash(params.errorInfo)
+  const canPost = _canSubmitError(errorHash)
+
+  if (!canPost) {
+    return Promise.resolve()
+  }
 
   // 处理唯一id
   let uniqueId
