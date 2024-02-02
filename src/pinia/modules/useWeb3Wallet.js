@@ -12,7 +12,6 @@ import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
 import { getQueryString } from "@/utils/helper.js"
 import { ElMessage } from "element-plus"
-import { compileScript } from "vue/compiler-sfc"
 
 export const useWeb3Wallet = defineStore("web3Wallet", () => {
   // config
