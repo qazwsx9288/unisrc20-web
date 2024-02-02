@@ -5,6 +5,7 @@ import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 // 加密
 import CryptoJS from "crypto-js"
 
+// TODO:上线
 const service = axios.create({
   baseURL: import.meta.env.VITE_ERROR_API,
   timeout: 99999,
