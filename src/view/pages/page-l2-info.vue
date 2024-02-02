@@ -380,7 +380,7 @@ async function init() {
     currentPageHolder.value = 1
     fetchHolderList()
   } else {
-    pageSizeTransaction.value = 1
+    currentPageTransaction.value = 1
     fetchTransactionList()
   }
 }
