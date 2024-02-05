@@ -381,6 +381,7 @@ async function init() {
     fetchHolderList()
   } else {
     currentPageTransaction.value = 1
+    totalTransaction.value = 0
     fetchTransactionList()
   }
 }
@@ -489,27 +490,27 @@ async function fetchHolderList() {
   })
 
   totalHolder.value = res.data.result.total
-  holderList.value = res.data.result.list.map((cur) => {
-    // 地址格式化
-    cur.holderAddressUrl = `${
-      import.meta.env.VITE_BASE_OKTC_SCAN_URL
-    }/address/${cur.holderAddress}`
+  holderList.value =
+    res.data.result?.list?.map((cur) => {
+      // 地址格式化
+      cur.holderAddressUrl = `${
+        import.meta.env.VITE_BASE_OKTC_SCAN_URL
+      }/address/${cur.holderAddress}`
 
-    cur.holderAddressFormat = `
+      cur.holderAddressFormat = `
         ${cur.holderAddress.slice(0, 3)}
         ...
         ${cur.holderAddress.slice(-4, cur.holderAddress.length)}
         `
 
-    return cur
-  })
+      return cur
+    }) || []
 }
 // holder page
 const currentPageHolder = ref(1)
 const pageSizeHolder = ref(20)
 const totalHolder = ref(0)
 const handleCurrentPageHolderChange = (val) => {
-  console.log(`current page: ${val}`)
   fetchHolderList({ page: val })
 }
 
@@ -522,39 +523,49 @@ async function fetchTransactionList() {
     ticker: queryParam.value.ticker,
   })
 
-  totalTransaction.value = res.data.result.total
-  transactionList.value = res.data.result.list.map((cur) => {
-    // 地址格式化
-    cur.txhashUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/tx/${
-      cur.txhash
-    }`
-    cur.txhashFormat = `
+  // 此接口无total返回，手动处理
+  if (res.code === 0) {
+    const currentTotal = res.data.result.list.length
+    totalTransaction.value =
+      currentPageTransaction.value * pageSizeTransaction.value
+    if (currentTotal === 20) {
+      totalTransaction.value++
+    }
+  }
+
+  transactionList.value =
+    res.data?.result?.list?.map((cur) => {
+      // 地址格式化
+      cur.txhashUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/tx/${
+        cur.txhash
+      }`
+      cur.txhashFormat = `
         ${cur.txhash.slice(0, 8)}
         ...
         ${cur.txhash.slice(-8, cur.txhash.length)}
         `
 
-    cur.fromUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${
-      cur.from
-    }`
-    cur.fromFormat = `
+      cur.fromUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${
+        cur.from
+      }`
+      cur.fromFormat = `
         ${cur.from.slice(0, 8)}
         ...
         ${cur.from.slice(-8, cur.from.length)}
         `
 
-    cur.toUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${cur.to}`
-    cur.toFormat = `
+      cur.toUrl = `${import.meta.env.VITE_BASE_OKTC_SCAN_URL}/address/${cur.to}`
+      cur.toFormat = `
         ${cur.to.slice(0, 8)}
         ...
         ${cur.to.slice(-8, cur.txhash.length)}
         `
 
-    // 赋值一个时间，让listFormat自动格式化
-    cur.createdAt = cur.blockTime
+      // 赋值一个时间，让listFormat自动格式化
+      cur.createdAt = cur.blockTime
 
-    return cur
-  })
+      return cur
+    }) || []
 
   listFormat(transactionList.value)
 }
