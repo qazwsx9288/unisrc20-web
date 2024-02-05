@@ -514,6 +514,17 @@ const handleCurrentPageHolderChange = (val) => {
   fetchHolderList({ page: val })
 }
 
+// transactions pages
+const currentPageTransaction = ref(1)
+const pageSizeTransaction = ref(20)
+const totalTransaction = ref(0)
+const handleCurrentPageTransactionChange = (val) => {
+  console.log(`current page: ${val}`)
+  fetchTransactionList({ page: val })
+}
+// 记录到达过的最大的页码 只因该接口无total
+const maxPage = ref(1)
+
 // transactions
 const transactionList = ref([])
 async function fetchTransactionList() {
@@ -525,10 +536,22 @@ async function fetchTransactionList() {
 
   // 此接口无total返回，手动处理
   if (res.code === 0) {
-    const currentTotal = res.data.result.list.length
-    totalTransaction.value =
-      currentPageTransaction.value * pageSizeTransaction.value
-    if (currentTotal === 20) {
+    //  获取当前页面的条数
+    const currentTotal = res.data.result?.list?.length || 0
+
+    // 处理maxPage
+    if (currentTotal > 0) {
+      // 更新maxPage.value
+      maxPage.value =
+        maxPage.value < currentPageTransaction.value
+          ? currentPageTransaction.value
+          : maxPage.value
+    }
+
+    // 处理total
+    totalTransaction.value = maxPage.value * pageSizeTransaction.value
+    // 到达尾页时，如果当前条数为20 猜测有下一页。
+    if (maxPage.value === currentPageTransaction.value && currentTotal === 20) {
       totalTransaction.value++
     }
   }
@@ -568,14 +591,6 @@ async function fetchTransactionList() {
     }) || []
 
   listFormat(transactionList.value)
-}
-
-const currentPageTransaction = ref(1)
-const pageSizeTransaction = ref(20)
-const totalTransaction = ref(0)
-const handleCurrentPageTransactionChange = (val) => {
-  console.log(`current page: ${val}`)
-  fetchTransactionList({ page: val })
 }
 
 // 添加代币
