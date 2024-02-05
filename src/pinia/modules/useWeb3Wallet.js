@@ -177,7 +177,6 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       } catch (error) {
         clearSigner()
 
-        console.log(error.reason)
         return {
           msg: error.reason,
           error: true,
