@@ -51,6 +51,8 @@ service.interceptors.response.use(
         errorInfo: JSON.stringify(response),
         note: "服务端返回错误",
       })
+
+      return Promise.reject(response)
     }
   },
   (error) => {
@@ -64,7 +66,7 @@ service.interceptors.response.use(
       errorInfo: JSON.stringify(error),
       note: "response请求错误",
     })
-    return error
+    return Promise.reject(error)
   }
 )
 
