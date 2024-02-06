@@ -161,9 +161,22 @@
                     <button
                       type="button"
                       class="w-100 btn btn-primary"
+                      :disabled="deployFormLoading"
                       @click="submitFormDeploy"
                     >
-                      {{ $t("pages.pageInscribe.DeployBtn") }}
+                      <div v-if="deployFormLoading">
+                        <span
+                          class="spinner-border spinner-border-sm text-light"
+                          aria-hidden="true"
+                        ></span>
+                        <span class="visually-hidden" role="status">
+                          Loading...
+                        </span>
+                      </div>
+
+                      <span v-else>
+                        {{ $t("pages.pageInscribe.DeployBtn") }}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -499,6 +512,7 @@ function handleExceed(files) {
   // 手动上传
 }
 // deploy 表单submit
+const deployFormLoading = ref(false)
 const submitFormDeploy = async () => {
   // 登陆校验
   if (!web3Wallet?.userWallet?.address) {
@@ -509,10 +523,9 @@ const submitFormDeploy = async () => {
     return
   }
 
-  if (!refFormDeploy.value) return
   await refFormDeploy.value.validate(async (valid, fields) => {
     if (valid) {
-      console.log("submit!")
+      deployFormLoading.value = true
       // Tick已在BRC20
       try {
         const resVerifyToken = await verifyToken({
@@ -531,6 +544,8 @@ const submitFormDeploy = async () => {
       } catch (error) {
         console.log(error)
         return
+      } finally {
+        deployFormLoading.value = false
       }
 
       try {
@@ -538,6 +553,8 @@ const submitFormDeploy = async () => {
         handleGoDeploy()
       } catch (error) {
         console.log(error)
+      } finally {
+        deployFormLoading.value = false
       }
     } else {
       console.log("error submit!", fields)
