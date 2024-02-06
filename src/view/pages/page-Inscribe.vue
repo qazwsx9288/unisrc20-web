@@ -344,12 +344,9 @@ import {
   gasCountLatest,
   verifyToken,
   orderMsg,
-  completeTask,
 } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage, genFileId } from "element-plus"
-import { ethers } from "ethers"
-import { contractConfig } from "@/contract/contract.js"
 import { UploadFilled } from "@element-plus/icons-vue"
 import { fileToBase64 } from "@/utils/helper.js"
 
