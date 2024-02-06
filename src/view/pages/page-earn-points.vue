@@ -61,7 +61,6 @@
             {{ dataInfo.taskScore }}
           </span>
 
-          <!-- TODO:接入API -->
           <span class="bg-primary fs-4 text-light p-2 rounded">
             {{ $t("pages.pageEarnPoints.MyRank") }}: {{ dataInfo?.rank || 0 }}
           </span>
