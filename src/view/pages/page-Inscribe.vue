@@ -498,6 +498,7 @@ function handleExceed(files) {
   refUpload.value.handleStart(file)
   // 手动上传
 }
+// deploy 表单submit
 const submitFormDeploy = async () => {
   // 登陆校验
   if (!web3Wallet?.userWallet?.address) {
@@ -572,7 +573,7 @@ function handleGoDeploy() {
   const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
   myModal.show()
 }
-// deploy submit
+// deploy 费用弹窗submit
 const deployModalLoading = ref(false)
 async function submitFormDeployModal() {
   deployModalLoading.value = true
