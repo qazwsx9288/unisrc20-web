@@ -539,20 +539,26 @@ const submitFormDeploy = async () => {
             type: "warning",
             message: "Tick already exists",
           })
+          deployFormLoading.value = false
           return
         }
       } catch (error) {
         console.log(error)
-        return
-      } finally {
         deployFormLoading.value = false
+        return
       }
 
       try {
         await fetchDeployFee()
         handleGoDeploy()
       } catch (error) {
+        ElMessage({
+          type: "error",
+          message: "Get deploy fee failed.",
+        })
         console.log(error)
+        deployFormLoading.value = false
+        return
       } finally {
         deployFormLoading.value = false
       }
@@ -582,8 +588,13 @@ async function handleDeployFeeSwitch(t) {
 }
 // 获取deploy费用
 async function fetchDeployFee() {
-  const res = await gasCountLatest()
-  deployFee.value = res.data.result.fee
+  try {
+    const res = await gasCountLatest()
+    deployFee.value = res.data.result.fee
+    return Promise.resolve()
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
 // 打开deploy弹窗
 function handleGoDeploy() {
