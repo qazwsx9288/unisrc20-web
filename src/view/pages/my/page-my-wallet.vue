@@ -155,13 +155,17 @@ async function fetchList({ page = currentPage.value }) {
         cur.contractFormat = ""
       }
 
-      cur.balance = "loading..."
+      cur.balance = "0"
       return cur
     })
 
     // 获取余额
-    // TODO:多条记录查询并发
+    // TODO:测试并发
     const signer = await web3Wallet.getSigner()
+    if (signer?.error) {
+      return
+    }
+
     tableData.value.forEach(async (cur) => {
       const contractUSDT = new ethers.Contract(
         cur.contract,
@@ -169,17 +173,15 @@ async function fetchList({ page = currentPage.value }) {
         signer
       )
 
-      try {
-        const balance = await contractUSDT.balanceOf(
-          web3Wallet.userWallet.address
-        )
-        const decimals = await contractUSDT.decimals()
+      Promise.all([
+        contractUSDT.balanceOf(web3Wallet.userWallet.address),
+        contractUSDT.decimals(),
+      ]).then((resArr) => {
+        const balance = resArr[0]
+        const decimals = resArr[1]
         const formattedBalance = ethers.utils.formatUnits(balance, decimals)
         cur.balance = parseFloat(formattedBalance).toFixed(4)
-      } catch (error) {
-        console.log(error)
-        cur.balance = "network error"
-      }
+      })
     })
   } catch (error) {
     console.log(error)
