@@ -98,7 +98,7 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     }
 
     // 校验钱包对象是否可用
-    if (wallet?.browserProvider !== null) {
+    if (wallet !== null && wallet?.browserProvider !== null) {
       // 获取provider
       // const provider = new ethers.BrowserProvider(wallet.browserProvider)
       const provider = new ethers.providers.Web3Provider(
