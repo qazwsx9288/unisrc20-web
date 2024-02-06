@@ -6,7 +6,7 @@ import { postErrorLogs } from "@/utils/error-poster.js"
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
-  timeout: 99999,
+  timeout: 15 * 1000,
 })
 
 // http request 拦截器
