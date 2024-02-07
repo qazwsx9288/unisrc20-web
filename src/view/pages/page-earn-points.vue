@@ -58,7 +58,7 @@
         <div class="pt-5 pb-4">
           <span class="bg-primary fs-4 text-light p-2 me-3 rounded">
             {{ $t("pages.pageEarnPoints.MyTotalPoints") }}:
-            {{ dataInfo.taskScore }}
+            {{ dataInfo.taskScore + dataInfo.inviteScore }}
           </span>
 
           <span class="bg-primary fs-4 text-light p-2 rounded">
