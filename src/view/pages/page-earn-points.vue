@@ -304,10 +304,11 @@ function handleGoLeaderBoard() {
   router.push({ name: "earn-points-rank" })
 }
 
+// TODO: 上线修改
 function handleCopyInviteUrl() {
   try {
     copyToClipboard(
-      `https://app.unisrc20.com/?inviteAddress=${dataInfo.value.address}`
+      `http://58.144.221.15:53192/?inviteAddress=${dataInfo.value.address}`
     )
     ElMessage({
       type: "success",
