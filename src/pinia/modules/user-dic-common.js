@@ -8,9 +8,19 @@ export const useUserDic = defineStore("userDic", () => {
       // 对照表
       formatTable: [
         {
-          value: [0, 1, 2, 3, 4, 5, 6, 57],
-          text: "Waiting",
+          value: [0],
+          text: "Payment Verifying",
+          elType: "info",
+        },
+        {
+          value: [1, 2, 3, 4, 5, 6],
+          text: "Deploying",
           elType: "warning",
+        },
+        {
+          value: [7],
+          text: "Order Failed",
+          elType: "danger",
         },
         { value: 7, text: "Success", elType: "success" },
       ],
