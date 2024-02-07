@@ -351,6 +351,7 @@
 
 <script setup>
 import { reactive, ref, computed } from "vue"
+import { useRouter } from "vue-router"
 import * as bootstrap from "bootstrap"
 import {
   createOrder,
@@ -364,6 +365,7 @@ import { UploadFilled } from "@element-plus/icons-vue"
 import { fileToBase64 } from "@/utils/helper.js"
 
 const web3Wallet = useWeb3Wallet()
+const router = useRouter()
 
 // 模式 1mint 2deploy
 const inscribeMode = ref("2")
@@ -665,6 +667,9 @@ async function submitFormDeployModal() {
 
     const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
     myModal.hide()
+
+    // TODO:test
+    router.push({ name: "deploy-order" })
   } catch (error) {
     console.log(error)
   } finally {
