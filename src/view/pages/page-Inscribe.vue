@@ -460,13 +460,21 @@ const checkUrl = (rule, value, callback) => {
     return
   }
 
+  // 校验value是否以"https://"开头
+  if (!value.startsWith("https://")) {
+    callback(new Error("Error URL: The URL must start with https://"))
+  }
+
   // 校验value是否是http链接
-  const urlPattern =
-    /^(((ht|f)tps?):\/\/)?([^!@#$%^&*?.\s-]([^!@#$%^&*?.\s]{0,63}[^!@#$%^&*?.\s])?\.)+[a-z]{2,6}\/?/
+  const urlPattern = new RegExp(
+    `https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()!@:%_\\+.~#?&\\/\\/=]*)`
+  )
   if (urlPattern.test(value)) {
     callback()
   } else {
-    callback(new Error("Error URL"))
+    callback(
+      new Error("Error URL Format: Please enter the complete http/htpps URL")
+    )
   }
 }
 const checkFileSize = (rule, value, callback) => {
@@ -632,8 +640,6 @@ async function submitFormDeployModal() {
       medium: formDataDeploy.medium,
       logoBase64: logoBase64,
     })
-
-    console.log(res)
 
     if (res.code !== 0) {
       ElMessage({
