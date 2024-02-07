@@ -40,7 +40,7 @@
 
           <el-table-column
             :label="$t('pages.my.pageMyDeployOrder.Status')"
-            width="120"
+            width="180"
           >
             <template #default="scope">
               <el-tag
