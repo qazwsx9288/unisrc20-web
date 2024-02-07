@@ -194,7 +194,7 @@
           <el-table-column
             fixed="right"
             :label="$t('pages.pageL2.Action')"
-            width="130"
+            width="180"
           >
             <template #default="scope">
               <button
@@ -206,7 +206,7 @@
                 {{ $t("pages.pageL2.Mint") }}
               </button>
               <button type="button" disabled class="btn btn-sm btn-secondary">
-                {{ $t("pages.pageL2.Buy") }}
+                {{ $t("pages.pageL2.Trade") }}
               </button>
             </template>
           </el-table-column>
