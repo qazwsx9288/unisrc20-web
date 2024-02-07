@@ -220,9 +220,7 @@
               Points per invited)
             </div>
             <div class="text-break">
-              <span>{{
-                `https://app.unisrc20.com/?inviteAddress=${dataInfo.address}`
-              }}</span>
+              <span>{{ `${appUrl}/?inviteAddress=${dataInfo.address}` }}</span>
               <button
                 class="btn btn-primary btn-sm ms-2"
                 type="button"
@@ -250,6 +248,9 @@ import { ElMessage } from "element-plus"
 
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()
+
+// TODO：上线修改
+const appUrl = "http://58.144.221.15:53192"
 
 onMounted(() => {
   bus.on("onGetSigner", () => {
@@ -304,12 +305,9 @@ function handleGoLeaderBoard() {
   router.push({ name: "earn-points-rank" })
 }
 
-// TODO: 上线修改
 function handleCopyInviteUrl() {
   try {
-    copyToClipboard(
-      `http://58.144.221.15:53192/?inviteAddress=${dataInfo.value.address}`
-    )
+    copyToClipboard(`${appUrl}/?inviteAddress=${dataInfo.value.address}`)
     ElMessage({
       type: "success",
       message: "Success",
