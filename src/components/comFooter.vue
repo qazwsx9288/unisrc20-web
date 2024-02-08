@@ -12,7 +12,7 @@
             class="mt-3 d-flex justify-content-center justify-content-lg-start align-items-center"
           >
             <img class="logo-img" src="@/assets/img/UNISRC20.png" />
-            <span class="fs-1">UniSRC-20</span>
+            <span class="fs-1">{{ TITLE }}</span>
           </div>
           <!-- <div class="text-secondary pt-3 text-break">
             © 2023 UniSRC20 All rights reserved.
@@ -139,6 +139,8 @@ import { contractConfig } from "@/contract/contract.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
 
+const TITLE = import.meta.env.VITE_PROJECT_NAME_SHOW
+
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()
 
@@ -183,7 +185,7 @@ async function handleAddToken(tokenType) {
 
 .footer-container {
   .logo-img {
-    width: 130px;
+    width: 90px;
   }
 
   // 页脚部分字体大小

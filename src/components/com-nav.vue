@@ -7,7 +7,7 @@
             style="height: 40px; width: 40px"
             src="@/assets/img/UNISRC20.png"
           />
-          UniSRC-20
+          {{ TITLE }}
         </a>
 
         <!-- 响应式 移动端的菜单toggle -->
@@ -174,6 +174,8 @@ import { useCurrentRoute } from "@/pinia/modules/currentRoute.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import comModalConnect from "@/components/com-modal-connect.vue"
 import { useI18n } from "vue-i18n"
+
+const TITLE = import.meta.env.VITE_PROJECT_NAME_SHOW
 
 const i18n = useI18n()
 const web3Wallet = useWeb3Wallet()

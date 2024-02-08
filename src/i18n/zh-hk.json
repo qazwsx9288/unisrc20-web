@@ -42,7 +42,7 @@
       "ProjectUrl": "網站",
       "Buy": "購買",
       "Information": "Links",
-      "Emphasis on Small Caps": "強調小型項目：將注意力集中於幫助初期階段的新興自發性項目發行銘文資產，這些項目具備顯著增長和成功提升的潜力。",
+      "Emphasis on Small Caps": "UniSell是一個2層的BRC20資產的發佈平臺，強調小型項目：將注意力集中於幫助初期階段的新興自發性項目發行銘文資產，這些項目具備顯著增長和成功提升的潜力。",
       "Trade": "交易"
     },
     "my": {
@@ -86,8 +86,8 @@
       "MyRank": "我的排名",
       "COMPLETETASKS": "完成任務",
       "EARNPOINTS": "賺取積分",
-      "Know UniSRC20": "瞭解UniSRC20",
-      "Try L2 UniSRC20": "嘗試L2在UNISRC20上"
+      "Know UniSRC20": "瞭解",
+      "Try L2 UniSRC20": "嘗試"
     },
     "pageL2Info": {
       "InscriptionInfo": "銘文信息",

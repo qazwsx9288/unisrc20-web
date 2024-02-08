@@ -45,7 +45,7 @@
       "Buy": "Buy",
       "Information": "Links",
       "Market Cap($)": "Market Cap($)",
-      "Emphasis on Small Caps": "Emphasis on Small Caps: Directing attention to emerging self-initiated projects in their early stages, poised for significant growth and heightened success.",
+      "Emphasis on Small Caps": "UniSell is a layer2 BRC20 launch pad emphasis on Small Caps: Directing attention to emerging self-initiated projects in their early stages, poised for significant growth and heightened success.",
       "Trade": "Trade"
     },
     "my": {
@@ -89,8 +89,8 @@
       "MyRank": "MY RANK",
       "COMPLETETASKS": "COMPLETE TASKS",
       "EARNPOINTS": "EARN POINTS",
-      "Know UniSRC20": "Know UniSRC20",
-      "Try L2 UniSRC20": "Try L2 On UniSRC20"
+      "Know UniSRC20": "Know",
+      "Try L2 UniSRC20": "Try"
     },
     "pageL2Info": {
       "Holders": "Holders",

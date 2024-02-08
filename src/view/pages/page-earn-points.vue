@@ -69,7 +69,8 @@
 
         <!-- know -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          {{ $t("pages.pageEarnPoints.Know UniSRC20") }} (Get 30 Points)
+          {{ $t("pages.pageEarnPoints.Know UniSRC20") }} {{ TITLE }} (Get 30
+          Points)
         </div>
 
         <div class="pb-3">
@@ -137,7 +138,8 @@
 
         <!-- Try -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          {{ $t("pages.pageEarnPoints.Try L2 UniSRC20") }} (Get 150 Points)
+          {{ $t("pages.pageEarnPoints.Try L2 UniSRC20") }} {{ TITLE }} (Get 150
+          Points)
         </div>
 
         <div class="pb-3">
@@ -245,6 +247,8 @@ import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { copyToClipboard } from "@/utils/helper.js"
 import bus from "vue3-eventbus"
 import { ElMessage } from "element-plus"
+
+const TITLE = import.meta.env.VITE_PROJECT_NAME_SHOW
 
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()

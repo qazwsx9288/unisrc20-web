@@ -90,9 +90,7 @@
 
       <!-- Recently Joined -->
       <div v-if="joinList?.length > 0">
-        <div class="fs-4 fw-bold pb-3 text-primary">
-          Recently Joined UniSRC20
-        </div>
+        <div class="fs-4 fw-bold pb-3 text-primary">Recently Joined</div>
 
         <div class="row gy-3">
           <div v-for="(item, index) in joinList" :key="index" class="col-12">

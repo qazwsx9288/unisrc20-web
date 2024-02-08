@@ -1,7 +1,7 @@
 <template>
   <div class="page-min-h">
     <div class="container">
-      <h2 class="m-0 py-3 pt-5 text-primary-emphasis">Brc20 L2</h2>
+      <h2 class="m-0 py-3 pt-5 text-primary-emphasis">Brc20 (L2)</h2>
 
       <div
         class="mb-5 pt-3 p-3 text-primary border border-primary rounded text-break"
