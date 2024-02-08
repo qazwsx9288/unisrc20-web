@@ -111,7 +111,10 @@
                   </div>
 
                   <el-form-item class="w-100" label="Tick" prop="tick">
-                    <el-input v-model="formDataDeploy.tick" />
+                    <el-input
+                      v-model="formDataDeploy.tick"
+                      placeholder="ordi"
+                    />
                   </el-form-item>
 
                   <el-form-item label="Max">
@@ -131,6 +134,7 @@
                       :min="1"
                       :step="1"
                       :precision="0"
+                      placeholder="1000"
                     />
                   </el-form-item>
 
@@ -144,6 +148,7 @@
                       :min="1"
                       :step="1"
                       :precision="0"
+                      placeholder="1000000"
                     />
                   </el-form-item>
 
