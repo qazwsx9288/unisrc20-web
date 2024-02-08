@@ -144,3 +144,12 @@ export const getInviteLatest = (data) => {
     method: "get",
   })
 }
+
+// 验证地址分数能否mint
+export const scoreVerify = (data) => {
+  return service({
+    url: `/v1/scoreVerify`,
+    method: "post",
+    data,
+  })
+}

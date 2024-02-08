@@ -7,6 +7,7 @@ import {
   verifyAddress,
   verifyWhitelist,
   completeTask,
+  scoreVerify,
 } from "@/api/server-api.js"
 import { contractConfig } from "@/contract/contract.js"
 import bus from "vue3-eventbus"
@@ -260,6 +261,16 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
       ElMessage({
         type: "error",
         message: "You are not in whitelist",
+      })
+      return
+    }
+
+    // 30分校验
+    const resScoreVerify = await scoreVerify({ ticker })
+    if (resScoreVerify?.data?.result?.result === false) {
+      ElMessage({
+        type: "error",
+        message: `You need at least ${resScoreVerify?.data?.result?.score} points to mint`,
       })
       return
     }
