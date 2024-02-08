@@ -110,11 +110,15 @@
                     scope.row.id !== 6
                   "
                   type="button"
-                  :href="scope.row.url"
-                  target="_blank"
-                  class="btn btn-sm btn-primary me-2"
+                  class="btn btn-sm me-2"
+                  :class="{
+                    'btn-primary': scope.row.followSubmit != 1,
+                    'btn-warning': scope.row.followSubmit == 1,
+                  }"
+                  @click="showSocialModal(scope.row)"
                 >
-                  To do it
+                  <span v-if="scope.row.followSubmit == 1">Waiting</span>
+                  <span v-else>To Do It</span>
                 </a>
 
                 <el-tag
@@ -218,7 +222,7 @@
 
           <div class="border p-3 rounded">
             <div class="fs-5 pb-3">
-              {{ $t("pages.pageEarnPoints.CopythisURLtoyourfriends") }} (10
+              {{ $t("pages.pageEarnPoints.CopythisURLtoyourfriends") }} (30
               Points per invited)
             </div>
             <div class="text-break">
@@ -235,18 +239,98 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal 社媒任务 -->
+    <div
+      class="modal fade"
+      id="modalSocial"
+      tabindex="-1"
+      aria-labelledby="modalSocialLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">
+              {{ $t("pages.pageEarnPoints.socialModalTitle") }}
+            </h5>
+          </div>
+          <!-- 弹窗body -->
+          <div class="text-gray p-3">
+            <div class="mb-2 fs-4 text-primary">Step 1</div>
+            <div class="mb-2">
+              {{ currentTask.taskName }}
+            </div>
+            <div class="mb-4">
+              <a :href="currentTask.url" target="_blank">Click Here</a>
+            </div>
+            <div class="mb-2 fs-4 text-primary">Step 2</div>
+            <el-form
+              ref="refFormSocial"
+              :model="formDataSocial"
+              :rules="rulesSocial"
+              label-position="top"
+              label-width="auto"
+              status-icon
+            >
+              <el-form-item
+                class="w-100"
+                label="Username In Social Media"
+                prop="name"
+              >
+                <el-input
+                  v-model="formDataSocial.name"
+                  placeholder="Your Username In Social media"
+                />
+              </el-form-item>
+              <el-form-item class="w-100" label="Wallet">
+                <el-input :value="web3Wallet.userWallet.address" disabled />
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              :disabled="modalSocialLoading"
+              @click="submitFormModalSocial"
+            >
+              <div v-if="modalSocialLoading">
+                <span
+                  class="spinner-border spinner-border-sm text-light"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden" role="status">Loading...</span>
+              </div>
+
+              <span v-else>Submit</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              id="modalSocialClose"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal 社媒任务 end -->
   </div>
 </template>
 
 <script setup>
 // TODO:上线URL Know UniSRC20/Try L2 On UniSRC20
-import { ref, onMounted } from "vue"
+import { ref, reactive, onMounted } from "vue"
 import { useRouter } from "vue-router"
-import { getTaskList } from "@/api/server-api.js"
+import { getTaskList, collectData } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { copyToClipboard } from "@/utils/helper.js"
 import bus from "vue3-eventbus"
 import { ElMessage } from "element-plus"
+import * as bootstrap from "bootstrap"
 
 const TITLE = ref(import.meta.env.VITE_PROJECT_NAME_SHOW)
 
@@ -309,6 +393,54 @@ function handleGoLeaderBoard() {
   router.push({ name: "earn-points-rank" })
 }
 
+// 打开填写社媒弹窗
+const currentTask = ref({})
+function showSocialModal(item) {
+  currentTask.value = item
+  const myModal = bootstrap.Modal.getOrCreateInstance("#modalSocial")
+  myModal.show()
+}
+// 填写社媒号提交
+const modalSocialLoading = ref(false)
+const refFormSocial = ref(null)
+async function submitFormModalSocial() {
+  await refFormSocial.value.validate(async (valid, fields) => {
+    if (valid) {
+      modalSocialLoading.value = true
+      const reqData = {
+        name: formDataSocial.name,
+        taskId: currentTask.value.id,
+      }
+      try {
+        const res = await collectData(reqData)
+        if (res.code === 0) {
+          const myModal = bootstrap.Modal.getOrCreateInstance("#modalSocial")
+          ElMessage({
+            type: "success",
+            message: "Success",
+          })
+          myModal.hide()
+          fetchKnowTaskList()
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        modalSocialLoading.value = false
+      }
+    } else {
+      console.log("error submit!", fields)
+    }
+  })
+}
+// 社媒表单数据
+const formDataSocial = reactive({
+  name: "",
+})
+const rulesSocial = reactive({
+  name: [{ required: true, message: "Please input", trigger: "blur" }],
+})
+
+// copy邀请url
 function handleCopyInviteUrl() {
   try {
     copyToClipboard(`${appUrl}/?inviteAddress=${dataInfo.value.address}`)

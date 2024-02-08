@@ -90,7 +90,8 @@
       "COMPLETETASKS": "COMPLETE TASKS",
       "EARNPOINTS": "EARN POINTS",
       "Know UniSRC20": "Know",
-      "Try L2 UniSRC20": "Try"
+      "Try L2 UniSRC20": "Try",
+      "socialModalTitle": "Task"
     },
     "pageL2Info": {
       "Holders": "Holders",

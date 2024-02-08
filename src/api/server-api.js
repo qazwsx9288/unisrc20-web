@@ -153,3 +153,12 @@ export const scoreVerify = (data) => {
     data,
   })
 }
+
+// 报告社媒账户
+export const collectData = (data) => {
+  return service({
+    url: `/v1/collectData`,
+    method: "post",
+    data,
+  })
+}
