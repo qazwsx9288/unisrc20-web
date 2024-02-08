@@ -248,7 +248,7 @@ import { copyToClipboard } from "@/utils/helper.js"
 import bus from "vue3-eventbus"
 import { ElMessage } from "element-plus"
 
-const TITLE = import.meta.env.VITE_PROJECT_NAME_SHOW
+const TITLE = ref(import.meta.env.VITE_PROJECT_NAME_SHOW)
 
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()

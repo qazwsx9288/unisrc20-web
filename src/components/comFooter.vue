@@ -138,8 +138,9 @@ import { useRouter } from "vue-router"
 import { contractConfig } from "@/contract/contract.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage } from "element-plus"
+import { ref } from "vue"
 
-const TITLE = import.meta.env.VITE_PROJECT_NAME_SHOW
+const TITLE = ref(import.meta.env.VITE_PROJECT_NAME_SHOW)
 
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()
