@@ -5,7 +5,7 @@ export function buildQueryParm(data) {
     if (str !== "") str += `&`
     str = `${str}${k}=${data[k]}`
   }
-  return str
+  return encodeURI(str)
 }
 
 // 复制内容到剪贴板
