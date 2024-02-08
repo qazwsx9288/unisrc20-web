@@ -8,16 +8,19 @@
       <!-- 表格 -->
       <div class="pb-3">
         <el-table class="rounded" :data="tableData" style="width: 100%">
-          <el-table-column prop="ticker" label="Ticker" width="80" />
-
-          <el-table-column label="Icon" width="60">
+          <el-table-column fixed label="Ticker" width="130">
             <template #default="scope">
-              <img
-                v-if="scope.row.logoBase64"
-                style="width: 30px; height: 30px"
-                :src="scope.row.logoBase64"
-                alt=""
-              />
+              <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">
+                <img
+                  v-if="scope.row.logoBase64"
+                  class="me-2 rounded-circle"
+                  style="width: 25px; height: 25px"
+                  :src="scope.row.logoBase64"
+                  alt=""
+                />
+
+                <span>{{ scope.row.ticker }}</span>
+              </el-link>
             </template>
           </el-table-column>
 

@@ -28,11 +28,21 @@
 
       <div>
         <el-table class="rounded" :data="tableDataView" style="width: 100%">
-          <el-table-column
-            prop="ticker"
-            :label="$t('pages.my.pageMyWallet.Symbol')"
-            width="80"
-          />
+          <el-table-column fixed label="Ticker" width="130">
+            <template #default="scope">
+              <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">
+                <img
+                  v-if="scope.row.logoBase64"
+                  class="me-2 rounded-circle"
+                  style="width: 25px; height: 25px"
+                  :src="scope.row.logoBase64"
+                  alt=""
+                />
+
+                <span>{{ scope.row.ticker }}</span>
+              </el-link>
+            </template>
+          </el-table-column>
 
           <el-table-column
             :label="$t('pages.my.pageMyWallet.Contract')"
