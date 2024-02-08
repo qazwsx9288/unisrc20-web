@@ -26,7 +26,7 @@
 
         <!-- 菜单列表 -->
         <div class="collapse navbar-collapse" id="navbarToggler">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav mb-2 mb-lg-0">
             <li v-for="(item, index) in menuList" :key="index" class="nav-item">
               <button
                 type="button"
@@ -40,6 +40,30 @@
               </button>
             </li>
           </ul>
+
+          <!-- 固定菜单 -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link me-2"
+                href="https://swap.unisrc20.com/swap"
+                target="_blank"
+              >
+                Swap
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link me-2"
+                href="https://ai.unisrc20.com/marketplace_demo/"
+                target="_blank"
+              >
+                Avatar
+              </a>
+            </li>
+          </ul>
+          <!-- 固定菜单 end -->
+
           <!-- 菜单栏右侧 -->
           <div class="d-flex">
             <!-- 语言 -->
