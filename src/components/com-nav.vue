@@ -131,7 +131,7 @@
 
             <!-- 连接按钮 -->
             <button
-              v-show="!web3Wallet.userWallet.address"
+              v-show="!web3Wallet?.userWallet?.address"
               class="btn btn-outline-primary"
               data-bs-toggle="modal"
               data-bs-target="#signInModal"
@@ -139,7 +139,7 @@
               {{ $t("comNav.Connect") }}
             </button>
             <!-- 登陆后的钱包 -->
-            <div v-show="web3Wallet.userWallet.address" class="dropdown">
+            <div v-show="web3Wallet?.userWallet?.address" class="dropdown">
               <button
                 class="btn btn-outline-primary dropdown-toggle"
                 type="button"
@@ -147,7 +147,7 @@
                 aria-expanded="false"
                 data-bs-auto-close="true"
               >
-                {{ web3Wallet.userWallet.addressFormat }}
+                {{ web3Wallet?.userWallet?.addressFormat }}
               </button>
               <ul class="dropdown-menu">
                 <li>
