@@ -69,8 +69,8 @@
 
         <!-- know -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          {{ $t("pages.pageEarnPoints.Know UniSRC20") }} {{ TITLE }} (Get 30
-          Points)
+          {{ $t("pages.pageEarnPoints.Know UniSRC20") }}
+          {{ TITLE }} (Get {{ knowTotalScoreCanGain }} Points)
         </div>
 
         <div class="pb-3">
@@ -142,8 +142,8 @@
 
         <!-- Try -->
         <div class="fs-4 fw-bold pb-3 text-primary">
-          {{ $t("pages.pageEarnPoints.Try L2 UniSRC20") }} {{ TITLE }} (Get 150
-          Points)
+          {{ $t("pages.pageEarnPoints.Try L2 UniSRC20") }}
+          {{ TITLE }} (Get {{ tryTotalScoreCanGain }} Points)
         </div>
 
         <div class="pb-3">
@@ -319,7 +319,7 @@
 
 <script setup>
 // TODO:上线URL Know UniSRC20/Try L2 On UniSRC20
-import { ref, reactive, onMounted } from "vue"
+import { ref, reactive, onMounted, computed } from "vue"
 import { useRouter } from "vue-router"
 import { getTaskList, collectData } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
@@ -357,6 +357,18 @@ async function init() {
 
 // know列表
 const knowTaskList = ref([])
+// 求和
+const knowTotalScoreCanGain = computed(() => {
+  const total = knowTaskList.value.reduce((pre, cur) => {
+    return pre + cur.point
+  }, 0)
+
+  if (total) {
+    return total
+  } else {
+    return 0
+  }
+})
 async function fetchKnowTaskList() {
   const res = await getTaskList({
     taskType: "1",
@@ -367,6 +379,18 @@ async function fetchKnowTaskList() {
 
 // try列表
 const tryTaskList = ref([])
+// 求和
+const tryTotalScoreCanGain = computed(() => {
+  const total = tryTaskList.value.reduce((pre, cur) => {
+    return pre + cur.point
+  }, 0)
+
+  if (total) {
+    return total
+  } else {
+    return 0
+  }
+})
 async function fetchTryTaskList() {
   const res = await getTaskList({
     taskType: "2",
