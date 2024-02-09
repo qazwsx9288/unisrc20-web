@@ -273,14 +273,10 @@
               label-width="auto"
               status-icon
             >
-              <el-form-item
-                class="w-100"
-                label="Username In Social Media"
-                prop="name"
-              >
+              <el-form-item class="w-100" label="Username" prop="name">
                 <el-input
                   v-model="formDataSocial.name"
-                  placeholder="Your Username In Social media"
+                  :placeholder="`Your Username In ${currentTask.name}`"
                 />
               </el-form-item>
               <el-form-item class="w-100" label="Wallet">
