@@ -6,7 +6,8 @@
     "MintOrder": "Mint Order",
     "Disconnect": "Disconnect",
     "Connect": "Connect",
-    "EarnPoints": "Earn Points"
+    "EarnPoints": "Earn Points",
+    "Language": "Language"
   },
   "pages": {
     "pageInscribe": {

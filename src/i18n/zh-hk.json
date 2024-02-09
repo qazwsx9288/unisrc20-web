@@ -6,7 +6,8 @@
     "MintOrder": "鑄造訂單",
     "Disconnect": "退出連接",
     "Connect": "連接錢包",
-    "EarnPoints": "賺取積分"
+    "EarnPoints": "賺取積分",
+    "Language": "語言"
   },
   "pages": {
     "pageInscribe": {
