@@ -75,6 +75,7 @@
 
         <div class="pb-3">
           <el-table
+            v-loading="fetchKnowTaskListLoading"
             class="rounded"
             size="large"
             :data="knowTaskList"
@@ -148,6 +149,7 @@
 
         <div class="pb-3">
           <el-table
+            v-loading="fetchTryTaskListLoading"
             class="rounded"
             size="large"
             :data="tryTaskList"
@@ -369,10 +371,19 @@ const knowTotalScoreCanGain = computed(() => {
     return 0
   }
 })
+const fetchKnowTaskListLoading = ref(false)
 async function fetchKnowTaskList() {
-  const res = await getTaskList({
-    taskType: "1",
-  })
+  fetchKnowTaskListLoading.value = true
+  let res
+  try {
+    res = await getTaskList({
+      taskType: "1",
+    })
+  } catch (error) {
+    console.log(error)
+  } finally {
+    fetchKnowTaskListLoading.value = false
+  }
   // 获取信息
   knowTaskList.value = res.data.result.task
 }
@@ -391,10 +402,20 @@ const tryTotalScoreCanGain = computed(() => {
     return 0
   }
 })
+const fetchTryTaskListLoading = ref(false)
 async function fetchTryTaskList() {
-  const res = await getTaskList({
-    taskType: "2",
-  })
+  fetchTryTaskListLoading.value = true
+  let res
+  try {
+    res = await getTaskList({
+      taskType: "2",
+    })
+  } catch (error) {
+    console.log(error)
+  } finally {
+    fetchTryTaskListLoading.value = false
+  }
+
   // 获取信息
   tryTaskList.value = res.data.result.task
 }

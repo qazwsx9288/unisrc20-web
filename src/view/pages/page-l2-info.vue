@@ -232,7 +232,12 @@
 
         <!-- holderList -->
         <div v-if="tableMode === '1'">
-          <el-table class="rounded" :data="holderList" style="width: 100%">
+          <el-table
+            v-loading="fetchHolderListLoading"
+            class="rounded"
+            :data="holderList"
+            style="width: 100%"
+          >
             <el-table-column
               fixed
               :label="$t('pages.pageL2Info.Address')"
@@ -276,7 +281,12 @@
 
         <!-- transactionList -->
         <div v-if="tableMode === '2'">
-          <el-table class="rounded" :data="transactionList" style="width: 100%">
+          <el-table
+            v-loading="transactionListLoading"
+            class="rounded"
+            :data="transactionList"
+            style="width: 100%"
+          >
             <el-table-column
               fixed
               :label="$t('pages.pageL2Info.Hash')"
@@ -482,12 +492,25 @@ function handletableModeChange(val) {
 
 // holders
 const holderList = ref([])
+const fetchHolderListLoading = ref(false)
 async function fetchHolderList() {
-  const res = await getHolders({
-    pageSize: pageSizeHolder.value,
-    page: currentPageHolder.value,
-    ticker: queryParam.value.ticker,
-  })
+  fetchHolderListLoading.value = true
+  let res
+  try {
+    res = await getHolders({
+      pageSize: pageSizeHolder.value,
+      page: currentPageHolder.value,
+      ticker: queryParam.value.ticker,
+    })
+  } catch (error) {
+    console.log(error)
+  } finally {
+    fetchHolderListLoading.value = false
+  }
+
+  if (res.code !== 0) {
+    return
+  }
 
   totalHolder.value = res.data.result.total
   holderList.value =
@@ -524,15 +547,23 @@ const handleCurrentPageTransactionChange = (val) => {
 }
 // 记录到达过的最大的页码 只因该接口无total
 const maxPage = ref(1)
-
 // transactions
 const transactionList = ref([])
+const transactionListLoading = ref(false)
 async function fetchTransactionList() {
-  const res = await getContractTransactions({
-    pageSize: pageSizeTransaction.value,
-    page: currentPageTransaction.value,
-    ticker: queryParam.value.ticker,
-  })
+  transactionListLoading.value = true
+  let res
+  try {
+    res = await getContractTransactions({
+      pageSize: pageSizeTransaction.value,
+      page: currentPageTransaction.value,
+      ticker: queryParam.value.ticker,
+    })
+  } catch (error) {
+    close.log(error)
+  } finally {
+    transactionListLoading.value = false
+  }
 
   // 此接口无total返回，手动处理
   if (res.code === 0) {

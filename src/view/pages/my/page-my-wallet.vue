@@ -27,7 +27,12 @@
       </div>
 
       <div>
-        <el-table class="rounded" :data="tableDataView" style="width: 100%">
+        <el-table
+          v-loading="fetchListLoading"
+          class="rounded"
+          :data="tableDataView"
+          style="width: 100%"
+        >
           <el-table-column fixed label="Ticker" width="130">
             <template #default="scope">
               <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">
@@ -138,9 +143,12 @@ const handleCurrentChange = (val) => {
   fetchList({ page: val })
 }
 // 获取列表
+const fetchListLoading = ref(false)
 async function fetchList({ page = currentPage.value }) {
+  fetchListLoading.value = true
+  let res
   try {
-    const res = await tickerList({
+    res = await tickerList({
       page: page,
       pageSize: pageSize.value,
       type: "1",
@@ -195,6 +203,8 @@ async function fetchList({ page = currentPage.value }) {
     })
   } catch (error) {
     console.log(error)
+  } finally {
+    fetchListLoading.value = false
   }
 }
 // 表格数据

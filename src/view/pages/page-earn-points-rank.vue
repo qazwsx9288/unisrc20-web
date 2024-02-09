@@ -37,6 +37,7 @@
 
       <div class="pb-5">
         <el-table
+          v-loading="fetchListLoading"
           class="pb-3 rounded"
           size="large"
           :data="tableData"
@@ -171,6 +172,7 @@ const handleCurrentChange = (val) => {
   fetchList()
 }
 // 获取列表
+const fetchListLoading = ref(false)
 async function fetchList(param) {
   let reqData = {
     page: param?.page || currentPage.value,
@@ -183,7 +185,16 @@ async function fetchList(param) {
       ...param,
     }
   }
-  const res = await getInviteOrder(reqData)
+
+  fetchListLoading.value = true
+  let res
+  try {
+    res = await getInviteOrder(reqData)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    fetchListLoading.value = false
+  }
   // 获取信息
   total.value = res.data.total
   tableData.value = res.data.list
