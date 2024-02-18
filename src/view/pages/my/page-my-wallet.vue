@@ -192,12 +192,16 @@ async function fetchList({ page = currentPage.value }) {
       Promise.all([
         contractUSDT.balanceOf(web3Wallet.userWallet.address),
         contractUSDT.decimals(),
-      ]).then((resArr) => {
-        const balance = resArr[0]
-        const decimals = resArr[1]
-        const formattedBalance = ethers.utils.formatUnits(balance, decimals)
-        cur.balance = parseFloat(formattedBalance).toFixed(4)
-      })
+      ])
+        .then((resArr) => {
+          const balance = resArr[0]
+          const decimals = resArr[1]
+          const formattedBalance = ethers.utils.formatUnits(balance, decimals)
+          cur.balance = parseFloat(formattedBalance).toFixed(4)
+        })
+        .catch((errArr) => {
+          console.log(errArr)
+        })
     })
   } catch (error) {
     console.log(error)
