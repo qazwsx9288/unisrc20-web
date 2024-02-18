@@ -15,7 +15,7 @@
         >
           <el-table-column fixed label="Ticker" width="130">
             <template #default="scope">
-              <el-link @click="handleGoInfo(scope.row.ticker)" type="primary">
+              <div class="d-flex align-items-center">
                 <img
                   v-if="scope.row.logoBase64"
                   class="me-2 rounded-circle"
@@ -23,9 +23,8 @@
                   :src="scope.row.logoBase64"
                   alt=""
                 />
-
                 <span>{{ scope.row.ticker }}</span>
-              </el-link>
+              </div>
             </template>
           </el-table-column>
 
