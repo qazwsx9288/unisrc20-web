@@ -1,6 +1,6 @@
 <template>
   <div class="page-min-h">
-    <div class="container">
+    <div class="container pb-5">
       <!-- banner -->
       <div class="py-5 gx-5 row">
         <img

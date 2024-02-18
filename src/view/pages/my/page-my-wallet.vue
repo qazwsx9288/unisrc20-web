@@ -1,6 +1,6 @@
 <template>
   <div class="page-min-h">
-    <div class="container">
+    <div class="container pb-5">
       <h2 class="m-0 py-3 py-lg-5 text-primary-emphasis">
         {{ $t("pages.my.pageMyWallet.MyWallet") }}
       </h2>
