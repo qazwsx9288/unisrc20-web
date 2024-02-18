@@ -243,6 +243,11 @@ async function handleAddTokenToWallet(item) {
     console.log(error)
   }
 }
+
+// 前往详情
+function handleGoInfo(ticker) {
+  router.push({ name: "l2-info", query: { ticker: ticker } })
+}
 </script>
 
 <style scoped></style>
