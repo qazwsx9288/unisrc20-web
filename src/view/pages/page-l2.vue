@@ -280,7 +280,6 @@ async function fetchList({ page = currentPage.value }) {
       type: curStatus.value,
       search: searchContent.value,
     })
-    console.log(res)
     total.value = res.data.total
     tableData.value = res.data.list.map((cur) => {
       cur.ticker = cur.ticker.toUpperCase()
