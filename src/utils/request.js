@@ -4,10 +4,9 @@ import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 // 错误报告
 import { postErrorLogs } from "@/utils/error-poster.js"
 
-// TODO: 上线改为15秒
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
-  timeout: 30 * 1000,
+  timeout: 20 * 1000,
 })
 
 // http request 拦截器

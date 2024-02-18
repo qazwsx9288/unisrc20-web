@@ -178,7 +178,6 @@ async function fetchList({ page = currentPage.value }) {
     })
 
     // 获取余额
-    // TODO:测试并发
     const signer = await web3Wallet.getSigner()
     if (signer?.error) {
       return

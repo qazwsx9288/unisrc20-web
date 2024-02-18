@@ -335,8 +335,7 @@ const TITLE = ref(import.meta.env.VITE_PROJECT_NAME_SHOW)
 const router = useRouter()
 const web3Wallet = useWeb3Wallet()
 
-// TODO：上线修改
-const appUrl = "http://58.144.221.15:53192"
+const appUrl = window.location.origin
 
 onMounted(() => {
   bus.on("onGetSigner", () => {

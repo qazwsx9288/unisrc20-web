@@ -679,7 +679,6 @@ async function submitFormDeployModal() {
     const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
     myModal.hide()
 
-    // TODO:test
     router.push({ name: "deploy-order" })
   } catch (error) {
     console.log(error)
