@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-dark pt-5">
+  <div class="bg-body-tertiary pt-5">
     <div
       class="container footer-container d-flex flex-column align-items-center flex-lg-row justify-content-lg-around pb-5"
     >
