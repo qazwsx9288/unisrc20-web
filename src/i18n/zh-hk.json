@@ -44,7 +44,8 @@
       "Buy": "購買",
       "Information": "Links",
       "Emphasis on Small Caps": "UniSell是一個2層的BRC20資產的發佈平臺，強調小型項目：將注意力集中於幫助初期階段的新興自發性項目發行銘文資產，這些項目具備顯著增長和成功提升的潜力。",
-      "Trade": "交易"
+      "Trade": "交易",
+      "Market Cap($)": "Market Cap($)"
     },
     "my": {
       "pageMyWallet": {
