@@ -153,7 +153,6 @@ async function fetchList({ page = currentPage.value }) {
       pageSize: pageSize.value,
       type: "1",
     })
-    console.log(res)
     total.value = res.data.total
 
     tableData.value = res.data.list.map((cur) => {
