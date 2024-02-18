@@ -375,6 +375,14 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
   async function addNetwork(signer) {
     let _provider = signer.provider
 
+    // 获取当前网络的链ID
+    const currentChainId = await _provider.send("eth_chainId", [])
+
+    // 检查当前链ID是否与要添加的网络的链ID相同
+    if (currentChainId === CHAIN_ID) {
+      return
+    }
+
     // 添加OKTC链
     const nativeCurrency = {
       name: CURRENCY_SYMBOL,
@@ -396,7 +404,8 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
     // 已连接才校验 否则不校验
     if (userWallet.value.address) {
       const _signer = await getSigner()
-      const curChainId = await _signer.getChainId()
+      // _signer.getChainId()获取的不是16进制的chainId，使用rpc方式获取
+      const curChainId = await _signer.provider.send("eth_chainId", [])
 
       if (curChainId !== CHAIN_ID) {
         // 当前链id不匹配，尝试切换
@@ -414,8 +423,6 @@ export const useWeb3Wallet = defineStore("web3Wallet", () => {
           })
           console.error("网络切换失败:", error)
         }
-      } else {
-        console.log("ChainId correct")
       }
     }
   }
