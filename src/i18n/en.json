@@ -60,7 +60,8 @@
         "Send": "Send",
         "Check My Deploy Orders": "Check My Deploy Orders",
         "Add": "Add",
-        "Buy": "Buy"
+        "Buy": "Buy",
+        "Trade": "Trade"
       },
       "pageMyDeployOrder": {
         "DeployOrder": "Deploy Order",

@@ -86,7 +86,7 @@
                 disabled
                 class="btn btn-sm btn-secondary me-2"
               >
-                {{ $t("pages.my.pageMyWallet.Buy") }}
+                {{ $t("pages.my.pageMyWallet.Trade") }}
               </button>
             </template>
           </el-table-column>

@@ -57,7 +57,8 @@
         "Send": "發送",
         "Check My Deploy Orders": "查看我的部署訂單",
         "Add": "添加",
-        "Buy": "購買"
+        "Buy": "購買",
+        "Trade": "交易"
       },
       "pageMyDeployOrder": {
         "DeployOrder": "部署訂單",
