@@ -542,7 +542,6 @@ const currentPageTransaction = ref(1)
 const pageSizeTransaction = ref(20)
 const totalTransaction = ref(0)
 const handleCurrentPageTransactionChange = (val) => {
-  console.log(`current page: ${val}`)
   fetchTransactionList({ page: val })
 }
 // 记录到达过的最大的页码 只因该接口无total

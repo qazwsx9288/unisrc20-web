@@ -265,7 +265,6 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
   fetchList({ page: val })
 }
 // 获取列表

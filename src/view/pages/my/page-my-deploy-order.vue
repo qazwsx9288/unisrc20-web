@@ -103,7 +103,6 @@ const currentPage = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
   fetchList({ page: val })
 }
 // 获取列表
@@ -116,7 +115,6 @@ async function fetchList({ page = currentPage.value }) {
       page: page,
       pageSize: pageSize.value,
     })
-    console.log(res)
     total.value = res.data.total
     tableData.value = res.data.list.map((cur) => {
       cur.ticker = cur.ticker.toUpperCase()

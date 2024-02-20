@@ -71,7 +71,7 @@ const web3Wallet = useWeb3Wallet()
 async function signIn(walletName) {
   web3Wallet.updateSupportWalletList()
   const signer = await web3Wallet.getSigner(walletName)
-  console.log
+
   if (signer?.error) {
     if (signer?.errorType !== web3Wallet.errorType.NO_WALLET) {
       // 登入失败
