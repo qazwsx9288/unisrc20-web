@@ -40,6 +40,10 @@
           v-loading="fetchListLoading"
           class="pb-3 rounded"
           size="large"
+          :default-sort="{
+            order: 'descending',
+            prop: 'totalScore',
+          }"
           :data="tableData"
           @sort-change="handleSortChange"
           style="width: 100%"
@@ -91,8 +95,9 @@
 
       <!-- Recently Joined -->
       <div v-if="joinList?.length > 0">
-        <div class="fs-4 fw-bold pb-3 text-primary">Recently Joined</div>
-
+        <div class="fs-4 fw-bold pb-3 text-primary">
+          {{ $t("pages.pageEarnPointsRank.Recently Invited") }}
+        </div>
         <div class="row gy-3">
           <div v-for="(item, index) in joinList" :key="index" class="col-12">
             <div class="p-3 border rounded row">
@@ -139,7 +144,12 @@ onMounted(() => {
 // init
 async function init() {
   currentPage.value = 1
-  fetchList()
+  // 初始化默认总分倒序
+  const param = {
+    prop: "total_score",
+    order: "desc",
+  }
+  fetchList(param)
   fetchJoinList()
 }
 
