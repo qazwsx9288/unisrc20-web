@@ -578,7 +578,6 @@ const submitFormDeploy = async () => {
 
       // 查询用户是否已有同名tick
       flagOrderHasSameTick.value = false
-      // TODO：查询方法
       try {
         const resOrderStatus = await getOrderStatus({
           ticker: formDataDeploy.tick,
