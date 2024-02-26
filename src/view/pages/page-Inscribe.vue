@@ -312,6 +312,16 @@
                 </tr>
               </tbody>
             </table>
+            <div v-if="flagOrderHasSameTick">
+              <div class="text-warning">
+                {{ $t("pages.pageInscribe.SameTickWarningText") }}
+              </div>
+              <div class="pt-2">
+                <button class="btn btn-link p-0" @click="handleGoOrder">
+                  {{ $t("pages.pageInscribe.View Order List") }}
+                </button>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button
@@ -363,6 +373,7 @@ import {
   gasCountLatest,
   verifyToken,
   orderMsg,
+  getOrderStatus,
 } from "@/api/server-api.js"
 import { useWeb3Wallet } from "@/pinia/modules/useWeb3Wallet.js"
 import { ElMessage, genFileId } from "element-plus"
@@ -526,6 +537,8 @@ function handleExceed(files) {
   refUpload.value.handleStart(file)
   // 手动上传
 }
+// 用户是否已有同名tick
+const flagOrderHasSameTick = ref(false)
 // deploy 表单submit
 const deployFormLoading = ref(false)
 const submitFormDeploy = async () => {
@@ -563,6 +576,19 @@ const submitFormDeploy = async () => {
         return
       }
 
+      // 查询用户是否已有同名tick
+      flagOrderHasSameTick.value = false
+      // TODO：查询方法
+      try {
+        const resOrderStatus = await getOrderStatus({
+          ticker: formDataDeploy.tick,
+        })
+        flagOrderHasSameTick.value = resOrderStatus?.data?.result || false
+      } catch (error) {
+        console.log(error)
+      }
+
+      // 查询费用 并打开下单弹窗
       try {
         await fetchDeployFee()
         handleGoDeploy()
@@ -687,6 +713,18 @@ async function submitFormDeployModal() {
   }
 }
 // Deploy表单 end
+
+// 前往订单钩子
+function handleGoOrder() {
+  const myModal = bootstrap.Modal.getOrCreateInstance("#deployModal")
+  if (myModal) {
+    myModal.hide()
+  }
+
+  router.push({
+    name: "deploy-order",
+  })
+}
 </script>
 
 <style lang="scss" scoped>

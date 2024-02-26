@@ -26,7 +26,9 @@
       "ProjectUrl": "網站",
       "twitter": "",
       "Optional": "可選項",
-      "Required": "必填項"
+      "Required": "必填項",
+      "SameTickWarningText": "您已經有了一筆相同Tick的訂單，提交將會覆蓋舊訂單。如果您的舊訂單已付款，請不要提交。",
+      "View Order List": "查看訂單清單"
     },
     "pageL2": {
       "Search": "搜索",

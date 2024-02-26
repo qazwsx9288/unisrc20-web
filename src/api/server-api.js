@@ -28,6 +28,15 @@ export const verifyToken = (data) => {
   })
 }
 
+// 验证用户的订单列表是否存在这个token
+export const getOrderStatus = (data) => {
+  const d = buildQueryParm(data)
+  return service({
+    url: `/v1/getOrderStatus?${d}`,
+    method: "get",
+  })
+}
+
 // 获取l2 ticker详情
 export const orderMsg = (data) => {
   const d = buildQueryParm(data)

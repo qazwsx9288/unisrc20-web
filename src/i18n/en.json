@@ -27,7 +27,9 @@
       "twitter": "Twitter",
       "github": "Github",
       "Optional": "Optional",
-      "Required": "Required"
+      "Required": "Required",
+      "SameTickWarningText": "You already have an order with the same Tick, and this submission will overwrite the old order. If your old order has already been paid, please do not submit it.",
+      "View Order List": "View Order List"
     },
     "pageL2": {
       "Search": "Search",
