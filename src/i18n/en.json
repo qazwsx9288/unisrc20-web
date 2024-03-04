@@ -115,7 +115,8 @@
       "Time": "Time",
       "Block": "Block",
       "From": "From",
-      "To": "To"
+      "To": "To",
+      "Mint": "MINT"
     },
     "pageEarnPointsRank": {
       "Rank": "Rank",

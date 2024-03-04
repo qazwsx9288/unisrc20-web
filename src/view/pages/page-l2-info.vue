@@ -209,8 +209,10 @@
       <!-- table -->
       <div>
         <!-- 筛选 -->
-        <div class="pb-3 pt-5">
-          <div class="btn-group" role="group">
+        <div
+          class="pb-3 pt-5 d-flex items-center justify-content-between justify-content-lg-start"
+        >
+          <div class="btn-group me-4" role="group">
             <button
               type="button"
               :class="{ active: tableMode === '1' }"
@@ -226,6 +228,17 @@
               @click="handletableModeChange('2')"
             >
               {{ $t("pages.pageL2Info.Transactions") }}
+            </button>
+          </div>
+
+          <div>
+            <button
+              :disabled="tickerInfo.max === tickerInfo.totalSupply"
+              type="button"
+              class="btn btn-primary me-2"
+              @click="handleMint"
+            >
+              {{ $t("pages.pageL2Info.Mint") }}
             </button>
           </div>
         </div>
@@ -621,6 +634,11 @@ async function fetchTransactionList() {
     }) || []
 
   listFormat(transactionList.value)
+}
+
+// mint
+async function handleMint() {
+  await web3Wallet.mintL2(tickerInfo.value.contract, tickerInfo.value.ticker)
 }
 
 // 添加代币
