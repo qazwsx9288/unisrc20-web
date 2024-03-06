@@ -61,6 +61,15 @@
                 Avatar
               </a>
             </li>
+            <li class="nav-item">
+              <a
+                class="nav-link me-2"
+                href="https://medium.com/@unisrc20"
+                target="_blank"
+              >
+                🔥<span style="color: rgb(251, 146, 60)">AirDrop</span>
+              </a>
+            </li>
           </ul>
           <!-- 固定菜单 end -->
 
